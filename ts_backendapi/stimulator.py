@@ -2,7 +2,7 @@ import pandas as pd
 import random
 
 
-def pricestimulator(close: float, volatility: float, startdate: str):
+def price_stimulator(close: float, volatility: float, startdate: str, capital: str):
 
     # get date range of business days.
     dt = pd.date_range(start=startdate, periods=260, freq='B')
@@ -15,5 +15,7 @@ def pricestimulator(close: float, volatility: float, startdate: str):
         low = close-(close*volatility)
         high = close+(close*volatility)
         close = round(random.uniform(low, high), 2)
+
+    df['Qty'] = round(float(capital) / df['ClosePrice'].astype("float"))
 
     return df

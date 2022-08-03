@@ -1,12 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import datetime
+import json
 
-from numpy import average
-from stimulator import pricestimulator
-from tatools import Indicators
-from criteria import Criteria
-from report import reportmateric
+from stimulator import price_stimulator
+from pre_processing import dataprocessing
 
 app = FastAPI()
 
@@ -22,39 +20,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-def dataprocessing(close: float, volatility: float, startdate: str, capital: float, buycriteria: list, sellcriteria: list, slcriteria: list = None, tpcriteria: list = None):
-
-    dataf = pricestimulator(close, volatility, startdate)
-
-    inobj = Indicators(dataf)
-    dataf = inobj.addmovingav()
-    dataf = inobj.addrsi()
-
-    dataf['Capital'] = capital
-    criteriaobj = Criteria(dataf)
-
-    criteriadic = {'MA': criteriaobj.mvcrossover,
-                   'CPMA': criteriaobj.closeandmoveaverage, 'rsi': criteriaobj.rsirange}
-    for criteria in buycriteria:
-        dataf = criteriadic[criteria]()
-        print(dataf[dataf['BuyPosition'] == 1])
-
-    criteriaobj = Criteria(dataf)
-    for criteria in sellcriteria:
-        dataf = criteriadic[criteria](type='sell', averagepos='above')
-        print(dataf[dataf['SellPosition'] == 1])
-
-    metrics = reportmateric(dataf)
-
-    return metrics
-
-
 @app.get('/price')
-def price(close: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today()):
-    return pricestimulator(close, volatility, startdate)
+def price(close: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today(), capital=100000):
+    return price_stimulator(close, volatility, startdate, capital)
 
+buycriteria={'C1':{
+    'Indicator':'SMA',
+    'Ind_parameter':50,
+    'Operator':'>',
+    'Indicator2':'SMA',
+    'Ind_parameter2':100}
+    }
+
+sellcriteria={'C2':{
+    'Indicator':'SMA',
+    'Ind_parameter':21,
+    'Operator':'>',
+    'Value':'ClosePrice'}
+    }
 
 @app.get('/report')
-def report(close: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today(), capital=100000, buycriteria=['MA'], sellcriteria=['CPMA']):
+def report(close: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today(), capital=100000, buycriteria=buycriteria, sellcriteria=sellcriteria):
+    
+    buycriteria=json.loads(buycriteria)
+    print(type(buycriteria))
+
+    sellcriteria=json.loads(sellcriteria)
+    print(type(sellcriteria))
+
     return dataprocessing(close, volatility, startdate, capital=capital, buycriteria=buycriteria, sellcriteria=sellcriteria)
