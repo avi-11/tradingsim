@@ -105,7 +105,6 @@ function App() {
 
   const data = {
     labels: [
-      "July",
       "Aug",
       "Sep",
       "Oct",
@@ -117,6 +116,7 @@ function App() {
       "Apr",
       "May",
       "Jun",
+      "July",
     ],
     datasets: [
       {
