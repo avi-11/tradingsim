@@ -22,9 +22,12 @@ def reportmateric(dataf):
         dataf['Position'] = np.select(con, [-1, 1], 0)
 
         dataf['nextclose'] = dataf['ClosePrice'].shift(-1)
-        dataf.fillna(0,inplace=True)
+        dataf.fillna(0, inplace=True)
         dataf['Profit'] = [float(dataf.loc[i, 'Qty']*(dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
                            if dataf.loc[i, 'Position'] == 1 else 0 for i in dataf.index]
+
+        print(dataf[dataf['Position'] == 1])
+        print(dataf[dataf['Profit'] != 0])
         return qs.reports.metrics(dataf['Profit'], mode='full', display=False)
 
     elif buysellcheck == False and buycheck:
@@ -33,6 +36,7 @@ def reportmateric(dataf):
                            if dataf.loc[i, 'BuyPosition'] == 1 else 0 for i in dataf.index]
 
         dataf.fillna(0, inplace=True)
+        print(dataf[dataf['Profit'] != 0])
         return qs.reports.metrics(dataf['Profit'], mode='full', display=False)
 
     elif buysellcheck == False and sellcheck:
@@ -41,6 +45,7 @@ def reportmateric(dataf):
                            if dataf.loc[i, 'SellPosition'] == -1 else 0 for i in dataf.index]
 
         dataf.fillna(0, inplace=True)
+        print(dataf[dataf['Profit'] != 0])
         return qs.reports.metrics(dataf['Profit'], mode='full', display=False)
 
     else:
