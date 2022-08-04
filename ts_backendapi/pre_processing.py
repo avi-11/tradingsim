@@ -14,17 +14,12 @@ def dataprocessing(close: float, volatility: float, startdate: str, capital: flo
 
     #buycriteria
     for ind in list(buycriteria.keys()):
-        
-        print(buycriteria[ind]['Indicator'])
-
-        print(buycriteria[ind]['Ind_parameter'])
         if 'Ind_parameter' in buycriteria[ind]:
             dataf=indicator[buycriteria[ind]['Indicator']](dataf=dataf, periods=int(buycriteria[ind]['Ind_parameter']))
 
         elif 'Ind_parameter' not in buycriteria[ind]:
             dataf=indicator[buycriteria[ind]['Indicator']](dataf=dataf)
 
-        print(dataf.head())
         if 'Indicator2' in buycriteria[ind]:
             if 'Ind_parameter2' in buycriteria[ind]:
                 dataf=indicator[buycriteria[ind]['Indicator2']](dataf=dataf, periods=int(buycriteria[ind]['Ind_parameter2']))
@@ -32,7 +27,6 @@ def dataprocessing(close: float, volatility: float, startdate: str, capital: flo
             elif 'Ind_parameter2' not in buycriteria[ind]:
                 dataf=indicator[buycriteria[ind]['Indicator2']](dataf=dataf)
         
-        print(dataf.head())
     for ind in list(buycriteria.keys()):
 
         if 'Indicator2' in buycriteria[ind]:
@@ -56,17 +50,12 @@ def dataprocessing(close: float, volatility: float, startdate: str, capital: flo
 
     #sellcriteria
     for ind in list(sellcriteria.keys()):
-        
-        print(sellcriteria[ind]['Indicator'])
-
-        print(sellcriteria[ind]['Ind_parameter'])
         if 'Ind_parameter' in sellcriteria[ind]:
             dataf=indicator[sellcriteria[ind]['Indicator']](dataf=dataf, periods=int(sellcriteria[ind]['Ind_parameter']))
 
         elif 'Ind_parameter' not in sellcriteria[ind]:
             dataf=indicator[sellcriteria[ind]['Indicator']](dataf=dataf)
 
-        print(dataf.head())
         if 'Indicator2' in sellcriteria[ind]:
             if 'Ind_parameter2' in sellcriteria[ind]:
                 dataf=indicator[sellcriteria[ind]['Indicator2']](dataf=dataf, periods=int(sellcriteria[ind]['Ind_parameter2']))
@@ -74,7 +63,6 @@ def dataprocessing(close: float, volatility: float, startdate: str, capital: flo
             elif 'Ind_parameter2' not in sellcriteria[ind]:
                 dataf=indicator[sellcriteria[ind]['Indicator2']](dataf=dataf)
         
-        print(dataf.head())
     for ind in list(sellcriteria.keys()):
 
         if 'Indicator2' in sellcriteria[ind]:
