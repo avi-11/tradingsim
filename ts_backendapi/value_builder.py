@@ -14,6 +14,9 @@ criteria10 = ['Indicator2', 'Ind_parameter2', 'Operator', 'Indicator']
 criteria11 = ['Indicator2', 'Operator', 'Indicator', 'Ind_parameter']
 criteria12 = ['Indicator2', 'Operator', 'Indicator']
 
+criteria13 = ['Value', 'Operator', 'Value2']
+criteria14 = ['Value2', 'Operator', 'Value']
+
 
 def value(criteriadic: dict) -> tuple:
     '''Args:
@@ -106,5 +109,19 @@ def value(criteriadic: dict) -> tuple:
 
         return valueOne, valueTwo
 
+    elif list(criteriadic.keys()) == criteria13:
+
+        valueTwo = f"{criteriadic['Value2']}"
+        valueOne = f"{criteriadic['Value']}"
+
+        return valueOne, valueTwo
+
+    elif list(criteriadic.keys()) == criteria12:
+
+        valueTwo = f"{criteriadic['Value']}"
+        valueOne = f"{criteriadic['Value2']}"
+
+        return valueOne, valueTwo
+
     else:
-        exit('Parameter is incorrect!')
+        exit(print('Parameter is incorrect!'))
