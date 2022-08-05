@@ -36,6 +36,7 @@ function App() {
   const [graphRan, setGraphRan] = useState([]);
   const [alertPositionSize, setalertPositionSize] = useState(false);
   const [submitValidate, setSubmitValidate] = useState(false);
+  const [selectedDate,setSelectedDate] = useState(null);
 
   const getRndInteger = (min, max) => {
     //console.log(Math.floor(Math.random() * (max - min + 1) ) + min);
@@ -226,6 +227,11 @@ function App() {
                   <option value={0.4}>Medium</option>
                   <option value={0.2}>Low</option>
                 </select>
+              </div>
+              <div className="input-field">
+                <label>Date</label>
+              {/* <Datepicker selected={selectedDate} onChange={date => setSelectedDate(date)} /> */}
+              <input type="date" onChange={e =>setSelectedDate(e.target.value)} />
               </div>
               <button type="submit" className="nextBtn">
               <span className="btnText">Simulate</span>
