@@ -227,12 +227,12 @@ function App() {
                   <option value={0.4}>Medium</option>
                   <option value={0.2}>Low</option>
                 </select>
-              </div>
-              <div className="input-field">
                 <label>Date</label>
               {/* <Datepicker selected={selectedDate} onChange={date => setSelectedDate(date)} /> */}
               <input type="date" onChange={e =>setSelectedDate(e.target.value)} />
               </div>
+//               <div className="input-field">
+//                 </div>
               <button type="submit" className="nextBtn">
               <span className="btnText">Simulate</span>
               <i className="uil uil-navigator"></i>
