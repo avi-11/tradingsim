@@ -36,6 +36,7 @@ function App() {
   const [graphRan, setGraphRan] = useState([]);
   const [alertPositionSize, setalertPositionSize] = useState(false);
   const [submitValidate, setSubmitValidate] = useState(false);
+  const [selectedDate,setSelectedDate] = useState(null);
 
   const getRndInteger = (min, max) => {
     //console.log(Math.floor(Math.random() * (max - min + 1) ) + min);
@@ -73,12 +74,12 @@ function App() {
   const handleInputChange = (event) => {
     console.log(event.target.name);
 
-    let mp = parseInt(marketPrice.replace(/,/g, ""));
-    let cap = parseInt(capital.replace(/,/g, ""));
+    let mp = Number(marketPrice.replace(/,/g, ""));
+    let cap = Number(capital.replace(/,/g, ""));
 
     if (event.target.name === "position") {
       // After updating position
-      const positionValue = parseInt(position);
+      const positionValue = Number(position);
       let posSize = positionValue / cap;
       console.log(posSize, positionValue, mp, cap);
       setPositionSize(posSize);
@@ -86,15 +87,15 @@ function App() {
       setQuantitySize(quant.toFixed(2));
     } else if (event.target.name === "positionSize") {
       // After updating position size
-      const positionSizeValue = parseInt(positionSize);
-      let pos = (positionSizeValue * cap)/100;
+      const positionSizeValue = Number(positionSize);
+      let pos = (positionSizeValue * cap) / 100;
       console.log(pos, positionSizeValue, mp, cap);
       setPosition(pos);
-      let quant = (pos / mp);
+      let quant = pos / mp;
       setQuantitySize(quant.toFixed(2));
     } else if (event.target.name === "quantitySize") {
       // After updating quantity size
-      const quantityValue = parseInt(quantitySize);
+      const quantityValue = Number(quantitySize);
       let pos = quantityValue * mp;
       console.log(pos, quantityValue, mp, cap);
       setPosition(pos);
@@ -105,7 +106,6 @@ function App() {
 
   const data = {
     labels: [
-      "July",
       "Aug",
       "Sep",
       "Oct",
@@ -117,6 +117,7 @@ function App() {
       "Apr",
       "May",
       "Jun",
+      "July",
     ],
     datasets: [
       {
@@ -141,8 +142,8 @@ function App() {
           }
         }}
       >
-        <div className="form first">
-          <div className="details personal">
+        <div className="form-first">
+          <div className="details-personal">
             <span className="title">Trading Simulator</span>
 
             <div className="fields">
@@ -210,26 +211,9 @@ function App() {
                   name="position"
                   onBlur={handleInputChange}
                   onChange={(e) => setPosition(e.target.value)}
-                  value={parseInt(position) ? parseInt(position) : ""}
+                  value={Number(position) ? Number(position) : ""}
                 />
               </div>
-            </div>
-          </div>
-
-          <div className="details ID">
-            <span className="title"></span>
-
-            <div className="fields">
-              <div className="input-field">
-                <label>Trigger price</label>
-                <NumberFormat thousandSeparator={true} />
-              </div>
-
-              <div className="input-field">
-                <label>Stop price</label>
-                <NumberFormat thousandSeparator={true} />
-              </div>
-
               <div className="input-field">
                 <label>Market volatility</label>
                 <select
@@ -244,48 +228,92 @@ function App() {
                   <option value={0.2}>Low</option>
                 </select>
               </div>
-
               <div className="input-field">
-                <label>Limit price</label>
-                <NumberFormat thousandSeparator={true} />
+                <label>Date</label>
+              {/* <Datepicker selected={selectedDate} onChange={date => setSelectedDate(date)} /> */}
+              <input type="date" onChange={e =>setSelectedDate(e.target.value)} />
               </div>
-              <div className="input-field">
-                <label>Brokerage</label>
-                <NumberFormat thousandSeparator={true} id="brokerage" />
-              </div>
-
-              <div className="input-field">
-                <label>Order side</label>
-                <select required>
-                  <option disabled selected></option>
-                  <option>LONG</option>
-                  <option>SHORT</option>
-                </select>
-              </div>
-              <div className="input-field">
-                <label>Metrics</label>
-                {showGraph && (
-                  <div>
-                    <Line data={data} width={"1000px"} height={"500px"} />
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <button type="submit" className="nextBtn">
+              <button type="submit" className="nextBtn">
               <span className="btnText">Simulate</span>
               <i className="uil uil-navigator"></i>
             </button>
+            </div>
+          </div>
+
+          {/* Work Here */}
+
+          <div className="details-ID">
+            <div className="detail">
+              <div className="details-inner">
+              <div className="entry-parameters">
+                <h3>ENTRY PARAMETERS</h3>
+                <div className="input-field">
+                  <label>Trigger price</label>
+                  <NumberFormat thousandSeparator={true} className="Trigger"/>
+                </div>
+                <div className="input-field">
+                  <label>Limit price</label>
+                  <NumberFormat thousandSeparator={true} className="Trigger"/>
+                </div>
+                <button type="submit" className="nextBtn">
+                  <span className="btnText">Build Entries</span>
+                </button>
+              </div>
+
+              <div className="exit-parameters">
+                <h3>EXIT PARAMETERS</h3>
+                <div className="input-field">
+                  <label>Stop price</label>
+                  <NumberFormat thousandSeparator={true} />
+                </div>
+                <div className="input-field">
+                  <label>Exit rule</label>
+                  <NumberFormat thousandSeparator={true} id="brokerage" />
+                </div>
+                <button type="submit" className="nextBtn">
+                  <span className="btnText">Build Exit</span>
+                </button>
+              </div>
+
+              </div>
+              <div className="how-to">
+                <h2>How to</h2>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Quisque nisl eros, pulvinar facilisis justo mollis, auctor
+                                                </p>
+              </div>
+            </div>
+
+            <div className="input-field">
+              <label>Order side</label>
+              <select required>
+                <option disabled selected></option>
+                <option>LONG</option>
+                <option>SHORT</option>
+              </select>
+            </div>
+            
+
+            
+            <div className="input-field">
+              <label>Metrics</label>
+              {showGraph && (
+                <div>
+                  <Line data={data} width={"1000px"} height={"500px"} />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        <button className="submit">
+        {/* <button className="submit">
           <span className="btnText"></span>
           <i className="uil uil-navigator"></i>
-        </button>
+        </button> */}
       </form>
 
-      <div className="shade"></div>
+      {/* <div className="shade"></div> */}
     </div>
   );
 }
