@@ -1,14 +1,13 @@
 from ast import operator
-from tatools import Indicators
+from ts_tatools import Indicators
 from criteria import *
-from report import reportmateric
+from ts_report import reportmateric
 from stimulator import price_stimulator
-from value_builder import value
 
 
-def dataprocessing(closeprice: float, volatility: float, startdate: str, capital: float, buycriteria: dict, sellcriteria: list = None):
+def dataprocessing(closeprice: float, volatility: float, startdate: str, qty: float, buycriteria: dict, sellcriteria: list = None):
 
-    dataf = price_stimulator(closeprice, volatility, startdate, capital)
+    dataf = price_stimulator(closeprice, volatility, startdate, qty)
 
     indicator = {'SMA': Indicators().addmovingav,
                  'RSI': Indicators().addrsi, 'BB': Indicators().addbb, 'ADX': Indicators().addadx, 'PP': Indicators().addpp}
@@ -65,7 +64,7 @@ def dataprocessing(closeprice: float, volatility: float, startdate: str, capital
     # sellcriteria
     for ind in list(sellcriteria.keys()):
 
-        valueOne, valueTwo = value(buycriteria[ind])
+        valueOne, valueTwo = value(sellcriteria[ind])
 
         dataf = sell(dataf, valueOne=valueOne, valueTwo=valueTwo,
                      operation=sellcriteria[ind]['Operator'])

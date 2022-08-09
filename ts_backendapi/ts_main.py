@@ -7,12 +7,10 @@ from stimulator import price_stimulator
 from pre_processing import dataprocessing
 
 # initating app
-app = FastAPI()
+app = FastAPI(redoc_url=None)
 
 # creating origin list
-origins = [
-    "http://localhost.com",
-]
+origins = ['*']
 
 # config CORSM
 app.add_middleware(
@@ -26,9 +24,9 @@ app.add_middleware(
 # link first for price
 
 
-@app.get('/price')
-def price(closeprice: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today(), capital=100000):
-    return price_stimulator(closeprice, volatility, startdate, capital)
+@app.post('/price')
+def price(closeprice: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today(), qty=10):
+    return price_stimulator(closeprice, volatility, startdate, qty)
 
 
 # sample data for criteria
@@ -37,21 +35,16 @@ buycriteria = {'C1': {
     'Ind_parameter': 50,
     'Operator': '>',
     'Indicator2': 'SMA',
-    'Ind_parameter2': 100},
+    'Ind_parameter2': 200},
     'C2': {
-    'Indicator': 'SMA',
-    'Ind_parameter': 21,
-    'Operator': '>',
-    'Value': 10000},
-    'C3': {
     'Value': 'ClosePrice',
     'Operator': '>',
     'Indicator': 'SMA',
-    'Ind_parameter': 20
+    'Ind_parameter': 21
 }
 }
 
-sellcriteria = {'C2': {
+sellcriteria = {'C1': {
     'Indicator': 'SMA',
     'Ind_parameter': 3,
     'Operator': '>',
@@ -60,8 +53,8 @@ sellcriteria = {'C2': {
 
 
 # link two for report
-@app.get('/report')
-def report(closeprice: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today(), capital=100000, buycriteria=buycriteria, sellcriteria=sellcriteria):
+@app.post('/report')
+def report(closeprice: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today(), qty=10, buycriteria=buycriteria, sellcriteria=sellcriteria):
 
     # converting json to dic
     buycriteria = json.loads(buycriteria)
@@ -70,4 +63,4 @@ def report(closeprice: float = 10000, volatility: float = 0.03, startdate: str =
     sellcriteria = json.loads(sellcriteria)
     print(type(sellcriteria))
 
-    return dataprocessing(closeprice, volatility, startdate, capital=capital, buycriteria=buycriteria, sellcriteria=sellcriteria)
+    return dataprocessing(closeprice, volatility, startdate, qty=qty, buycriteria=buycriteria, sellcriteria=sellcriteria)

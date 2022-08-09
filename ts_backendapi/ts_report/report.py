@@ -26,6 +26,7 @@ def reportmateric(dataf):
         dataf['Profit'] = [float(dataf.loc[i, 'Qty']*(dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
                            if dataf.loc[i, 'Position'] == 1 else 0 for i in dataf.index]
 
+        print(dataf[dataf['BuyPosition'] == 1])
         print(dataf[dataf['Position'] == 1])
         print(dataf[dataf['Profit'] != 0])
         return qs.reports.metrics(dataf['Profit'], mode='full', display=False)
