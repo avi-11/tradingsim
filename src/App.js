@@ -2,6 +2,9 @@ import React from "react";
 import NumberFormat from "react-number-format";
 import "./App.css";
 import { useState, useEffect } from "react";
+import MadeData from "./Data";
+import axios from "axios";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,6 +17,8 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { Line } from "react-chartjs-2";
+import Datepicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 ChartJS.register(
   CategoryScale,
@@ -36,8 +41,19 @@ function App() {
   const [graphRan, setGraphRan] = useState([]);
   const [alertPositionSize, setalertPositionSize] = useState(false);
   const [submitValidate, setSubmitValidate] = useState(false);
-  const [selectedDate,setSelectedDate] = useState(null);
+  const [chartsToDisplay, setChartsToDisplay] = useState([]);
+  const[selectedDate,setSelectedDate]=useState(null);
+  const[labels,setLabels]=useState([]);
 
+  const getData = async () => {
+    const charts = [];
+    charts.push(<ChartJS key={1} data={MadeData} />);
+    setChartsToDisplay(charts);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
   const getRndInteger = (min, max) => {
     //console.log(Math.floor(Math.random() * (max - min + 1) ) + min);
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -52,7 +68,7 @@ function App() {
       range.push(getRndInteger(a, b));
     }
     setShowGraph(true);
-    setGraphRan(range);
+    
     //console.log(range);
   };
   const validateSubmit = () => {
@@ -103,21 +119,22 @@ function App() {
       setPositionSize(posSize);
     }
   };
+  const getApi=() => {
+    axios.post('http://tradingsim.herokuapp.com/price')
+    .then(res => {
+      console.log(Object.keys(res.data.ClosePrice));
+        console.log(res.data.ClosePrice);
+        setGraphRan(Object.values(res.data.ClosePrice));
+        setLabels(Object.keys(res.data.ClosePrice));
+    }
+    ).catch(err => {
+      console.log(err);
+    })
+  }
 
   const data = {
     labels: [
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "July",
+      ...labels
     ],
     datasets: [
       {
@@ -206,9 +223,9 @@ function App() {
 
               <div className="input-field">
                 <label>Position</label>
-                <input
-                  type="long"
-                  name="position"
+                <NumberFormat
+                  
+                  thousandSeparator={true}
                   onBlur={handleInputChange}
                   onChange={(e) => setPosition(e.target.value)}
                   value={Number(position) ? Number(position) : ""}
@@ -230,10 +247,11 @@ function App() {
                 <label>Date</label>
               {/* <Datepicker selected={selectedDate} onChange={date => setSelectedDate(date)} /> */}
               <input type="date" onChange={e =>setSelectedDate(e.target.value)} />
+              
               </div>
-//               <div className="input-field">
-//                 </div>
-              <button type="submit" className="nextBtn">
+              <div className="input-field">
+                </div>
+              <button type="submit" className="nextBtn" onClick={getApi}>
               <span className="btnText">Simulate</span>
               <i className="uil uil-navigator"></i>
             </button>
@@ -255,7 +273,7 @@ function App() {
                   <label>Limit price</label>
                   <NumberFormat thousandSeparator={true} className="Trigger"/>
                 </div>
-                <button type="submit" className="nextBtn">
+                <button type="submit" className="nextBtn" >
                   <span className="btnText">Build Entries</span>
                 </button>
               </div>
@@ -304,6 +322,8 @@ function App() {
                 </div>
               )}
             </div>
+             
+               {/* <div className="chart">{chartsToDisplay.map(item => item)}</div>   */}
           </div>
         </div>
 
