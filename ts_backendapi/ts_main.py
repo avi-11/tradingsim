@@ -2,7 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import datetime
 import json
+import pandas as pd
 
+from sampledata import data
 from stimulator import price_stimulator
 from pre_processing import dataprocessing
 
@@ -25,8 +27,12 @@ app.add_middleware(
 
 
 @app.post('/price')
-def price(closeprice: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today(), qty=10):
-    return price_stimulator(closeprice, volatility, startdate, qty)
+def price(instrumentname: str='BTC', closeprice: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today(), qty=10):
+    
+    df=price_stimulator(instrumentname, closeprice, volatility, startdate, qty)
+
+    # return df[['InstrumentName','OHLC']]
+    return df['InstrumentName OHLC Qty']
 
 
 # sample data for criteria
@@ -54,7 +60,7 @@ sellcriteria = {'C1': {
 
 # link two for report
 @app.post('/report')
-def report(closeprice: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today(), qty=10, buycriteria=buycriteria, sellcriteria=sellcriteria):
+def report(data=data, buycriteria=buycriteria, sellcriteria=sellcriteria):
 
     # converting json to dic
     buycriteria = json.loads(buycriteria)
@@ -62,5 +68,8 @@ def report(closeprice: float = 10000, volatility: float = 0.03, startdate: str =
 
     sellcriteria = json.loads(sellcriteria)
     print(type(sellcriteria))
-
-    return dataprocessing(closeprice, volatility, startdate, qty=qty, buycriteria=buycriteria, sellcriteria=sellcriteria)
+    
+    data=json.loads(data)
+    df=pd.DataFrame(data.values(), index=data.keys(), columns=['InstrumnetName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice', 'Qty'])
+    print(df)
+    return dataprocessing(dataf=df, buycriteria=buycriteria, sellcriteria=sellcriteria)

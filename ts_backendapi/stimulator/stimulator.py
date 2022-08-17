@@ -2,15 +2,14 @@ import pandas as pd
 import random
 
 
-def price_stimulator(closeprice: float, volatility: float, startdate: str, qty: float):
+def price_stimulator(instrumentname, closeprice: float, volatility: float, startdate: str, qty: float):
 
     # get date range of business days.
     dt = pd.date_range(start=startdate, periods=260, freq='B')
 
     # empty datafram
-    df = pd.DataFrame(
-        columns=['OpenPrice', 'HighPrice', 'LowPrice', 'ClosePrice'], index=dt)
-
+    # df = pd.DataFrame(columns=['OpenPrice', 'HighPrice', 'LowPrice', 'ClosePrice', 'OHLC'], index=dt)
+    df = pd.DataFrame(columns=['OpenPrice', 'HighPrice', 'LowPrice', 'ClosePrice', 'InstrumentName OHLC Qty'], index=dt)
     # preparing ClosePrice, OpenPrice, HighPrice and LowPrice
     for d in df.index:
 
@@ -29,7 +28,10 @@ def price_stimulator(closeprice: float, volatility: float, startdate: str, qty: 
         df.loc[d, ['HighPrice']] = highprice
         df.loc[d, ['LowPrice']] = lowprice
         df.loc[d, ['ClosePrice']] = closeprice
+        # df.loc[d, ['OHLC']]=[[openprice, highprice, lowprice, closeprice]]
+        df.loc[d, ['InstrumentName OHLC Qty']]=[[instrumentname, openprice, highprice, lowprice, closeprice, float(qty)]]
 
-    df['Qty'] = float(qty)
+    # df['Qty'] = float(qty)
+    # df['InstrumentName']= instrumentname
 
     return df

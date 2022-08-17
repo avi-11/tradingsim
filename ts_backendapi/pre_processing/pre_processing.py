@@ -5,9 +5,7 @@ from ts_report import reportmateric
 from stimulator import price_stimulator
 
 
-def dataprocessing(closeprice: float, volatility: float, startdate: str, qty: float, buycriteria: dict, sellcriteria: list = None):
-
-    dataf = price_stimulator(closeprice, volatility, startdate, qty)
+def dataprocessing(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
 
     indicator = {'SMA': Indicators().addmovingav,
                  'RSI': Indicators().addrsi, 'BB': Indicators().addbb, 'ADX': Indicators().addadx, 'PP': Indicators().addpp}
