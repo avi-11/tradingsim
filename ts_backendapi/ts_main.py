@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import datetime
+from datetime import datetime
 import json
 import pandas as pd
 
@@ -26,13 +26,13 @@ app.add_middleware(
 # link first for price
 
 
-@app.post('/price')
-def price(instrumentname: str='BTC', closeprice: float = 10000, volatility: float = 0.03, startdate: str = datetime.datetime.today(), qty=10):
+@app.post('/simulate_price')
+def price(instrumentname: str='BTC', closeprice: float = 10000, volatility: float = 0.03, startdate: str =datetime.now().strftime('%d-%m-%Y')):
     
-    df=price_stimulator(instrumentname, closeprice, volatility, startdate, qty)
+    df=price_stimulator(instrumentname, closeprice, volatility, startdate)
 
     # return df[['InstrumentName','OHLC']]
-    return df['InstrumentName OHLC Qty']
+    return df['InstrumentName OHLC']
 
 
 # sample data for criteria
