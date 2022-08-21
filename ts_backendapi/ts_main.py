@@ -59,8 +59,8 @@ sellcriteria = {'C1': {
 
 
 # link two for report
-@app.post('/report')
-def report(data=data, buycriteria=buycriteria, sellcriteria=sellcriteria):
+@app.post('/simulate_report')
+def report(data=data, order_side: int=0, initial_capital: float=100000, position_size: float=0.1, buycriteria=buycriteria, sellcriteria=sellcriteria):
 
     # converting json to dic
     buycriteria = json.loads(buycriteria)
@@ -70,6 +70,23 @@ def report(data=data, buycriteria=buycriteria, sellcriteria=sellcriteria):
     print(type(sellcriteria))
     
     data=json.loads(data)
-    df=pd.DataFrame(data.values(), index=data.keys(), columns=['InstrumnetName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice', 'Qty'])
+    df=pd.DataFrame(data.values(), index=data.keys(), columns=['InstrumnetName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice'])
+    df.index=pd.to_datetime(df.index, format="%d-%m-%Y")
     print(df)
     return dataprocessing(dataf=df, buycriteria=buycriteria, sellcriteria=sellcriteria)
+
+@app.post('/simulate_chartdata')
+def report(data=data, order_side: int=0, initial_capital: float=100000, position_size: float=0.1, buycriteria=buycriteria, sellcriteria=sellcriteria):
+
+    # converting json to dic
+    buycriteria = json.loads(buycriteria)
+    print(type(buycriteria))
+
+    sellcriteria = json.loads(sellcriteria)
+    print(type(sellcriteria))
+    
+    data=json.loads(data)
+    df=pd.DataFrame(data.values(), index=data.keys(), columns=['InstrumnetName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice'])
+    df.index=pd.to_datetime(df.index, format="%d-%m-%Y")
+    print(df)
+    return df

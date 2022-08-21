@@ -23,7 +23,9 @@ def reportmateric(dataf):
 
         dataf['nextclose'] = dataf['ClosePrice'].shift(-1)
         dataf.fillna(0, inplace=True)
-        dataf['Profit'] = [float(dataf.loc[i, 'Qty']*(dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
+        # dataf['Profit'] = [float(dataf.loc[i, 'Qty']*(dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
+        #                    if dataf.loc[i, 'Position'] == 1 else 0 for i in dataf.index]
+        dataf['Profit'] = [float((dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
                            if dataf.loc[i, 'Position'] == 1 else 0 for i in dataf.index]
 
         print(dataf[dataf['BuyPosition'] == 1])
@@ -33,7 +35,9 @@ def reportmateric(dataf):
 
     elif buysellcheck == False and buycheck:
         dataf['nextclose'] = dataf['ClosePrice'].shift(-1)
-        dataf['Profit'] = [float(dataf.loc[i, 'Qty']*(dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
+        # dataf['Profit'] = [float(dataf.loc[i, 'Qty']*(dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
+        #                    if dataf.loc[i, 'BuyPosition'] == 1 else 0 for i in dataf.index]
+        dataf['Profit'] = [float((dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
                            if dataf.loc[i, 'BuyPosition'] == 1 else 0 for i in dataf.index]
 
         dataf.fillna(0, inplace=True)
@@ -42,7 +46,9 @@ def reportmateric(dataf):
 
     elif buysellcheck == False and sellcheck:
         dataf['nextclose'] = dataf['ClosePrice'].shift(-1)
-        dataf['Profit'] = [float(dataf.loc[i, 'Qty']*(dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
+        # dataf['Profit'] = [float(dataf.loc[i, 'Qty']*(dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
+        #                    if dataf.loc[i, 'SellPosition'] == -1 else 0 for i in dataf.index]
+        dataf['Profit'] = [float((dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
                            if dataf.loc[i, 'SellPosition'] == -1 else 0 for i in dataf.index]
 
         dataf.fillna(0, inplace=True)
