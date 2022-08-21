@@ -16,9 +16,6 @@
 }
 body {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: black;
 }
 
@@ -168,7 +165,6 @@ h3 {
 }
 p,
 h2 {
-  width: 50%;
   color: white;
   /* padding-left: 80px; */
 }
