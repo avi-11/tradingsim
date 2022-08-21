@@ -1,11 +1,7 @@
-import React from "react";
-import NumberFormat from "react-number-format";
-import './index.css';
+import "./index.css";
 import { useState, useEffect } from "react";
-import MadeData from "./Data";
 import axios from "axios";
-import {useNavigate } from 'react-router-dom';
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import {
   Chart as ChartJS,
@@ -17,10 +13,15 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Chart } from "react-chartjs-2";
-import { Line } from "react-chartjs-2";
-import Datepicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import "react-datepicker/dist/react-datepicker.css";
+
+import styles from "./Home.module.css";
+import SelectInput from "./components/input/selectInput/SelectInput";
+import Numberinput from "./components/input/numberInput/Numberinput";
+import GlobalInput from "./components/input/globalInput/GlobalInput";
+import LabelSelector from "./components/input/labelSelector/LabelSelector";
+import ActionButton from "./components/button/actionButton/ActionButton";
+import LineChart from "./components/chart/LineChart";
 
 ChartJS.register(
   CategoryScale,
@@ -44,22 +45,23 @@ function Home() {
   const [alertPositionSize, setalertPositionSize] = useState(false);
   const [submitValidate, setSubmitValidate] = useState(false);
   const [chartsToDisplay, setChartsToDisplay] = useState([]);
-  const[selectedDate,setSelectedDate]=useState(null);
-  const[labels,setLabels]=useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [labels, setLabels] = useState([]);
 
   const getData = async () => {
     const charts = [];
-    charts.push(<ChartJS key={1} data={MadeData} />);
+    // charts.push(<ChartJS key={1} data={MadeData} />);
     setChartsToDisplay(charts);
   };
 
   useEffect(() => {
     getData();
   }, []);
+
   const getRndInteger = (min, max) => {
-    //console.log(Math.floor(Math.random() * (max - min + 1) ) + min);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
+
   const ShowGraph = () => {
     let range = [];
     let mp = parseInt(marketPrice.replace(/,/g, ""));
@@ -70,9 +72,10 @@ function Home() {
       range.push(getRndInteger(a, b));
     }
     setShowGraph(true);
-    
+
     //console.log(range);
   };
+
   const validateSubmit = () => {
     if (positionSize > 100) {
       setSubmitValidate(false);
@@ -84,6 +87,7 @@ function Home() {
       setSubmitValidate(true);
     }
   };
+
   const formatToCurrency = (amount) => {
     amount = parseInt(amount);
     return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
@@ -121,25 +125,25 @@ function Home() {
       setPositionSize(posSize);
     }
   };
-  const getApi=() => {
-    axios.post('http://tradingsim.herokuapp.com/simulate_price')
-    .then(res => {
-      console.log(Object.keys(res.data));
+
+  const getApi = () => {
+    axios
+      .post("http://tradingsim.herokuapp.com/simulate_price")
+      .then((res) => {
+        console.log(Object.keys(res.data));
         console.log(res.data);
-        const arr=Object.values(res.data).map(x => x[1]);
+        const arr = Object.values(res.data).map((x) => x[1]);
         console.log(arr);
         setGraphRan(arr);
-         setLabels(Object.keys(res.data));
-    }
-    ).catch(err => {
-      console.log(err);
-    })
-  }
+        setLabels(Object.keys(res.data));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const data = {
-    labels: [
-      ...labels
-    ],
+    labels: [...labels],
     datasets: [
       {
         label: "Simulator",
@@ -150,18 +154,24 @@ function Home() {
       },
     ],
   };
-  
 
   return (
     <div className="container">
-      <h1>Crypto Trading Sim</h1>
-      <div className="how-to">
-                <h2>How to</h2>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Quisque nisl eros, pulvinar facilisis justo mollis, auctor
-                  </p>
-              </div>
+      <div className={styles.homeDetailContainer}>
+        <h2>Home</h2>
+        <p>
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since the 1500s, when an unknown printer took a galley of type and
+          scrambled it to make a type specimen book. It has survived not only
+          five centuries, but also the leap into electronic typesetting,
+          remaining essentially unchanged. It was popularised in the 1960s with
+          the release of Letraset sheets containing Lorem Ipsum passages, and
+          more recently with desktop publishing software like Aldus PageMaker
+          including versions of Lorem Ipsum
+        </p>
+      </div>
+
       <form
         action="/"
         onSubmit={(e) => {
@@ -174,93 +184,38 @@ function Home() {
       >
         <div className="form-first">
           <div className="details-personal">
-            <span className="title"></span>
+            <div className={styles.formField__grid}>
+              <SelectInput />
 
-            <div className="fields">
-              <div className="input-field">
-                <label>Instrument</label>
-                <select required>
-                  <option disabled selected></option>
-                  <option>BTC</option>
-                  <option>ETH</option>
-                </select>
-              </div>
+              <Numberinput value={marketPrice} setValue={setMarketPrice} />
 
-              <div className="input-field">
-                <label>Market price</label>
-                <NumberFormat
-                  thousandSeparator={true}
-                  id="market-price"
-                  value={marketPrice}
-                  onChange={(e) => {
-                    setMarketPrice(e.target.value);
-                  }}
-                />
-              </div>
+              <LabelSelector
+                values={["High", "Medium", "Low"]}
+                currentValue={volatility}
+                setValue={SetVolatilty}
+              />
 
-              
-              
-              
-              <div className="input-field">
-                <label>Market volatility</label>
-                <select
-                  value={volatility}
-                  onChange={(e) => {
-                    SetVolatilty(e.target.value);
-                  }}
-                >
-                  <option selected></option>
-                  <option value={0.8}>High</option>
-                  <option value={0.4}>Medium</option>
-                  <option value={0.2}>Low</option>
-                </select>
-                <label>Date</label>
-              {/* <Datepicker selected={selectedDate} onChange={date => setSelectedDate(date)} /> */}
-              <input type="date" onChange={e =>setSelectedDate(e.target.value)} />
-              
-              </div>
-              <div className="input-field">
-                </div>
-              <button type="submit" className="nextBtn" onClick={getApi}>
-              <span className="btnText">Simulate</span>
-              <i className="uil uil-navigator"></i>
-            </button>
+              <GlobalInput inputType="date" setValue={setSelectedDate} />
             </div>
           </div>
 
-          {/* Work Here */}
-
-          <div className="details-ID">
-            <div className="detail">
-              <div className="details-inner">
-              
-              
-              </div>
-              
-            </div>
-
-            
-            
-
-            
-            <div className="chart">
-              <label>Metrics</label>
-              {showGraph && (
-                <div>
-                  <Line data={data} width={"500px"} height={"250px"} />
-                </div>
-              )}
-            </div>
-             
-               {/* <div className="chart">{chartsToDisplay.map(item => item)}</div>   */}
-          </div>
+          <ActionButton buttonText="Simulate Price" onClick={getApi} />
         </div>
-
-        <Link to="/entry" className="link"> Next</Link>
-        
       </form>
 
-       <div className="shade"></div>
+      <div className="details-ID">
+        <LineChart showGraph={showGraph} data={data} />
+      </div>
+
+      <Link
+        to="/entry"
+        className="link"
+        style={{ position: "relative", left: "80%" }}
+      >
+        <ActionButton buttonText="Create Entries" />
+      </Link>
+
+      <div className="shade"></div>
     </div>
   );
 }
