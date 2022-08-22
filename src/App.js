@@ -1,8 +1,6 @@
-import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./App.css";
-import "./CssVariables.css";
 import styles from "./pages/home/Home.module.css";
 
 import Entry from "./pages/entry/Entry";
@@ -11,14 +9,11 @@ import Home from "./pages/home/Home";
 import Result from "./pages/result/Result";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
+import ShadeContainer from "./components/container/ShadeContainer";
 
 function App() {
   return (
-    <div
-      style={{
-        width: "90%",
-      }}
-    >
+    <ShadeContainer>
       <Header />
       <div className={styles.homeDetailContainer}>
         <h2>Home</h2>
@@ -43,7 +38,7 @@ function App() {
         </Routes>
         <Footer />
       </BrowserRouter>
-    </div>
+    </ShadeContainer>
   );
 }
 
