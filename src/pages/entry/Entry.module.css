@@ -1,0 +1,71 @@
+.formContainer > form > div {
+  margin: 1rem 0rem;
+}
+
+.entry__radioFormGroup {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.entry__radioFormGroup label {
+  margin-right: 1rem;
+}
+
+.entry__radioFormGroup input {
+  margin-right: 0.25rem;
+}
+
+.entry__capitalFormGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.entry__capitalFormGroup > label > input {
+  margin-left: 1rem;
+  width: 20rem;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.formContainer > form > .entry__entryFormGroup {
+  margin-top: 5rem;
+  width: 90%;
+}
+
+.entryFormGroup__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 2rem 0rem;
+}
+
+.entryFormGroup__row > p {
+  flex-grow: 1.5;
+}
+.entryFormGroup__row > * {
+  flex-grow: 1;
+}
+.entryFormGroup__row > div > select {
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+}
+
+.entry__editRuleBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.entry__editRuleBtn > * {
+  margin-right: 0.75rem !important;
+}
+
+.entry__routeBtn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 1rem 0rem;
+}

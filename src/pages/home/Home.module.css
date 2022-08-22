@@ -1,0 +1,41 @@
+.homeDetailContainer,
+.homeDetailContainer > p {
+  margin: 25px 0px;
+}
+
+.homeDetailContainer > h2,
+.homeDetailContainer > p {
+  width: 100%;
+  font-size: 0.9em;
+}
+
+.formField__grid {
+  width: 90%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.formField__grid label {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.formField__grid > div {
+  display: flex;
+  align-items: center;
+}
+
+.formField__grid input,
+.formField__grid label input,
+.formField__grid select {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 5px;
+  font-size: 1rem;
+
+  margin-left: 1rem;
+}
