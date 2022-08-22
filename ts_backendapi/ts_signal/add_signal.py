@@ -1,11 +1,8 @@
-from ast import operator
 from ts_tatools import Indicators
 from criteria import *
-from ts_report import reportmateric
-from stimulator import price_stimulator
 
 
-def dataprocessing(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
+def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
 
     indicator = {'SMA': Indicators().addmovingav,
                  'RSI': Indicators().addrsi, 'BB': Indicators().addbb, 'ADX': Indicators().addadx, 'PP': Indicators().addpp}
@@ -37,7 +34,7 @@ def dataprocessing(dataf: DataFrame, buycriteria: dict, sellcriteria: list = Non
                     operation=buycriteria[ind]['Operator'])
 
         # dataf = criteriadic[criteria]()
-        print(dataf[dataf['BuyPosition'] == 1])
+        print(dataf[dataf['BuySignal'] == 1])
 
     # indicator for sellcriteria
     for ind in list(sellcriteria.keys()):
@@ -68,8 +65,6 @@ def dataprocessing(dataf: DataFrame, buycriteria: dict, sellcriteria: list = Non
                      operation=sellcriteria[ind]['Operator'])
 
         # dataf = criteriadic[criteria]()
-        print(dataf[dataf['SellPosition'] == -1])
-
-    metrics = reportmateric(dataf)
-
-    return metrics
+        print(dataf[dataf['SellSignal'] == -1])
+        
+    return dataf

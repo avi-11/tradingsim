@@ -1,12 +1,14 @@
+from turtle import position
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
-import json
 import pandas as pd
+from pydantic import BaseModel
 
 from sampledata import data
-from stimulator import price_stimulator
-from pre_processing import dataprocessing
+from ts_signal import signal
+from stimulate_price import price_stimulate
+from stimulate_report import reportmateric
 
 # initating app
 app = FastAPI(redoc_url=None)
@@ -27,9 +29,9 @@ app.add_middleware(
 
 
 @app.post('/simulate_price')
-def price(instrumentname: str='BTC', closeprice: float = 10000, volatility: float = 0.03, startdate: str =datetime.now().strftime('%d-%m-%Y')):
-    
-    df=price_stimulator(instrumentname, closeprice, volatility, startdate)
+def price(instrumentname: str = 'BTC', closeprice: float = 10000, volatility: float = 0.03, startdate: str = datetime.now().strftime('%d-%m-%Y')):
+
+    df = price_stimulate(instrumentname, closeprice, volatility, startdate)
 
     # return df[['InstrumentName','OHLC']]
     return df['InstrumentName OHLC']
@@ -58,35 +60,43 @@ sellcriteria = {'C1': {
 }
 
 
+class Report(BaseModel):
+    ohlc_data = data
+    order_side: int = 0
+    initial_capital: float = 100000
+    position_size: float = 0.1
+    buycriteria = buycriteria
+    sellcriteria = sellcriteria
+
 # link two for report
-@app.post('/simulate_report')
-def report(data=data, order_side: int=0, initial_capital: float=100000, position_size: float=0.1, buycriteria=buycriteria, sellcriteria=sellcriteria):
 
-    # converting json to dic
-    buycriteria = json.loads(buycriteria)
-    print(type(buycriteria))
-
-    sellcriteria = json.loads(sellcriteria)
-    print(type(sellcriteria))
-    
-    data=json.loads(data)
-    df=pd.DataFrame(data.values(), index=data.keys(), columns=['InstrumnetName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice'])
-    df.index=pd.to_datetime(df.index, format="%d-%m-%Y")
-    print(df)
-    return dataprocessing(dataf=df, buycriteria=buycriteria, sellcriteria=sellcriteria)
 
 @app.post('/simulate_chartdata')
-def report(data=data, order_side: int=0, initial_capital: float=100000, position_size: float=0.1, buycriteria=buycriteria, sellcriteria=sellcriteria):
+def chartdata(report_data: Report):
 
-    # converting json to dic
-    buycriteria = json.loads(buycriteria)
-    print(type(buycriteria))
+    buycriteria = report_data.buycriteria
 
-    sellcriteria = json.loads(sellcriteria)
-    print(type(sellcriteria))
-    
-    data=json.loads(data)
-    df=pd.DataFrame(data.values(), index=data.keys(), columns=['InstrumnetName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice'])
-    df.index=pd.to_datetime(df.index, format="%d-%m-%Y")
-    print(df)
+    sellcriteria = report_data.sellcriteria
+
+    data = report_data.ohlc_data
+    df = pd.DataFrame(data.values(), index=data.keys(), columns=[
+                      'InstrumnetName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice'])
+    df.index = pd.to_datetime(df.index, format="%d-%m-%Y")
+
+    df = signal(dataf=df, buycriteria=buycriteria, sellcriteria=sellcriteria)
+
+    order_side = report_data.order_side
+    initial_capital = report_data.initial_capital
+    position_size = report_data.position_size
+
     return df
+
+
+# link three for report
+
+@app.post('/simulate_report')
+def report(report_data: Report):
+
+    dataf = chartdata(report_data=report_data)
+
+    return reportmateric(dataf=dataf)

@@ -83,7 +83,8 @@ class Indicators:
         '''
         try:
             # adx column
-            dataf['ADX'] = adx(dataf['HighPrice'], dataf['LowPrice'], dataf['ClosePrice'], window=period)
+            dataf['ADX'] = adx(
+                dataf['HighPrice'], dataf['LowPrice'], dataf['ClosePrice'], window=period)
 
             print('\nADX is added to dataframe')
 
@@ -117,7 +118,6 @@ class Indicators:
 
             tcpr = (2*(pp) - (dataf['BCPR'])).shift(1)
 
-        
             # pivot point
             dataf['PP pp'] = cpp
             # r1-pivot point
@@ -139,4 +139,3 @@ class Indicators:
             print(f'\n{e} while adding pivot points')
 
         return dataf
-        

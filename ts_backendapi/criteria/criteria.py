@@ -12,30 +12,30 @@ def buy(df: DataFrame, valueOne: str, valueTwo: str, operation: str):
     if valueTwo in df.columns:
         valueTwo = df[valueTwo]
 
-    if ('BuyPosition' in df.columns):
+    if ('BuySignal' in df.columns):
         if operation == '>':
             con = ((valueOne > valueTwo)
-                   & (df['BuyPosition'] == 1))
-            df['BuyPosition'] = np.where(con, 1, 0)
+                   & (df['BuySignal'] == 1))
+            df['BuySignal'] = np.where(con, 1, 0)
         elif operation == '<':
             con = ((valueOne < valueTwo)
-                   & (df['BuyPosition'] == 1))
-            df['BuyPosition'] = np.where(con, 1, 0)
+                   & (df['BuySignal'] == 1))
+            df['BuySignal'] = np.where(con, 1, 0)
         elif operation == '=':
             con = ((valueOne == valueTwo)
-                   & (df['BuyPosition'] == 1))
-            df['BuyPosition'] = np.where(con, 1, 0)
+                   & (df['BuySignal'] == 1))
+            df['BuySignal'] = np.where(con, 1, 0)
 
     else:
         if operation == '>':
             con = ((valueOne > valueTwo))
-            df['BuyPosition'] = np.where(con, 1, 0)
+            df['BuySignal'] = np.where(con, 1, 0)
         elif operation == '<':
             con = ((valueOne < valueTwo))
-            df['BuyPosition'] = np.where(con, 1, 0)
+            df['BuySignal'] = np.where(con, 1, 0)
         elif operation == '=':
             con = ((valueOne == valueTwo))
-            df['BuyPosition'] = np.where(con, 1, 0)
+            df['BuySignal'] = np.where(con, 1, 0)
 
     return df
 
@@ -49,29 +49,29 @@ def sell(df: DataFrame, valueOne: str, valueTwo: str, operation: str):
     if valueTwo in df.columns:
         valueTwo = df[valueTwo]
 
-    if ('SellPosition' in df.columns):
+    if ('SellSignal' in df.columns):
         if operation == '>':
             con = ((valueOne > valueTwo)
-                   & (df['SellPosition'] == -1))
-            df['SellPosition'] = np.where(con, -1, 0)
+                   & (df['SellSignal'] == -1))
+            df['SellSignal'] = np.where(con, -1, 0)
         elif operation == '<':
             con = ((valueOne < valueTwo)
-                   & (df['SellPosition'] == -1))
-            df['SellPosition'] = np.where(con, -1, 0)
+                   & (df['SellSignal'] == -1))
+            df['SellSignal'] = np.where(con, -1, 0)
         elif operation == '=':
             con = ((valueOne == valueTwo)
-                   & (df['SellPosition'] == -1))
-            df['SellPosition'] = np.where(con, -1, 0)
+                   & (df['SellSignal'] == -1))
+            df['SellSignal'] = np.where(con, -1, 0)
 
     else:
         if operation == '>':
             con = ((valueOne > valueTwo))
-            df['SellPosition'] = np.where(con, -1, 0)
+            df['SellSignal'] = np.where(con, -1, 0)
         elif operation == '<':
             con = ((valueOne < valueTwo))
-            df['SellPosition'] = np.where(con, -1, 0)
+            df['SellSignal'] = np.where(con, -1, 0)
         elif operation == '=':
             con = ((valueOne == valueTwo))
-            df['SellPosition'] = np.where(con, -1, 0)
+            df['SellSignal'] = np.where(con, -1, 0)
 
     return df

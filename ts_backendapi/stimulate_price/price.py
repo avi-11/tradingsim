@@ -2,7 +2,7 @@ import pandas as pd
 import random
 
 
-def price_stimulator(instrumentname, closeprice: float, volatility: float, startdate: str):
+def price_stimulate(instrumentname, closeprice: float, volatility: float, startdate: str):
 
     # get date range of business days.
     dt = pd.date_range(start=startdate, periods=260, freq='B').strftime('%d-%m-%Y')
