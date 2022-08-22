@@ -188,7 +188,12 @@ function Home() {
             </div>
           </div>
 
-          <ActionButton buttonText="Simulate Price" onClick={getApi} />
+          <ActionButton
+            buttonText="Simulate Price"
+            onClick={getApi}
+            textColor="var(--whiteColor)"
+            backgroundColor="var(--brandColor)"
+          />
         </div>
       </form>
 
@@ -201,10 +206,14 @@ function Home() {
         className="link"
         style={{ position: "relative", left: "80%" }}
       >
-        <ActionButton buttonText="Create Entries" />
+        <ActionButton
+          buttonText="Create Entries"
+          textColor="var(--whiteColor)"
+          backgroundColor="var(--brandColor)"
+        />
       </Link>
 
-      <div className="shade"></div>
+      {/* <div className="shade"></div> */}
     </div>
   );
 }

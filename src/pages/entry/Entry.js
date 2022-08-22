@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
+import Container from "../../components/container/Container";
 import SelectInput from "../../components/input/selectInput/SelectInput";
 
 import styles from "./Entry.module.css";
@@ -21,7 +22,7 @@ const Entry = () => {
 
   return (
     <div className="app-container">
-      <div className={styles.formContainer}>
+      <Container>
         <h2>ENTRY BUILDER</h2>
         <form>
           <div className={styles.entry__radioFormGroup}>
@@ -72,19 +73,37 @@ const Entry = () => {
           </div>
 
           <div className={styles.entry__editRuleBtn}>
-            <ActionButton buttonText={"Add Rule"} onClick={addRule} />
-            <ActionButton buttonText={"Delete Rule"} onClick={removeRule} />
+            <ActionButton
+              buttonText={"Add Rule"}
+              onClick={addRule}
+              textColor="var(--whiteColor)"
+              backgroundColor="var(--brandColor)"
+            />
+            <ActionButton
+              buttonText={"Delete Rule"}
+              onClick={removeRule}
+              backgroundColor="var(--whiteColor)"
+              textColor="var(--blackColor)"
+            />
           </div>
         </form>
-      </div>
+      </Container>
 
       <div className={styles.entry__routeBtn}>
         <Link to="/">
-          <ActionButton buttonText="Back" />
+          <ActionButton
+            buttonText="Back To Home"
+            textColor="var(--whiteColor)"
+            backgroundColor="transparent"
+          />
         </Link>
 
         <Link to="/exit">
-          <ActionButton buttonText="Next" />
+          <ActionButton
+            buttonText="Submit"
+            textColor="var(--whiteColor)"
+            backgroundColor="var(--brandColor)"
+          />
         </Link>
       </div>
       {/* <div className="shade"></div> */}
