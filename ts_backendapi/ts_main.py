@@ -1,12 +1,13 @@
-from turtle import position
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 import pandas as pd
 from pydantic import BaseModel
+import json
 
 from sampledata import data
 from ts_signal import signal
+from stimulate_chartdata import *
 from stimulate_price import price_stimulate
 from stimulate_report import reportmateric
 
@@ -71,9 +72,12 @@ class Report(BaseModel):
 # link two for report
 
 
+df = pd.DataFrame()
+
+
 @app.post('/simulate_chartdata')
 def chartdata(report_data: Report):
-
+    global df
     buycriteria = report_data.buycriteria
 
     sellcriteria = report_data.sellcriteria
@@ -89,14 +93,25 @@ def chartdata(report_data: Report):
     initial_capital = report_data.initial_capital
     position_size = report_data.position_size
 
-    return df
+    df = position(dataf=df, order_side=order_side)
+
+    df = margin(dataf=df, initial_capital=initial_capital,
+                position_size=position_size)
+
+    res = df.to_json(orient="records")
+    parsed = json.loads(res)
+
+    return parsed
 
 
 # link three for report
 
 @app.post('/simulate_report')
 def report(report_data: Report):
+    global df
 
-    dataf = chartdata(report_data=report_data)
+    chartdata(report_data=report_data)
+
+    dataf = df
 
     return reportmateric(dataf=dataf)

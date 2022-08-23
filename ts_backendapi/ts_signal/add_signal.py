@@ -66,5 +66,5 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
 
         # dataf = criteriadic[criteria]()
         print(dataf[dataf['SellSignal'] == -1])
-        
+
     return dataf

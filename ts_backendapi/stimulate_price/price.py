@@ -5,10 +5,12 @@ import random
 def price_stimulate(instrumentname, closeprice: float, volatility: float, startdate: str):
 
     # get date range of business days.
-    dt = pd.date_range(start=startdate, periods=260, freq='B').strftime('%d-%m-%Y')
+    dt = pd.date_range(start=startdate, periods=260,
+                       freq='B').strftime('%d-%m-%Y')
 
     # empty dataframe
-    df = pd.DataFrame(columns=['OpenPrice', 'HighPrice', 'LowPrice', 'ClosePrice', 'InstrumentName OHLC'], index=dt)
+    df = pd.DataFrame(columns=['OpenPrice', 'HighPrice', 'LowPrice',
+                      'ClosePrice', 'InstrumentName OHLC'], index=dt)
     # preparing ClosePrice, OpenPrice, HighPrice and LowPrice
     for d in df.index:
 
@@ -28,6 +30,7 @@ def price_stimulate(instrumentname, closeprice: float, volatility: float, startd
         # df.loc[d, ['LowPrice']] = lowprice
         # df.loc[d, ['ClosePrice']] = closeprice
 
-        df.loc[d, ['InstrumentName OHLC']]=[[instrumentname, openprice, highprice, lowprice, closeprice]]
+        df.loc[d, ['InstrumentName OHLC']] = [
+            [instrumentname, openprice, highprice, lowprice, closeprice]]
 
     return df
