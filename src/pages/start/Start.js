@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Start.module.css";
-import LOGO from "../../components/header/Logo";
+import { LOGO } from "../../components/header/Logo";
 import { Link } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import Numbers from "../../components/button/actionButton/Numbers";

@@ -11,11 +11,13 @@ import Result from "./pages/result/Result";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import ShadeContainer from "./components/container/ShadeContainer";
+import { NormalLogo } from "./components/header/Logo";
 
 function App() {
   return (
     <ShadeContainer>
       <Header />
+      <NormalLogo />
 
       <BrowserRouter>
         <Routes>

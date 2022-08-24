@@ -1,9 +1,11 @@
-const SelectInput = ({ defaultValue, options, label }) => {
+const SelectInput = ({ defaultValue, options, label, placeholder }) => {
   return (
     <div className="input-field">
       <label>{label}</label>
       <select required defaultValue={defaultValue}>
-        <option disabled>{defaultValue}</option>
+        <option placeholder={placeholder} disabled>
+          {defaultValue}
+        </option>
         {options.map((option) => (
           <option key={option} value={option}>
             {option}

@@ -7,6 +7,7 @@ const ActionButton = ({ buttonText, onClick, textColor, backgroundColor }) => {
     borderRadius: "46px",
     padding: "10px 30px",
     margin: "1rem 0rem",
+    width: "16rem",
 
     fontWeight: "700",
     fontSize: "1rem",

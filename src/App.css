@@ -150,7 +150,7 @@ select {
 .container form button,
 .backBtn {
   position: relative;
-  left: 80%;
+  left: 10%;
   outline: none;
   color: #fff;
   transition: all 0.3s linear;

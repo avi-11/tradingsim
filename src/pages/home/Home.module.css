@@ -9,10 +9,26 @@
   font-size: 0.9em;
 }
 
+.header{
+  display: flex;
+    align-items: center;
+    border: 2px dashed #868181;
+border-radius: 15px;
+padding: 1rem;
+margin: 2rem;
+}
+
+.info_header{
+  padding: 0rem 3rem;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #C5C1C1;
+}
+
 .formField__grid {
-  width: 90%;
+  width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 1rem;
   align-items: center;
   margin-bottom: 10px;
@@ -33,6 +49,7 @@
 .formField__grid select {
   outline: none;
   border: none;
+  width: 12rem;
   border-bottom: 1px solid #ccc;
   padding: 5px;
   font-size: 1rem;

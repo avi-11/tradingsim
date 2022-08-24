@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import Container from "../../components/container/Container";
+import { NormalLogo } from "../../components/header/Logo";
 import SelectInput from "../../components/input/selectInput/SelectInput";
 
 import styles from "./Entry.module.css";

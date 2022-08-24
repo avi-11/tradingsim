@@ -22,6 +22,7 @@ import GlobalInput from "../../components/input/globalInput/GlobalInput";
 import LabelSelector from "../../components/input/labelSelector/LabelSelector";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import LineChart from "../../components/chart/LineChart";
+import { NormalLogo } from "../../components/header/Logo";
 
 ChartJS.register(
   CategoryScale,
@@ -157,6 +158,19 @@ function Home() {
 
   return (
     <div className="container">
+      <div className={styles.header}>
+        <div>
+          <i
+            style={{ color: "#00D6A2" }}
+            class="fa-solid fa-circle-info fa-2xl"
+          ></i>
+        </div>
+        <h1 className={styles.info_header}>
+          Select a ticker and current market conditions along with the expected
+          volatility conditions. Higher volatility will lead to greater
+          fluctuations in the forecasted market prices.
+        </h1>
+      </div>
       <form
         action="/"
         onSubmit={(e) => {
@@ -170,30 +184,34 @@ function Home() {
         <div className="form-first">
           <div className="details-personal">
             <div className={styles.formField__grid}>
-              <SelectInput
-                defaultValue={""}
-                options={["BTC", "ETH"]}
-                label="Intrument"
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <SelectInput
+                  placeholder={"BTC/ETH"}
+                  defaultValue={""}
+                  options={["BTC", "ETH"]}
+                  label="INSTRUMENT"
+                />
+                <LabelSelector
+                  values={["High", "Medium", "Low"]}
+                  currentValue={volatility}
+                  setValue={SetVolatilty}
+                />
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <Numberinput value={marketPrice} setValue={setMarketPrice} />
+
+                <GlobalInput inputType="date" setValue={setSelectedDate} />
+              </div>
+
+              <ActionButton
+                buttonText="Simulate Price"
+                onClick={getApi}
+                textColor="var(--whiteColor)"
+                backgroundColor="var(--brandColor)"
               />
-
-              <Numberinput value={marketPrice} setValue={setMarketPrice} />
-
-              <LabelSelector
-                values={["High", "Medium", "Low"]}
-                currentValue={volatility}
-                setValue={SetVolatilty}
-              />
-
-              <GlobalInput inputType="date" setValue={setSelectedDate} />
             </div>
           </div>
-
-          <ActionButton
-            buttonText="Simulate Price"
-            onClick={getApi}
-            textColor="var(--whiteColor)"
-            backgroundColor="var(--brandColor)"
-          />
         </div>
       </form>
 
