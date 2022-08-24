@@ -1,6 +1,6 @@
 const containerStyles = {
   textAlign: "center",
-  padding: "23px 0px",
+  padding: "3rem 0px",
   borderBottom: "1px solid rgba(105, 102, 255, 0.5)",
 };
 
@@ -11,9 +11,7 @@ const Header = () => {
         style={{
           padding: "0px",
         }}
-      >
-        Crypto Trading Sim
-      </h1>
+      ></h1>
     </div>
   );
 };
