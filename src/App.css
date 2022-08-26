@@ -269,3 +269,19 @@ h3 {
   z-index: 100;
   color: white;
 }
+
+.chartTooltip {
+  /* padding: 1rem; */
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.chartTooltip p {
+  color: black;
+  font-weight: 400;
+}
+.chartTooltip p span {
+  font-weight: 600;
+  margin-right: 5px;
+}

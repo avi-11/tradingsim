@@ -25,10 +25,38 @@ function CandleChart({ data, name }) {
     },
     xaxis: {
       type: "datetime",
+      tooltip: {
+        enabled: true,
+      },
     },
     yaxis: {
       tooltip: {
         enabled: true,
+      },
+    },
+    tooltip: {
+      custom: undefined,
+      x: {
+        show: true,
+        format: "dd MMM yyyy",
+        formatter: undefined,
+      },
+      y: {
+        formatter: function (e, { series, seriesIndex, dataPointIndex, w }) {
+          return `<div class="chartTooltip">
+          <div>
+              <p><span>Open:</span> ${w.globals.seriesCandleO[seriesIndex][dataPointIndex]}</p>
+              <p><span>Close:</span> ${w.globals.seriesCandleC[seriesIndex][dataPointIndex]}</p>
+              <p><span>Low:</span> ${w.globals.seriesCandleL[seriesIndex][dataPointIndex]}</p>
+              <p><span>High:</span> ${w.globals.seriesCandleH[seriesIndex][dataPointIndex]}</p>
+              </div>
+            </div>`;
+        },
+        title: {
+          formatter: function (e) {
+            return "";
+          },
+        },
       },
     },
   };
@@ -46,7 +74,7 @@ function CandleChart({ data, name }) {
         options={options}
         series={series}
         type="candlestick"
-        // height={500}
+        height={500}
         width={"100%"}
       />
     </div>
