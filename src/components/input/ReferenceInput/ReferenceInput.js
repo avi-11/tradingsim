@@ -7,7 +7,7 @@ const ReferenceInput = ({
   setshowOp,
 }) => {
   const handleChange = (index, ref) => {
-    if (ref === 1) {
+    if (ref === "1") {
       const newOp = showOp.map((op) => {
         if (op.id === index) {
           return {
@@ -17,8 +17,95 @@ const ReferenceInput = ({
             third: true,
             fourth: true,
             fifth: true,
+            ref: true,
           };
         }
+
+        return op;
+      });
+      setshowOp(newOp);
+    } else if (ref === "2") {
+      const newOp = showOp.map((op) => {
+        if (op.id === index) {
+          return {
+            ...op,
+            first: true,
+            second: true,
+            third: true,
+            fourth: false,
+            fifth: true,
+            ref: true,
+          };
+        }
+
+        return op;
+      });
+      setshowOp(newOp);
+    } else if (ref === "3") {
+      const newOp = showOp.map((op) => {
+        if (op.id === index) {
+          return {
+            ...op,
+            first: true,
+            second: true,
+            third: true,
+            fourth: true,
+            fifth: false,
+            ref: true,
+          };
+        }
+
+        return op;
+      });
+      setshowOp(newOp);
+    } else if (ref === "4") {
+      const newOp = showOp.map((op) => {
+        if (op.id === index) {
+          return {
+            ...op,
+            first: true,
+            second: false,
+            third: true,
+            fourth: true,
+            fifth: true,
+            ref: true,
+          };
+        }
+
+        return op;
+      });
+      setshowOp(newOp);
+    } else if (ref === "5") {
+      const newOp = showOp.map((op) => {
+        if (op.id === index) {
+          return {
+            ...op,
+            first: true,
+            second: false,
+            third: true,
+            fourth: true,
+            fifth: false,
+            ref: true,
+          };
+        }
+
+        return op;
+      });
+      setshowOp(newOp);
+    } else if (ref === "6") {
+      const newOp = showOp.map((op) => {
+        if (op.id === index) {
+          return {
+            ...op,
+            first: true,
+            second: false,
+            third: true,
+            fourth: false,
+            fifth: true,
+            ref: true,
+          };
+        }
+
         return op;
       });
       setshowOp(newOp);

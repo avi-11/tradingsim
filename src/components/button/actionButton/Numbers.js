@@ -16,7 +16,7 @@ const Numbers = ({ num }) => {
           cy="50"
           r="40"
           stroke="blue"
-          stroke-width="3"
+          strokeWidth="3"
           fill="transparent"
         />
       </svg>

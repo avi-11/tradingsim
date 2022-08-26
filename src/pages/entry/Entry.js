@@ -10,6 +10,7 @@ import styles from "./Entry.module.css";
 
 const Entry = () => {
   const [entryGroups, setEntryGroups] = useState([1]);
+  const [num, setNum] = useState(1);
 
   const [showOp, setshowOp] = useState([
     {
@@ -19,6 +20,7 @@ const Entry = () => {
       third: false,
       fourth: false,
       fifth: false,
+      ref: false,
     },
   ]);
 
@@ -29,15 +31,17 @@ const Entry = () => {
   function addRule(e) {
     e.preventDefault();
     setEntryGroups([...entryGroups, entryGroups.length + 1]);
+    setNum(num + 1);
     const newOption = [
       ...showOp,
       {
-        id: entryGroups.length,
+        id: num + 1,
         first: false,
         second: false,
         third: false,
         fourth: false,
         fifth: false,
+        ref: false,
       },
     ];
 
@@ -132,21 +136,38 @@ const Entry = () => {
                   setshowOp={setshowOp}
                 />
 
-                <>
-                  <SelectInput
-                    label=""
-                    defaultValue="Choose indicator or price"
-                    options={[1, 2, 3]}
-                  />
+                <SelectInput
+                  disabled={!showOp[index]?.first}
+                  label=""
+                  defaultValue="Choose indicator or price"
+                  options={[1, 2, 3]}
+                />
 
-                  <input type="text" placeholder="Indicator value" />
-                  <SelectInput
-                    label=""
-                    defaultValue="Add Operation"
-                    options={[1, 2, 3]}
-                  />
-                  <input type="text" />
-                </>
+                <input
+                  disabled={!showOp[index]?.second}
+                  type="text"
+                  placeholder="Indicator value"
+                />
+
+                <SelectInput
+                  disabled={!showOp[index]?.third}
+                  label=""
+                  defaultValue="Add Operation"
+                  options={[">", "<", "="]}
+                />
+
+                <SelectInput
+                  disabled={!showOp[index]?.fourth}
+                  label=""
+                  defaultValue="Choose indicator or price"
+                  options={[1, 2, 3]}
+                />
+
+                <input
+                  disabled={!showOp[index]?.fifth}
+                  placeholder="text"
+                  type="text"
+                />
               </div>
             ))}
 
