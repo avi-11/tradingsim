@@ -22,7 +22,6 @@ import Numberinput from "../../components/input/numberInput/Numberinput";
 import GlobalInput from "../../components/input/globalInput/GlobalInput";
 import LabelSelector from "../../components/input/labelSelector/LabelSelector";
 import ActionButton from "../../components/button/actionButton/ActionButton";
-
 import { NormalLogo } from "../../components/header/Logo";
 import CandleChart from "../../components/chart/candleChart/CandleChart";
 
@@ -94,24 +93,19 @@ function Home() {
       </div>
       <form
         action="/"
-        onSubmit={(e) => {
-          e.preventDefault();
-          validateSubmit();
-          if (submitValidate) {
-            ShowGraph();
-          }
-        }}
+        onSubmit={getData}
       >
         <div className="form-first">
           <div className="details-personal">
             <div className={styles.formField__grid}>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <SelectInput
-                  placeholder={"BTC/ETH"}
-                  defaultValue={""}
+                  defaultValue={instrumentname}
+                  setValue={setInstrumentname}
                   options={["BTC", "ETH"]}
-                  label="INSTRUMENT"
+                  label="Intrument"
                 />
+                
                 <LabelSelector
                   values={["High", "Medium", "Low"]}
                   currentValue={volatility}
@@ -120,14 +114,18 @@ function Home() {
               </div>
 
               <div style={{ display: "flex", flexDirection: "column" }}>
-                <Numberinput value={marketPrice} setValue={setMarketPrice} />
+                <Numberinput value={closeprice} setValue={setClosePrice} />
 
-                <GlobalInput inputType="date" setValue={setSelectedDate} />
+                <GlobalInput
+                inputType="date"
+                value={startdate}
+                setValue={updateDate}
+              />
               </div>
 
               <ActionButton
                 buttonText="Simulate Price"
-                onClick={getApi}
+                onClick={getData}
                 textColor="var(--whiteColor)"
                 backgroundColor="var(--brandColor)"
               />
