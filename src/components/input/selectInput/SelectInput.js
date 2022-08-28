@@ -2,6 +2,7 @@ const SelectInput = ({
   defaultValue,
   options,
   label,
+  setValue,
   placeholder,
   disabled,
 }) => {
