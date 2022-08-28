@@ -84,7 +84,7 @@ def chartdata(report_data: Report):
 
     data = report_data.ohlc_data
     df = pd.DataFrame(data.values(), index=data.keys(), columns=[
-                      'InstrumnetName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice'])
+                      'InstrumentName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice'])
     df.index = pd.to_datetime(df.index, format="%d-%m-%Y")
 
     df = signal(dataf=df, buycriteria=buycriteria, sellcriteria=sellcriteria)

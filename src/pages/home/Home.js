@@ -13,6 +13,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+
 import "react-datepicker/dist/react-datepicker.css";
 
 import styles from "./Home.module.css";
@@ -21,8 +22,9 @@ import Numberinput from "../../components/input/numberInput/Numberinput";
 import GlobalInput from "../../components/input/globalInput/GlobalInput";
 import LabelSelector from "../../components/input/labelSelector/LabelSelector";
 import ActionButton from "../../components/button/actionButton/ActionButton";
-import LineChart from "../../components/chart/LineChart";
+
 import { NormalLogo } from "../../components/header/Logo";
+import CandleChart from "../../components/chart/candleChart/CandleChart";
 
 ChartJS.register(
   CategoryScale,
@@ -35,126 +37,45 @@ ChartJS.register(
 );
 
 function Home() {
-  const [quantitySize, setQuantitySize] = useState("");
-  const [position, setPosition] = useState("");
-  const [positionSize, setPositionSize] = useState("");
-  const [capital, setCapital] = useState(0);
-  const [marketPrice, setMarketPrice] = useState(0);
+  // Updated states
+  const [instrumentname, setInstrumentname] = useState("");
+  const [closeprice, setClosePrice] = useState(0);
   const [volatility, SetVolatilty] = useState(0);
   const [showGraph, setShowGraph] = useState(false);
-  const [graphRan, setGraphRan] = useState([]);
-  const [alertPositionSize, setalertPositionSize] = useState(false);
-  const [submitValidate, setSubmitValidate] = useState(false);
-  const [chartsToDisplay, setChartsToDisplay] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [labels, setLabels] = useState([]);
+  const [startdate, setStartDate] = useState(null);
+  const [graphData, setGraphData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  const getData = async () => {
-    const charts = [];
-    // charts.push(<ChartJS key={1} data={MadeData} />);
-    setChartsToDisplay(charts);
+  const updateDate = (date) => {
+    const newDate = date.split("-");
+    setStartDate(`${newDate[2]}-${newDate[1]}-${newDate[0]}`);
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  async function getData(e) {
+    e.preventDefault();
 
-  const getRndInteger = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  const ShowGraph = () => {
-    let range = [];
-    let mp = parseInt(marketPrice.replace(/,/g, ""));
-    let a = mp - mp * volatility;
-    let b = mp + mp * volatility;
-    console.log(a + " " + b);
-    for (let i = 0; i < 12; i++) {
-      range.push(getRndInteger(a, b));
+    setLoading(true);
+    if (!(instrumentname === "BTC" || instrumentname === "ETH")) {
+      setError("Invalid instrument name");
+      alert("Invalid instrument name");
+      return;
     }
+    if (!closeprice || !volatility || !startdate) {
+      setError("Check all fields");
+      alert("Check all fields");
+      return;
+    }
+
+    const res = await axios.post(
+      `https://tradingsim.herokuapp.com/simulate_price?instrumentname=${instrumentname}&closeprice=${closeprice}&volatility=${
+        volatility === "High" ? 0.08 : volatility === "Medium" ? 0.06 : 0.03
+      }&startdate=${startdate}`
+    );
+    setGraphData(res.data);
+    setLoading(false);
     setShowGraph(true);
-
-    //console.log(range);
-  };
-
-  const validateSubmit = () => {
-    if (positionSize > 100) {
-      setSubmitValidate(false);
-      setalertPositionSize(true);
-      setTimeout(() => {
-        setalertPositionSize(false);
-      }, 3000);
-    } else {
-      setSubmitValidate(true);
-    }
-  };
-
-  const formatToCurrency = (amount) => {
-    amount = parseInt(amount);
-    return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
-  };
-
-  const handleInputChange = (event) => {
-    console.log(event.target.name);
-
-    let mp = Number(marketPrice.replace(/,/g, ""));
-    let cap = Number(capital.replace(/,/g, ""));
-
-    if (event.target.name === "position") {
-      // After updating position
-      const positionValue = Number(position);
-      let posSize = positionValue / cap;
-      console.log(posSize, positionValue, mp, cap);
-      setPositionSize(posSize);
-      let quant = positionValue / mp;
-      setQuantitySize(quant.toFixed(2));
-    } else if (event.target.name === "positionSize") {
-      // After updating position size
-      const positionSizeValue = Number(positionSize);
-      let pos = (positionSizeValue * cap) / 100;
-      console.log(pos, positionSizeValue, mp, cap);
-      setPosition(pos);
-      let quant = pos / mp;
-      setQuantitySize(quant.toFixed(2));
-    } else if (event.target.name === "quantitySize") {
-      // After updating quantity size
-      const quantityValue = Number(quantitySize);
-      let pos = quantityValue * mp;
-      console.log(pos, quantityValue, mp, cap);
-      setPosition(pos);
-      let posSize = pos / cap;
-      setPositionSize(posSize);
-    }
-  };
-
-  const getApi = () => {
-    axios
-      .post("http://tradingsim.herokuapp.com/simulate_price")
-      .then((res) => {
-        console.log(Object.keys(res.data));
-        console.log(res.data);
-        const arr = Object.values(res.data).map((x) => x[1]);
-        console.log(arr);
-        setGraphRan(arr);
-        setLabels(Object.keys(res.data));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const data = {
-    labels: [...labels],
-    datasets: [
-      {
-        label: "Simulator",
-        data: [...graphRan],
-        fill: false,
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
-      },
-    ],
-  };
+  }
 
   return (
     <div className="container">
@@ -212,11 +133,20 @@ function Home() {
               />
             </div>
           </div>
+
         </div>
       </form>
 
       <div className="details-ID">
-        <LineChart showGraph={showGraph} data={data} />
+        {showGraph ? (
+          <CandleChart data={graphData} name={instrumentname} />
+        ) : loading ? (
+          <div>
+            <h1>Loading...</h1>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
 
       <Link

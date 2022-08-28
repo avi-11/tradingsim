@@ -12,6 +12,7 @@ const SelectInput = ({
         <option placeholder={placeholder} disabled>
           {defaultValue}
         </option>
+
         {options.map((option) => (
           <option key={option} value={option}>
             {option}
