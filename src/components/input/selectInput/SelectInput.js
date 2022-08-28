@@ -1,4 +1,11 @@
-const SelectInput = ({ defaultValue, options, label, setValue }) => {
+const SelectInput = ({
+  defaultValue,
+  options,
+  label,
+  setValue,
+  placeholder,
+  disabled,
+}) => {
   return (
     <div className="input-field">
       <label>{label}</label>
@@ -8,6 +15,7 @@ const SelectInput = ({ defaultValue, options, label, setValue }) => {
         onChange={(e) => setValue(e.target.value)}
       >
         <option disabled></option>
+
         {options.map((option) => (
           <option key={option} value={option}>
             {option}

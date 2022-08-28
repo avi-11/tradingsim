@@ -6,6 +6,8 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-right: 3rem;
+  margin-top: 1rem;
 }
 
 .entry__radioFormGroup label {
@@ -68,4 +70,38 @@
   align-items: center;
 
   margin: 1rem 0rem;
+}
+
+
+.entry_reference{
+  display:grid ;
+  grid-template-columns: repeat(3,1fr);
+}
+
+.entry_upperCard{
+  display: flex;
+  align-items: center;
+}
+
+.entry_referenceBox{
+  border: 2px dashed #868181;
+    border-radius: 15px;
+    padding: 1rem;
+    margin: 1rem;
+    width: 100%;
+}
+
+.entry_infoIcon{
+  border: 2px dashed #868181;
+    border-radius: 15px;
+    padding: 6rem 2rem;
+}
+
+.entry_firstForm{
+  display: flex;
+  align-items: center;
+}
+
+.hide{
+  visibility: hidden;
 }
