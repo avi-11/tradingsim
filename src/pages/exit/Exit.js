@@ -70,16 +70,40 @@ const Exit = () => {
           <h1 style={{ padding: "0 1rem" }}>Reference Card</h1>
           <div className={styles.entry_reference}>
             <div>
-              <Reference />
-              <Reference />
+              <Reference
+                num="1"
+                type="indicator-operator-indicator"
+                example="SMA (50) > SMA (200)"
+              />
+              <Reference
+                num="2"
+                type="indicator-operator-price"
+                example="SMA (50) > close"
+              />
             </div>
             <div>
-              <Reference />
-              <Reference />
+              <Reference
+                num="3"
+                type="indicator-operator-value"
+                example="SMA (50) > 75.5"
+              />
+              <Reference
+                num="4"
+                type="price-operator-indicator"
+                example="close > SMA (50)"
+              />
             </div>
             <div>
-              <Reference />
-              <Reference />
+              <Reference
+                num="5"
+                type="price-operator-price"
+                example="close > high"
+              />
+              <Reference
+                num="6"
+                type="price-operator-value"
+                example="close > 75.5"
+              />
             </div>
           </div>
         </div>
