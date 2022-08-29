@@ -24,17 +24,12 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
             elif 'Ind_parameter2' not in buycriteria[ind]:
                 dataf = indicator[buycriteria[ind]['Indicator2']](dataf=dataf)
 
-        print(dataf)
-
     # buycriteria
     for ind in list(buycriteria.keys()):
 
         valueOne, valueTwo = value(buycriteria[ind])
         dataf = buy(dataf, valueOne=valueOne, valueTwo=valueTwo,
                     operation=buycriteria[ind]['Operator'])
-
-        # dataf = criteriadic[criteria]()
-        print(dataf[dataf['BuySignal'] == 1])
 
     # indicator for sellcriteria
     for ind in list(sellcriteria.keys()):
@@ -54,8 +49,6 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
             elif 'Ind_parameter2' not in sellcriteria[ind]:
                 dataf = indicator[sellcriteria[ind]['Indicator2']](dataf=dataf)
 
-        print(dataf)
-
     # sellcriteria
     for ind in list(sellcriteria.keys()):
 
@@ -63,8 +56,5 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
 
         dataf = sell(dataf, valueOne=valueOne, valueTwo=valueTwo,
                      operation=sellcriteria[ind]['Operator'])
-
-        # dataf = criteriadic[criteria]()
-        print(dataf[dataf['SellSignal'] == -1])
 
     return dataf

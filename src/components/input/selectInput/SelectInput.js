@@ -2,16 +2,20 @@ const SelectInput = ({
   defaultValue,
   options,
   label,
+  setValue,
   placeholder,
   disabled,
 }) => {
   return (
     <div className="input-field">
       <label>{label}</label>
-      <select disabled={disabled} required defaultValue={defaultValue}>
-        <option placeholder={placeholder} disabled>
-          {defaultValue}
-        </option>
+      <select
+        required
+        defaultValue={defaultValue}
+        onChange={(e) => setValue(e.target.value)}
+      >
+        <option disabled></option>
+
         {options.map((option) => (
           <option key={option} value={option}>
             {option}
