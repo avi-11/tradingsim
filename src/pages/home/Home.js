@@ -1,5 +1,5 @@
 import "../../index.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -22,7 +22,6 @@ import Numberinput from "../../components/input/numberInput/Numberinput";
 import GlobalInput from "../../components/input/globalInput/GlobalInput";
 import LabelSelector from "../../components/input/labelSelector/LabelSelector";
 import ActionButton from "../../components/button/actionButton/ActionButton";
-import { NormalLogo } from "../../components/header/Logo";
 import CandleChart from "../../components/chart/candleChart/CandleChart";
 
 ChartJS.register(
@@ -58,11 +57,13 @@ function Home() {
     if (!(instrumentname === "BTC" || instrumentname === "ETH")) {
       setError("Invalid instrument name");
       alert("Invalid instrument name");
+      setLoading(false);
       return;
     }
     if (!closeprice || !volatility || !startdate) {
       setError("Check all fields");
       alert("Check all fields");
+      setLoading(false);
       return;
     }
 
@@ -91,21 +92,23 @@ function Home() {
           fluctuations in the forecasted market prices.
         </h1>
       </div>
-      <form
-        action="/"
-        onSubmit={getData}
-      >
+      <form action="/" onSubmit={getData}>
         <div className="form-first">
           <div className="details-personal">
             <div className={styles.formField__grid}>
-              <div style={{ display: "flex", flexDirection: "column" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
                 <SelectInput
                   defaultValue={instrumentname}
                   setValue={setInstrumentname}
                   options={["BTC", "ETH"]}
                   label="Intrument"
                 />
-                
+
                 <LabelSelector
                   values={["High", "Medium", "Low"]}
                   currentValue={volatility}
@@ -114,13 +117,17 @@ function Home() {
               </div>
 
               <div style={{ display: "flex", flexDirection: "column" }}>
-                <Numberinput value={closeprice} setValue={setClosePrice} />
+                <Numberinput
+                  value={closeprice}
+                  setValue={setClosePrice}
+                  label="Market price"
+                />
 
                 <GlobalInput
-                inputType="date"
-                value={startdate}
-                setValue={updateDate}
-              />
+                  inputType="date"
+                  value={startdate}
+                  setValue={updateDate}
+                />
               </div>
 
               <ActionButton
@@ -131,7 +138,6 @@ function Home() {
               />
             </div>
           </div>
-
         </div>
       </form>
 
