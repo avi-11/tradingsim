@@ -7,7 +7,7 @@ import Numbers from "../../components/button/actionButton/Numbers";
 
 const Start = () => {
   return (
-    <div className="Start_page">
+    <div className="Start_page" style={{ overflowX: "hidden" }}>
       <div className={styles.Start_page_firstBox}>
         <h1 className={styles.First_box_heading}>Features :</h1>
         <div className={styles.Start_page_firstBox_points}>

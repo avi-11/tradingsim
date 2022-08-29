@@ -17,13 +17,13 @@ const example = {
   color: "#C5C1C1",
 };
 
-const Reference = () => {
+const Reference = ({ refNumber, refType, refExample }) => {
   return (
     <div style={{ display: "flex", margin: "1rem 0" }}>
-      <p style={numStyle}>1</p>
+      <p style={numStyle}>{refNumber}</p>
       <div>
-        <p>indicator-operator-indicator</p>
-        <p style={example}>{"Eg : SMA (50) > SMA (200)"}</p>
+        <p>{refType}</p>
+        <p style={example}>Eg: {refExample}</p>
       </div>
     </div>
   );

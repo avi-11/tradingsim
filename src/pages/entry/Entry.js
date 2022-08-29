@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
-import Reference from "../../components/button/actionButton/Reference";
 import Container from "../../components/container/Container";
+import Numberinput from "../../components/input/numberInput/Numberinput";
+import RadioButton from "../../components/input/radioButton/RadioButton";
 import ReferenceInput from "../../components/input/ReferenceInput/ReferenceInput";
 import SelectInput from "../../components/input/selectInput/SelectInput";
+import EntryReference from "../../components/reference/EntryReference";
 
 import styles from "./Entry.module.css";
 
@@ -68,53 +70,25 @@ const Entry = () => {
         </div>
         <div className={styles.entry_referenceBox}>
           <h1 style={{ padding: "0 1rem" }}>Reference Card</h1>
-          <div className={styles.entry_reference}>
-            <div>
-              <Reference />
-              <Reference />
-            </div>
-            <div>
-              <Reference />
-              <Reference />
-            </div>
-            <div>
-              <Reference />
-              <Reference />
-            </div>
-          </div>
+          <EntryReference />
         </div>
       </div>
 
       <Container>
         <form className={styles.entry_firstForm}>
-          <p>
-            <span>Strategy</span>
-            <span>Settings</span>
-          </p>
+          <p>Strategy Settings</p>
 
-          <div>
+          <div style={{ width: "90%" }}>
             <div className={styles.entry__capitalFormGroup}>
-              <label>
-                <span>Initial Capital</span>
-                <input type="number" />
-              </label>
+              <Numberinput label={"Initial Capital"} />
 
-              <label>
-                <span>Position Size</span>
-                <input type="number" />
-              </label>
+              <Numberinput label={"Position Size"} />
             </div>
             <div className={styles.entry__radioFormGroup}>
               <p>Order Size</p>
-              <label>
-                <input type="radio" value="long" name="type" />
-                <span>LONG</span>
-              </label>
+              <RadioButton label="LONG" value="long" name="type" />
 
-              <label>
-                <input type="radio" value="short" name="type" />
-                <span>SHORT</span>
-              </label>
+              <RadioButton label="SHORT" value="short" name="type" />
             </div>
           </div>
         </form>
@@ -192,7 +166,7 @@ const Entry = () => {
       </Container>
 
       <div className={styles.entry__routeBtn}>
-        <Link to="/">
+        <Link to="/home">
           <ActionButton
             buttonText="Back To Home"
             textColor="var(--whiteColor)"
@@ -208,7 +182,6 @@ const Entry = () => {
           />
         </Link>
       </div>
-      {/* <div className="shade"></div> */}
     </div>
   );
 };
