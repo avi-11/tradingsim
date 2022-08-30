@@ -3,119 +3,15 @@ const ReferenceInput = ({
   placeholder,
   option,
   index,
-  showOp,
-  setshowOp,
+  setCurrentRef,
 }) => {
-  const handleChange = (index, ref) => {
-    if (ref === "1") {
-      const newOp = showOp.map((op) => {
-        if (op.id === index) {
-          return {
-            ...op,
-            first: true,
-            second: true,
-            third: true,
-            fourth: true,
-            fifth: true,
-            ref: true,
-          };
-        }
-
-        return op;
-      });
-      setshowOp(newOp);
-    } else if (ref === "2") {
-      const newOp = showOp.map((op) => {
-        if (op.id === index) {
-          return {
-            ...op,
-            first: true,
-            second: true,
-            third: true,
-            fourth: false,
-            fifth: true,
-            ref: true,
-          };
-        }
-
-        return op;
-      });
-      setshowOp(newOp);
-    } else if (ref === "3") {
-      const newOp = showOp.map((op) => {
-        if (op.id === index) {
-          return {
-            ...op,
-            first: true,
-            second: true,
-            third: true,
-            fourth: true,
-            fifth: false,
-            ref: true,
-          };
-        }
-
-        return op;
-      });
-      setshowOp(newOp);
-    } else if (ref === "4") {
-      const newOp = showOp.map((op) => {
-        if (op.id === index) {
-          return {
-            ...op,
-            first: true,
-            second: false,
-            third: true,
-            fourth: true,
-            fifth: true,
-            ref: true,
-          };
-        }
-
-        return op;
-      });
-      setshowOp(newOp);
-    } else if (ref === "5") {
-      const newOp = showOp.map((op) => {
-        if (op.id === index) {
-          return {
-            ...op,
-            first: true,
-            second: false,
-            third: true,
-            fourth: true,
-            fifth: false,
-            ref: true,
-          };
-        }
-
-        return op;
-      });
-      setshowOp(newOp);
-    } else if (ref === "6") {
-      const newOp = showOp.map((op) => {
-        if (op.id === index) {
-          return {
-            ...op,
-            first: true,
-            second: false,
-            third: true,
-            fourth: false,
-            fifth: true,
-            ref: true,
-          };
-        }
-
-        return op;
-      });
-      setshowOp(newOp);
-    }
-  };
   return (
     <div>
       <select
         required
-        onChange={(e) => handleChange(index + 1, e.target.value)}
+        onChange={(e) => {
+          setCurrentRef(e.target.value, index + 1);
+        }}
         defaultValue={defaultValue}
       >
         <option placeholder={placeholder} disabled>

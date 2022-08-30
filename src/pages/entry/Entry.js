@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import Container from "../../components/container/Container";
 import Numberinput from "../../components/input/numberInput/Numberinput";
@@ -11,52 +11,172 @@ import EntryReference from "../../components/reference/EntryReference";
 import styles from "./Entry.module.css";
 
 const Entry = () => {
+  const [initialCapital, setInitialCapital] = useState("");
+  const [positionSize, setPositionSize] = useState("");
+  const [orderSize, setOrderSize] = useState("");
   const [entryGroups, setEntryGroups] = useState([1]);
-  const [num, setNum] = useState(1);
-
-  const [showOp, setshowOp] = useState([
+  const [entryValues, setEntryValues] = useState([
     {
       id: 1,
-      first: false,
-      second: false,
-      third: false,
-      fourth: false,
-      fifth: false,
-      ref: false,
+      refNumber: "",
     },
   ]);
+  const [num, setNum] = useState(1);
 
-  useEffect(() => {
-    console.log(showOp);
-  }, [showOp]);
+  const navigate = useNavigate();
+
+  function validatePreviousEntries(entryValues) {
+    let valid = true;
+
+    entryValues.forEach((entry) => {
+      if (entry.refNumber === "1") {
+        if (
+          !(
+            entry.indicator1 &&
+            entry.indicator2 &&
+            entry.indicatorParameter1 &&
+            entry.indicatorParameter2 &&
+            entry.operator
+          )
+        ) {
+          valid = false;
+        }
+      } else if (entry.refNumber === "2") {
+        if (
+          !(
+            entry.indicator1 &&
+            entry.indicatorParameter1 &&
+            (entry.price1 || entry.price2) &&
+            entry.operator
+          )
+        ) {
+          valid = false;
+        }
+      } else if (entry.refNumber === "3") {
+        if (
+          !(
+            entry.indicator1 &&
+            entry.indicatorParameter1 &&
+            entry.value &&
+            entry.operator
+          )
+        ) {
+          valid = false;
+        }
+      } else if (entry.refNumber === "4") {
+        if (
+          !(
+            entry.price1 &&
+            entry.indicator2 &&
+            entry.indicatorParameter2 &&
+            entry.operator
+          )
+        ) {
+          valid = false;
+        }
+      } else if (entry.refNumber === "5") {
+        if (!(entry.price1 && entry.price2 && entry.operator)) {
+          valid = false;
+        }
+      } else if (entry.refNumber === "6") {
+        if (!(entry.price1 && entry.value && entry.operator)) {
+          valid = false;
+        }
+      } else {
+        valid = false;
+      }
+    });
+
+    return valid;
+  }
 
   function addRule(e) {
     e.preventDefault();
-    setEntryGroups([...entryGroups, entryGroups.length + 1]);
-    setNum(num + 1);
-    const newOption = [
-      ...showOp,
-      {
-        id: num + 1,
-        first: false,
-        second: false,
-        third: false,
-        fourth: false,
-        fifth: false,
-        ref: false,
-      },
-    ];
 
-    setshowOp(newOption);
+    if (!validatePreviousEntries(entryValues)) {
+      alert("Complete Previous Entries!!");
+      return;
+    }
+
+    setEntryGroups([...entryGroups, entryGroups.length + 1]);
+    setEntryValues([...entryValues, { id: entryValues.length + 1 }]);
+    setNum(num + 1);
   }
 
   function removeRule(e) {
     e.preventDefault();
     if (entryGroups.length > 1) {
       setEntryGroups(entryGroups.slice(0, entryGroups.length - 1));
-      const newOption = showOp.slice(0, showOp.length - 1);
-      setshowOp(newOption);
+      setEntryValues(entryValues.slice(0, entryValues.length - 1));
     }
+  }
+
+  function setCurrentRef(e, id) {
+    const newEntryValue = entryValues.map((value) => {
+      if (value.id === id)
+        return {
+          ...value,
+          refNumber: e,
+        };
+      return value;
+    });
+
+    setEntryValues(newEntryValue);
+  }
+
+  function isIndicator(refNumber) {
+    if (refNumber === "1" || refNumber === "2" || refNumber === "3")
+      return true;
+    return false;
+  }
+
+  function isValue(refNumber) {
+    if (refNumber === "3" || refNumber === "6") return true;
+    return false;
+  }
+
+  function setIndicatorOne(e, value) {
+    const newEntryValue = entryValues.map((entryValue) => {
+      if (entryValue.id === value.id)
+        return {
+          ...entryValue,
+          indicator1: e,
+        };
+      return entryValue;
+    });
+
+    setEntryValues(newEntryValue);
+  }
+
+  function setPriceOne(e, value) {
+    const newEntryValue = entryValues.map((entryValue) => {
+      if (entryValue.id === value.id) return { ...entryValue, price1: e };
+      return entryValue;
+    });
+
+    setEntryValues(newEntryValue);
+  }
+
+  function setIndicatorTwo(e, value) {
+    const newEntryValue = entryValues.map((entryValue) => {
+      if (entryValue.id === value.id)
+        return {
+          ...entryValue,
+          indicator2: e,
+        };
+      return entryValue;
+    });
+
+    setEntryValues(newEntryValue);
+  }
+
+  function setPriceTwo(e, value) {
+    const newEntryValue = entryValues.map((entryValue) => {
+      if (entryValue.id === value.id) return { ...entryValue, price2: e };
+      return entryValue;
+    });
+
+    setEntryValues(newEntryValue);
   }
 
   return (
@@ -80,15 +200,33 @@ const Entry = () => {
 
           <div style={{ width: "90%" }}>
             <div className={styles.entry__capitalFormGroup}>
-              <Numberinput label={"Initial Capital"} />
+              <Numberinput
+                label={"Initial Capital"}
+                value={initialCapital}
+                setValue={setInitialCapital}
+              />
 
-              <Numberinput label={"Position Size"} />
+              <Numberinput
+                label={"Position Size"}
+                value={positionSize}
+                setValue={setPositionSize}
+              />
             </div>
             <div className={styles.entry__radioFormGroup}>
               <p>Order Size</p>
-              <RadioButton label="LONG" value="long" name="type" />
+              <RadioButton
+                label="LONG"
+                value="long"
+                name="type"
+                setValue={setOrderSize}
+              />
 
-              <RadioButton label="SHORT" value="short" name="type" />
+              <RadioButton
+                label="SHORT"
+                value="short"
+                name="type"
+                setValue={setOrderSize}
+              />
             </div>
           </div>
         </form>
@@ -98,50 +236,131 @@ const Entry = () => {
         <h2>ENTRY BUILDER</h2>
         <form>
           <div className={styles.entry__entryFormGroup}>
-            {entryGroups.map((entryGroup, index) => (
-              <div key={index} className={styles.entryFormGroup__row}>
+            {entryValues.map((entryValue, index) => (
+              <div key={entryValue.id} className={styles.entryFormGroup__row}>
                 <p>Entry Rule {index + 1}</p>
 
                 <ReferenceInput
                   defaultValue="ref. no"
                   option={[1, 2, 3, 4, 5, 6]}
                   index={index}
-                  showOp={showOp}
-                  setshowOp={setshowOp}
+                  setCurrentRef={setCurrentRef}
                 />
+                {entryValue.refNumber ? (
+                  <SelectInput
+                    label=""
+                    defaultValue="Choose indicator or price"
+                    options={[1, 2, 3]}
+                    value={entryValue}
+                    setValue={
+                      isIndicator(entryValue.refNumber)
+                        ? setIndicatorOne
+                        : setPriceOne
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
 
-                <SelectInput
-                  disabled={!showOp[index]?.first}
-                  label=""
-                  defaultValue="Choose indicator or price"
-                  options={[1, 2, 3]}
-                />
+                {entryValue.refNumber === "1" ||
+                entryValue.refNumber === "2" ||
+                entryValue.refNumber === "3" ? (
+                  <input
+                    type="number"
+                    placeholder="Indicator value"
+                    value={entryValue.indicatorParameter1}
+                    onChange={(e) =>
+                      setEntryValues(
+                        entryValues.map((value) => {
+                          if (value.id === entryValue.id)
+                            return {
+                              ...value,
+                              indicatorParameter1: e.target.value,
+                            };
+                          return value;
+                        })
+                      )
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
 
-                <input
-                  disabled={!showOp[index]?.second}
-                  type="text"
-                  placeholder="Indicator value"
-                />
+                {entryValue.refNumber ? (
+                  <SelectInput
+                    label=""
+                    defaultValue="Add Operation"
+                    options={[">", "<", "="]}
+                    value={entryValue}
+                    setValue={(e) =>
+                      setEntryValues(
+                        entryValues.map((value) => {
+                          if (value.id === entryValue.id)
+                            return { ...value, operator: e };
+                          return value;
+                        })
+                      )
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
 
-                <SelectInput
-                  disabled={!showOp[index]?.third}
-                  label=""
-                  defaultValue="Add Operation"
-                  options={[">", "<", "="]}
-                />
+                {entryValue.refNumber !== "3" &&
+                entryValue.refNumber !== "6" &&
+                entryValue.refNumber ? (
+                  <SelectInput
+                    label=""
+                    defaultValue="Choose indicator or price"
+                    options={[1, 2, 3]}
+                    value={entryValue}
+                    setValue={
+                      entryValue.refNumber === "1" ||
+                      entryValue.refNumber === "4"
+                        ? setIndicatorTwo
+                        : setPriceTwo
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
 
-                <SelectInput
-                  disabled={!showOp[index]?.fourth}
-                  label=""
-                  defaultValue="Choose indicator or price"
-                  options={[1, 2, 3]}
-                />
-
-                <input
-                  disabled={!showOp[index]?.fifth}
-                  placeholder="text"
-                  type="text"
-                />
+                {entryValue.refNumber !== "2" &&
+                entryValue.refNumber !== "5" &&
+                entryValue.refNumber ? (
+                  <input
+                    placeholder={
+                      isValue(entryValue.refNumber)
+                        ? "Enter value"
+                        : "Indicator Value"
+                    }
+                    type="text"
+                    onChange={
+                      isValue(entryValue.refNumber)
+                        ? (e) =>
+                            setEntryValues(
+                              entryValues.map((value) => {
+                                if (value.id === entryValue.id)
+                                  return { ...value, value: e.target.value };
+                                return value;
+                              })
+                            )
+                        : (e) =>
+                            setEntryValues(
+                              entryValues.map((value) => {
+                                if (value.id === entryValue.id)
+                                  return {
+                                    ...value,
+                                    indicatorParameter2: e.target.value,
+                                  };
+                                return value;
+                              })
+                            )
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
               </div>
             ))}
 
@@ -174,14 +393,26 @@ const Entry = () => {
           />
         </Link>
 
-        <Link to="/exit">
-          <ActionButton
-            buttonText="Submit"
-            textColor="var(--whiteColor)"
-            backgroundColor="var(--brandColor)"
-          />
-        </Link>
+        <ActionButton
+          buttonText="Submit"
+          textColor="var(--whiteColor)"
+          backgroundColor="var(--brandColor)"
+          onClick={(e) => {
+            e.preventDefault();
+            if (
+              validatePreviousEntries(entryValues) &&
+              initialCapital &&
+              positionSize &&
+              orderSize
+            ) {
+              navigate("/exit");
+            } else {
+              alert("Please fill all fields");
+            }
+          }}
+        />
       </div>
+      {console.log(initialCapital, positionSize, orderSize)}
     </div>
   );
 };
