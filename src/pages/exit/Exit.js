@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
-import Reference from "../../components/button/actionButton/Reference";
 import Container from "../../components/container/Container";
 import ReferenceInput from "../../components/input/ReferenceInput/ReferenceInput";
 import SelectInput from "../../components/input/selectInput/SelectInput";
+import EntryReference from "../../components/reference/EntryReference";
 
 import styles from "../entry/Entry.module.css";
 
@@ -68,44 +68,8 @@ const Exit = () => {
         </div>
         <div className={styles.entry_referenceBox}>
           <h1 style={{ padding: "0 1rem" }}>Reference Card</h1>
-          <div className={styles.entry_reference}>
-            <div>
-              <Reference
-                num="1"
-                type="indicator-operator-indicator"
-                example="SMA (50) > SMA (200)"
-              />
-              <Reference
-                num="2"
-                type="indicator-operator-price"
-                example="SMA (50) > close"
-              />
-            </div>
-            <div>
-              <Reference
-                num="3"
-                type="indicator-operator-value"
-                example="SMA (50) > 75.5"
-              />
-              <Reference
-                num="4"
-                type="price-operator-indicator"
-                example="close > SMA (50)"
-              />
-            </div>
-            <div>
-              <Reference
-                num="5"
-                type="price-operator-price"
-                example="close > high"
-              />
-              <Reference
-                num="6"
-                type="price-operator-value"
-                example="close > 75.5"
-              />
-            </div>
-          </div>
+
+          <EntryReference />
         </div>
       </div>
 
@@ -183,7 +147,7 @@ const Exit = () => {
       <div className={styles.entry__routeBtn}>
         <Link to="/entry">
           <ActionButton
-            buttonText="Back To Home"
+            buttonText="Back To Entries"
             textColor="var(--whiteColor)"
             backgroundColor="transparent"
           />

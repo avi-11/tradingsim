@@ -1,5 +1,5 @@
 const containerStyles = {
-  width: "90%",
+  width: "100%",
   border: "1px solid var(--borderColor)",
   borderRadius: "10px",
   padding: "16px 24px",

@@ -18,13 +18,13 @@ const shade2Style = {
   transform: "rotate(45deg)",
 
   top: "-230px",
-  right: "240px",
+  right: "0px",
 };
 
 function ShadeContainer(props) {
   return (
     <>
-      <div style={{ width: "90%", zIndex: "1000" }}>
+      <div style={{ width: "90%", zIndex: "1000", overflowX: "none" }}>
         {props.children.map((child) => child)}
       </div>
       <div style={shade1Style} className="shade1"></div>

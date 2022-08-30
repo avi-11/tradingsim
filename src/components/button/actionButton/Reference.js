@@ -17,13 +17,14 @@ const exampleS = {
   color: "#C5C1C1",
 };
 
-const Reference = ({ num, type, example }) => {
+
+const Reference = ({ refNumber, refType, refExample }) => {
   return (
     <div style={{ display: "flex", margin: "1rem 0" }}>
-      <p style={numStyle}>{num}</p>
+      <p style={numStyle}>{refNumber}</p>
       <div>
-        <p>{type}</p>
-        <p style={exampleS}>Eg : {example}</p>
+        <p>{refType}</p>
+        <p style={example}>Eg: {refExample}</p>
       </div>
     </div>
   );

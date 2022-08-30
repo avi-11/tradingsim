@@ -9,20 +9,20 @@
   font-size: 0.9em;
 }
 
-.header{
+.header {
   display: flex;
-    align-items: center;
-    border: 2px dashed #868181;
-border-radius: 15px;
-padding: 1rem;
-margin: 2rem;
+  align-items: center;
+  border: 2px dashed #868181;
+  border-radius: 15px;
+  padding: 1rem;
+  margin: 2rem;
 }
 
-.info_header{
+.info_header {
   padding: 0rem 3rem;
-    font-size: 1.5rem;
-    font-weight: 300;
-    color: #C5C1C1;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #c5c1c1;
 }
 
 .formField__grid {

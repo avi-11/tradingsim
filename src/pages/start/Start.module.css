@@ -1,3 +1,4 @@
+
 .points{
     color: #cccccc;
     font-family: 'Inter';
@@ -6,14 +7,14 @@ font-weight: 300;
 font-size: 22px;
 }
 
-.Start_page_firstBox{
-    display: inline-block;
-    padding: 1rem 3rem;
-    background-color: #1C1C1C;
-    border-radius: 10px;
-    position: relative;
-    left: 60%;
-    margin-top: 2rem;
+.Start_page_firstBox {
+  display: inline-block;
+  padding: 1rem 3rem;
+  background-color: #1c1c1c;
+  border-radius: 10px;
+  position: relative;
+  left: 60%;
+  margin-top: 2rem;
 }
 
 .First_box_heading{
@@ -35,22 +36,22 @@ font-size: 40px;
 
 padding: 0;
 
-color: #FFFFFF;
 
+
+  color: #ffffff;
 }
 
-.Start_page_firstBox_points{
-    margin: 1rem 0px;
-
+.Start_page_firstBox_points {
+  margin: 1rem 0px;
 }
 
-.Start_page_secondBox{
-    margin: 0 2rem;
+.Start_page_secondBox {
+  margin: 0 2rem;
 }
 
-.third_heading{
-    display: flex;
-    margin: 1rem 0;
+.third_heading {
+  display: flex;
+  margin: 1rem 0;
 }
 
 .Start_page_thirdBox_heading{
