@@ -9,7 +9,7 @@ const numStyle = {
   margin: "0 1rem",
 };
 
-const exampleS = {
+const example = {
   fontFamily: "Inter",
   fontStyle: "italic",
   fontWeight: "300",
