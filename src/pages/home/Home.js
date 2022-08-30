@@ -154,7 +154,7 @@ function Home() {
       </div>
 
       <Link
-        to="/entry"
+        to={showGraph ? "/entry" : ""}
         className="link"
         style={{ position: "relative", left: "80%" }}
       >
@@ -162,6 +162,7 @@ function Home() {
           buttonText="Create Entries"
           textColor="var(--whiteColor)"
           backgroundColor="var(--brandColor)"
+          onClick={(e) => (showGraph ? "" : alert("Run simulation first"))}
         />
       </Link>
 
