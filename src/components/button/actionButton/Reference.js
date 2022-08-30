@@ -17,6 +17,7 @@ const example = {
   color: "#C5C1C1",
 };
 
+
 const Reference = ({ refNumber, refType, refExample }) => {
   return (
     <div style={{ display: "flex", margin: "1rem 0" }}>

@@ -68,6 +68,7 @@ const Exit = () => {
         </div>
         <div className={styles.entry_referenceBox}>
           <h1 style={{ padding: "0 1rem" }}>Reference Card</h1>
+
           <EntryReference />
         </div>
       </div>

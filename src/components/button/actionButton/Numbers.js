@@ -14,7 +14,7 @@ const Numbers = ({ num }) => {
         <circle
           cx="50"
           cy="50"
-          r="40"
+          r="32"
           stroke="blue"
           strokeWidth="3"
           fill="transparent"
