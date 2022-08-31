@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import Container from "../../components/container/Container";
 import Numberinput from "../../components/input/numberInput/Numberinput";
@@ -24,6 +24,36 @@ const Entry = () => {
   const [num, setNum] = useState(1);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  function checkIndicatorRange(indicator, indicatorValue) {
+    let validRange = true;
+
+    if (indicator === "RSI") {
+      if (indicatorValue < 0 || indicatorValue > 100) {
+        validRange = false;
+      }
+    } else if (indicator === "SMA") {
+      if (indicatorValue < 0 || indicatorValue > 500) {
+        validRange = false;
+      }
+    } else if (indicator === "ADX") {
+      if (indicatorValue < 0 || indicatorValue > 100) {
+        validRange = false;
+      }
+    }
+
+    if (!validRange)
+      alert(
+        `Indicator value out of range. Ranges are: \n
+          1. SMA:- 0 - 500 \n
+          2. RSI:- 0 - 100 \n
+          3. ADX:- 0 - 100
+        `
+      );
+
+    return validRange;
+  }
 
   function validatePreviousEntries(entryValues) {
     let valid = true;
@@ -40,6 +70,13 @@ const Entry = () => {
           )
         ) {
           valid = false;
+        } else if (
+          !(
+            checkIndicatorRange(entry.indicator1, entry.indicatorParameter1) &&
+            checkIndicatorRange(entry.indicator2, entry.indicatorParameter2)
+          )
+        ) {
+          valid = false;
         }
       } else if (entry.refNumber === "2") {
         if (
@@ -49,6 +86,10 @@ const Entry = () => {
             (entry.price1 || entry.price2) &&
             entry.operator
           )
+        ) {
+          valid = false;
+        } else if (
+          !checkIndicatorRange(entry.indicator1, entry.indicatorParameter1)
         ) {
           valid = false;
         }
@@ -62,6 +103,10 @@ const Entry = () => {
           )
         ) {
           valid = false;
+        } else if (
+          !checkIndicatorRange(entry.indicator1, entry.indicatorParameter1)
+        ) {
+          valid = false;
         }
       } else if (entry.refNumber === "4") {
         if (
@@ -71,6 +116,10 @@ const Entry = () => {
             entry.indicatorParameter2 &&
             entry.operator
           )
+        ) {
+          valid = false;
+        } else if (
+          !checkIndicatorRange(entry.indicator2, entry.indicatorParameter2)
         ) {
           valid = false;
         }
@@ -249,8 +298,16 @@ const Entry = () => {
                 {entryValue.refNumber ? (
                   <SelectInput
                     label=""
-                    defaultValue="Choose indicator or price"
-                    options={[1, 2, 3]}
+                    defaultValue={
+                      isIndicator(entryValue.refNumber)
+                        ? "Choose Indicator"
+                        : "Choose Price"
+                    }
+                    options={
+                      isIndicator(entryValue.refNumber)
+                        ? ["SMA", "RSI", "ADX"]
+                        : ["Open", "Close", "High", "Low"]
+                    }
                     value={entryValue}
                     setValue={
                       isIndicator(entryValue.refNumber)
@@ -269,6 +326,18 @@ const Entry = () => {
                     type="number"
                     placeholder="Indicator value"
                     value={entryValue.indicatorParameter1}
+                    min={1}
+                    max={
+                      entryValue.indicator1
+                        ? entryValue.indicator1 === "SMA"
+                          ? 500
+                          : entryValue.indicator1 === "RSI"
+                          ? 100
+                          : entryValue.indicator1 === "ADX"
+                          ? 100
+                          : 1
+                        : 1
+                    }
                     onChange={(e) =>
                       setEntryValues(
                         entryValues.map((value) => {
@@ -311,8 +380,18 @@ const Entry = () => {
                 entryValue.refNumber ? (
                   <SelectInput
                     label=""
-                    defaultValue="Choose indicator or price"
-                    options={[1, 2, 3]}
+                    defaultValue={
+                      entryValue.refNumber === "1" ||
+                      entryValue.refNumber === "4"
+                        ? "Choose Indicator"
+                        : "Choose Price"
+                    }
+                    options={
+                      entryValue.refNumber === "1" ||
+                      entryValue.refNumber === "4"
+                        ? ["SMA", "RSI", "ADX"]
+                        : ["Open", "Close", "High", "Low"]
+                    }
                     value={entryValue}
                     setValue={
                       entryValue.refNumber === "1" ||
@@ -356,6 +435,18 @@ const Entry = () => {
                                 return value;
                               })
                             )
+                    }
+                    min={!isValue(entryValue.refNumber) ? 1 : 0}
+                    max={
+                      !isValue(entryValue.refNumber) && entryValue.indicator1
+                        ? entryValue.indicator1 === "SMA"
+                          ? 500
+                          : entryValue.indicator1 === "RSI"
+                          ? 100
+                          : entryValue.indicator1 === "ADX"
+                          ? 100
+                          : 1
+                        : 1
                     }
                   />
                 ) : (
@@ -405,6 +496,10 @@ const Entry = () => {
               positionSize &&
               orderSize
             ) {
+              localStorage.setItem("initialCapital", initialCapital);
+              localStorage.setItem("positionSize", positionSize);
+              localStorage.setItem("orderSize", orderSize);
+              localStorage.setItem("entryValues", JSON.stringify(entryValues));
               navigate("/exit");
             } else {
               alert("Please fill all fields");
@@ -412,7 +507,6 @@ const Entry = () => {
           }}
         />
       </div>
-      {console.log(initialCapital, positionSize, orderSize)}
     </div>
   );
 };
