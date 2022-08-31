@@ -63,7 +63,7 @@ export function validatePreviousEntries(entryValues) {
   return valid;
 }
 
-function addRule(
+export function addRule(
   e,
   value,
   entryValues,
@@ -85,7 +85,7 @@ function addRule(
   setNum(num + 1);
 }
 
-function removeRule(
+export function removeRule(
   e,
   entryGroups,
   setEntryValues,
@@ -99,7 +99,7 @@ function removeRule(
   }
 }
 
-function setCurrentRef(e, id, entryValues, setEntryValues) {
+export function setCurrentRef(e, id, entryValues, setEntryValues) {
   const newEntryValue = entryValues.map((value) => {
     if (value.id === id)
       return {
@@ -112,17 +112,17 @@ function setCurrentRef(e, id, entryValues, setEntryValues) {
   setEntryValues(newEntryValue);
 }
 
-function isIndicator(refNumber) {
+export function isIndicator(refNumber) {
   if (refNumber === "1" || refNumber === "2" || refNumber === "3") return true;
   return false;
 }
 
-function isValue(refNumber) {
+export function isValue(refNumber) {
   if (refNumber === "3" || refNumber === "6") return true;
   return false;
 }
 
-function setIndicatorOne(e, value, entryValues, setEntryValues) {
+export function setIndicatorOne(e, value, entryValues, setEntryValues) {
   const newEntryValue = entryValues.map((entryValue) => {
     if (entryValue.id === value.id)
       return {
@@ -135,7 +135,7 @@ function setIndicatorOne(e, value, entryValues, setEntryValues) {
   setEntryValues(newEntryValue);
 }
 
-function setPriceOne(e, value, entryValues, setEntryValues) {
+export function setPriceOne(e, value, entryValues, setEntryValues) {
   const newEntryValue = entryValues.map((entryValue) => {
     if (entryValue.id === value.id) return { ...entryValue, price1: e };
     return entryValue;
@@ -144,7 +144,7 @@ function setPriceOne(e, value, entryValues, setEntryValues) {
   setEntryValues(newEntryValue);
 }
 
-function setIndicatorTwo(e, value, entryValues, setEntryValues) {
+export function setIndicatorTwo(e, value, entryValues, setEntryValues) {
   const newEntryValue = entryValues.map((entryValue) => {
     if (entryValue.id === value.id)
       return {
@@ -157,7 +157,7 @@ function setIndicatorTwo(e, value, entryValues, setEntryValues) {
   setEntryValues(newEntryValue);
 }
 
-function setPriceTwo(e, value, entryValues, setEntryValues) {
+export function setPriceTwo(e, value, entryValues, setEntryValues) {
   const newEntryValue = entryValues.map((entryValue) => {
     if (entryValue.id === value.id) return { ...entryValue, price2: e };
     return entryValue;
