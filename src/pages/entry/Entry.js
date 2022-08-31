@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import Container from "../../components/container/Container";
 import Numberinput from "../../components/input/numberInput/Numberinput";
@@ -24,6 +24,9 @@ const Entry = () => {
   const [num, setNum] = useState(1);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log(location);
 
   function validatePreviousEntries(entryValues) {
     let valid = true;
@@ -249,8 +252,16 @@ const Entry = () => {
                 {entryValue.refNumber ? (
                   <SelectInput
                     label=""
-                    defaultValue="Choose indicator or price"
-                    options={[1, 2, 3]}
+                    defaultValue={
+                      isIndicator(entryValue.refNumber)
+                        ? "Choose Indicator"
+                        : "Choose Price"
+                    }
+                    options={
+                      isIndicator(entryValue.refNumber)
+                        ? ["SMA", "RSI", "ADX"]
+                        : ["Open", "Close", "High", "Low"]
+                    }
                     value={entryValue}
                     setValue={
                       isIndicator(entryValue.refNumber)
@@ -311,8 +322,18 @@ const Entry = () => {
                 entryValue.refNumber ? (
                   <SelectInput
                     label=""
-                    defaultValue="Choose indicator or price"
-                    options={[1, 2, 3]}
+                    defaultValue={
+                      entryValue.refNumber === "1" ||
+                      entryValue.refNumber === "4"
+                        ? "Choose Indicator"
+                        : "Choose Price"
+                    }
+                    options={
+                      entryValue.refNumber === "1" ||
+                      entryValue.refNumber === "4"
+                        ? ["SMA", "RSI", "ADX"]
+                        : ["Open", "Close", "High", "Low"]
+                    }
                     value={entryValue}
                     setValue={
                       entryValue.refNumber === "1" ||
@@ -405,6 +426,10 @@ const Entry = () => {
               positionSize &&
               orderSize
             ) {
+              localStorage.setItem("initialCapital", initialCapital);
+              localStorage.setItem("positionSize", positionSize);
+              localStorage.setItem("orderSize", orderSize);
+              localStorage.setItem("entryValues", JSON.stringify(entryValues));
               navigate("/exit");
             } else {
               alert("Please fill all fields");
@@ -412,7 +437,6 @@ const Entry = () => {
           }}
         />
       </div>
-      {console.log(initialCapital, positionSize, orderSize)}
     </div>
   );
 };

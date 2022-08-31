@@ -207,8 +207,16 @@ const Exit = () => {
                 {entryValue.refNumber ? (
                   <SelectInput
                     label=""
-                    defaultValue="Choose indicator or price"
-                    options={[1, 2, 3]}
+                    defaultValue={
+                      isIndicator(entryValue.refNumber)
+                        ? "Choose Indicator"
+                        : "Choose Price"
+                    }
+                    options={
+                      isIndicator(entryValue.refNumber)
+                        ? ["SMA", "RSI", "ADX"]
+                        : ["Open", "Close", "High", "Low"]
+                    }
                     value={entryValue}
                     setValue={
                       isIndicator(entryValue.refNumber)
@@ -269,8 +277,18 @@ const Exit = () => {
                 entryValue.refNumber ? (
                   <SelectInput
                     label=""
-                    defaultValue="Choose indicator or price"
-                    options={[1, 2, 3]}
+                    defaultValue={
+                      entryValue.refNumber === "1" ||
+                      entryValue.refNumber === "4"
+                        ? "Choose Indicator"
+                        : "Choose Price"
+                    }
+                    options={
+                      entryValue.refNumber === "1" ||
+                      entryValue.refNumber === "4"
+                        ? ["SMA", "RSI", "ADX"]
+                        : ["Open", "Close", "High", "Low"]
+                    }
                     value={entryValue}
                     setValue={
                       entryValue.refNumber === "1" ||
@@ -358,6 +376,7 @@ const Exit = () => {
           onClick={(e) => {
             e.preventDefault();
             if (validatePreviousEntries(entryValues)) {
+              localStorage.setItem("exitValues", JSON.stringify(entryValues));
               navigate("/result");
             } else {
               alert("Please fill all fields");

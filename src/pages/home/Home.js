@@ -154,7 +154,9 @@ function Home() {
       </div>
 
       <Link
-        to={showGraph ? "/entry" : ""}
+        to={{
+          pathname: Object.keys(graphData).length ? "/entry" : "",
+        }}
         className="link"
         style={{ position: "relative", left: "80%" }}
       >
@@ -162,10 +164,14 @@ function Home() {
           buttonText="Create Entries"
           textColor="var(--whiteColor)"
           backgroundColor="var(--brandColor)"
-          onClick={(e) => (showGraph ? "" : alert("Run simulation first"))}
+          onClick={(e) => {
+            if (Object.keys(graphData).length) {
+              localStorage.setItem("graphData", JSON.stringify(graphData));
+            } else alert("Run simulation first");
+          }}
         />
       </Link>
-
+      {console.log(graphData)}
       {/* <div className="shade"></div> */}
     </div>
   );
