@@ -20,6 +20,35 @@ const Exit = () => {
 
   const navigate = useNavigate();
 
+  function checkIndicatorRange(indicator, indicatorValue) {
+    let validRange = true;
+
+    if (indicator === "RSI") {
+      if (indicatorValue < 0 || indicatorValue > 100) {
+        validRange = false;
+      }
+    } else if (indicator === "SMA") {
+      if (indicatorValue < 0 || indicatorValue > 500) {
+        validRange = false;
+      }
+    } else if (indicator === "ADX") {
+      if (indicatorValue < 0 || indicatorValue > 100) {
+        validRange = false;
+      }
+    }
+
+    if (!validRange)
+      alert(
+        `Indicator value out of range. Ranges are: \n
+          1. SMA:- 0 - 500 \n
+          2. RSI:- 0 - 100 \n
+          3. ADX:- 0 - 100
+        `
+      );
+
+    return validRange;
+  }
+
   function validatePreviousEntries(entryValues) {
     let valid = true;
 
@@ -35,6 +64,13 @@ const Exit = () => {
           )
         ) {
           valid = false;
+        } else if (
+          !(
+            checkIndicatorRange(entry.indicator1, entry.indicatorParameter1) &&
+            checkIndicatorRange(entry.indicator2, entry.indicatorParameter2)
+          )
+        ) {
+          valid = false;
         }
       } else if (entry.refNumber === "2") {
         if (
@@ -44,6 +80,10 @@ const Exit = () => {
             (entry.price1 || entry.price2) &&
             entry.operator
           )
+        ) {
+          valid = false;
+        } else if (
+          !checkIndicatorRange(entry.indicator1, entry.indicatorParameter1)
         ) {
           valid = false;
         }
@@ -57,6 +97,10 @@ const Exit = () => {
           )
         ) {
           valid = false;
+        } else if (
+          !checkIndicatorRange(entry.indicator1, entry.indicatorParameter1)
+        ) {
+          valid = false;
         }
       } else if (entry.refNumber === "4") {
         if (
@@ -66,6 +110,10 @@ const Exit = () => {
             entry.indicatorParameter2 &&
             entry.operator
           )
+        ) {
+          valid = false;
+        } else if (
+          !checkIndicatorRange(entry.indicator2, entry.indicatorParameter2)
         ) {
           valid = false;
         }
@@ -235,6 +283,18 @@ const Exit = () => {
                     type="number"
                     placeholder="Indicator value"
                     value={entryValue.indicatorParameter1}
+                    min={1}
+                    max={
+                      entryValue.indicator1
+                        ? entryValue.indicator1 === "SMA"
+                          ? 500
+                          : entryValue.indicator1 === "RSI"
+                          ? 100
+                          : entryValue.indicator1 === "ADX"
+                          ? 100
+                          : 1
+                        : 1
+                    }
                     onChange={(e) =>
                       setEntryValues(
                         entryValues.map((value) => {
@@ -332,6 +392,18 @@ const Exit = () => {
                                 return value;
                               })
                             )
+                    }
+                    min={!isValue(entryValue.refNumber) ? 1 : 0}
+                    max={
+                      !isValue(entryValue.refNumber) && entryValue.indicator1
+                        ? entryValue.indicator1 === "SMA"
+                          ? 500
+                          : entryValue.indicator1 === "RSI"
+                          ? 100
+                          : entryValue.indicator1 === "ADX"
+                          ? 100
+                          : 1
+                        : 1
                     }
                   />
                 ) : (
