@@ -5,6 +5,7 @@
   --brandColor: #6966ff;
   --whiteColor: #fff;
   --blackColor: #000;
+  --grayColor: #c5c1c1;
 }
 
 input {
@@ -150,7 +151,7 @@ select {
 .container form button,
 .backBtn {
   position: relative;
-  left: 80%;
+  left: 10%;
   outline: none;
   color: #fff;
   transition: all 0.3s linear;
@@ -268,4 +269,20 @@ h3 {
   cursor: pointer;
   z-index: 100;
   color: white;
+}
+
+.chartTooltip {
+  /* padding: 1rem; */
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.chartTooltip p {
+  color: black;
+  font-weight: 400;
+}
+.chartTooltip p span {
+  font-weight: 600;
+  margin-right: 5px;
 }

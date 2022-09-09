@@ -6,10 +6,12 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-right: 3rem;
+  margin-top: 1rem;
 }
 
 .entry__radioFormGroup label {
-  margin-right: 1rem;
+  margin-left: 1rem;
 }
 
 .entry__radioFormGroup input {
@@ -18,11 +20,11 @@
 
 .entry__capitalFormGroup {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 }
 
-.entry__capitalFormGroup > label > input {
+.entry__capitalFormGroup > div {
   margin-left: 1rem;
   width: 20rem;
   border-radius: 5px;
@@ -68,4 +70,42 @@
   align-items: center;
 
   margin: 1rem 0rem;
+}
+
+.entry_reference {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.entry_upperCard {
+  display: flex;
+  align-items: center;
+}
+
+.entry_referenceBox {
+  border: 2px dashed #868181;
+  border-radius: 15px;
+  padding: 1rem;
+  margin: 1rem;
+  width: 100%;
+}
+
+.entry_infoIcon {
+  border: 2px dashed #868181;
+  border-radius: 15px;
+  padding: 6rem 2rem;
+}
+
+.entry_firstForm {
+  display: flex;
+  align-items: center;
+}
+
+.entry_firstForm > p {
+  color: var(--grayColor);
+  text-decoration: underline;
+}
+
+.hide {
+  visibility: hidden;
 }

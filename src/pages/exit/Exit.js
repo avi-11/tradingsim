@@ -1,49 +1,414 @@
 import { useState } from "react";
-import NumberFormat from "react-number-format";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
-import SelectInput from "../../components/input/selectInput/SelectInput";
 import Container from "../../components/container/Container";
+import ReferenceInput from "../../components/input/ReferenceInput/ReferenceInput";
+import SelectInput from "../../components/input/selectInput/SelectInput";
+import EntryReference from "../../components/reference/EntryReference";
 
 import styles from "../entry/Entry.module.css";
 
-function Exit() {
-  const [exitGroups, setExitGroups] = useState([1]);
+const Exit = () => {
+  const [entryGroups, setEntryGroups] = useState([1]);
+  const [entryValues, setEntryValues] = useState([
+    {
+      id: 1,
+      refNumber: "",
+    },
+  ]);
+  const [num, setNum] = useState(1);
+
+  const navigate = useNavigate();
+
+  function checkIndicatorRange(indicator, indicatorValue) {
+    let validRange = true;
+
+    if (indicator === "RSI") {
+      if (indicatorValue < 0 || indicatorValue > 100) {
+        validRange = false;
+      }
+    } else if (indicator === "SMA") {
+      if (indicatorValue < 0 || indicatorValue > 500) {
+        validRange = false;
+      }
+    } else if (indicator === "ADX") {
+      if (indicatorValue < 0 || indicatorValue > 100) {
+        validRange = false;
+      }
+    }
+
+    if (!validRange)
+      alert(
+        `Indicator value out of range. Ranges are: \n
+          1. SMA:- 0 - 500 \n
+          2. RSI:- 0 - 100 \n
+          3. ADX:- 0 - 100
+        `
+      );
+
+    return validRange;
+  }
+
+  function validatePreviousEntries(entryValues) {
+    let valid = true;
+
+    entryValues.forEach((entry) => {
+      if (entry.refNumber === "1") {
+        if (
+          !(
+            entry.indicator1 &&
+            entry.indicator2 &&
+            entry.indicatorParameter1 &&
+            entry.indicatorParameter2 &&
+            entry.operator
+          )
+        ) {
+          valid = false;
+        } else if (
+          !(
+            checkIndicatorRange(entry.indicator1, entry.indicatorParameter1) &&
+            checkIndicatorRange(entry.indicator2, entry.indicatorParameter2)
+          )
+        ) {
+          valid = false;
+        }
+      } else if (entry.refNumber === "2") {
+        if (
+          !(
+            entry.indicator1 &&
+            entry.indicatorParameter1 &&
+            (entry.price1 || entry.price2) &&
+            entry.operator
+          )
+        ) {
+          valid = false;
+        } else if (
+          !checkIndicatorRange(entry.indicator1, entry.indicatorParameter1)
+        ) {
+          valid = false;
+        }
+      } else if (entry.refNumber === "3") {
+        if (
+          !(
+            entry.indicator1 &&
+            entry.indicatorParameter1 &&
+            entry.value &&
+            entry.operator
+          )
+        ) {
+          valid = false;
+        } else if (
+          !checkIndicatorRange(entry.indicator1, entry.indicatorParameter1)
+        ) {
+          valid = false;
+        }
+      } else if (entry.refNumber === "4") {
+        if (
+          !(
+            entry.price1 &&
+            entry.indicator2 &&
+            entry.indicatorParameter2 &&
+            entry.operator
+          )
+        ) {
+          valid = false;
+        } else if (
+          !checkIndicatorRange(entry.indicator2, entry.indicatorParameter2)
+        ) {
+          valid = false;
+        }
+      } else if (entry.refNumber === "5") {
+        if (!(entry.price1 && entry.price2 && entry.operator)) {
+          valid = false;
+        }
+      } else if (entry.refNumber === "6") {
+        if (!(entry.price1 && entry.value && entry.operator)) {
+          valid = false;
+        }
+      } else {
+        valid = false;
+      }
+    });
+
+    return valid;
+  }
 
   function addRule(e) {
     e.preventDefault();
-    setExitGroups([...exitGroups, exitGroups.length + 1]);
+
+    if (!validatePreviousEntries(entryValues)) {
+      alert("Complete Previous Entries!!");
+      return;
+    }
+
+    setEntryGroups([...entryGroups, entryGroups.length + 1]);
+    setEntryValues([...entryValues, { id: entryValues.length + 1 }]);
+    setNum(num + 1);
   }
 
   function removeRule(e) {
     e.preventDefault();
-    if (exitGroups.length > 1)
-      setExitGroups(exitGroups.slice(0, exitGroups.length - 1));
+    if (entryGroups.length > 1) {
+      setEntryGroups(entryGroups.slice(0, entryGroups.length - 1));
+      setEntryValues(entryValues.slice(0, entryValues.length - 1));
+    }
+  }
+
+  function setCurrentRef(e, id) {
+    const newEntryValue = entryValues.map((value) => {
+      if (value.id === id)
+        return {
+          ...value,
+          refNumber: e,
+        };
+      return value;
+    });
+
+    setEntryValues(newEntryValue);
+  }
+
+  function isIndicator(refNumber) {
+    if (refNumber === "1" || refNumber === "2" || refNumber === "3")
+      return true;
+    return false;
+  }
+
+  function isValue(refNumber) {
+    if (refNumber === "3" || refNumber === "6") return true;
+    return false;
+  }
+
+  function setIndicatorOne(e, value) {
+    const newEntryValue = entryValues.map((entryValue) => {
+      if (entryValue.id === value.id)
+        return {
+          ...entryValue,
+          indicator1: e,
+        };
+      return entryValue;
+    });
+
+    setEntryValues(newEntryValue);
+  }
+
+  function setPriceOne(e, value) {
+    const newEntryValue = entryValues.map((entryValue) => {
+      if (entryValue.id === value.id) return { ...entryValue, price1: e };
+      return entryValue;
+    });
+
+    setEntryValues(newEntryValue);
+  }
+
+  function setIndicatorTwo(e, value) {
+    const newEntryValue = entryValues.map((entryValue) => {
+      if (entryValue.id === value.id)
+        return {
+          ...entryValue,
+          indicator2: e,
+        };
+      return entryValue;
+    });
+
+    setEntryValues(newEntryValue);
+  }
+
+  function setPriceTwo(e, value) {
+    const newEntryValue = entryValues.map((entryValue) => {
+      if (entryValue.id === value.id) return { ...entryValue, price2: e };
+      return entryValue;
+    });
+
+    setEntryValues(newEntryValue);
   }
 
   return (
-    <div>
+    <div className="app-container">
+      <div className={styles.entry_upperCard}>
+        <div className={styles.entry_infoIcon}>
+          <i
+            style={{ color: "#00D6A2" }}
+            class="fa-solid fa-circle-info fa-2xl"
+          ></i>
+        </div>
+        <div className={styles.entry_referenceBox}>
+          <h1 style={{ padding: "0 1rem" }}>Reference Card</h1>
+
+          <EntryReference />
+        </div>
+      </div>
+
       <Container>
         <h2>EXIT BUILDER</h2>
         <form>
           <div className={styles.entry__entryFormGroup}>
-            {exitGroups.map((entryGroup, index) => (
-              <div key={index} className={styles.entryFormGroup__row}>
+            {entryValues.map((entryValue, index) => (
+              <div key={entryValue.id} className={styles.entryFormGroup__row}>
                 <p>Entry Rule {index + 1}</p>
-                <SelectInput
-                  label=""
-                  defaultValue="Choose indicator or price"
-                  options={[1, 2, 3]}
-                />
 
-                <input type="text" placeholder="Indicator value" />
-                <SelectInput
-                  label=""
-                  defaultValue="Add Operatio"
-                  options={[1, 2, 3]}
+                <ReferenceInput
+                  defaultValue="ref. no"
+                  option={[1, 2, 3, 4, 5, 6]}
+                  index={index}
+                  setCurrentRef={setCurrentRef}
                 />
-                <input type="text" />
+                {entryValue.refNumber ? (
+                  <SelectInput
+                    label=""
+                    defaultValue={
+                      isIndicator(entryValue.refNumber)
+                        ? "Choose Indicator"
+                        : "Choose Price"
+                    }
+                    options={
+                      isIndicator(entryValue.refNumber)
+                        ? ["SMA", "RSI", "ADX"]
+                        : ["Open", "Close", "High", "Low"]
+                    }
+                    value={entryValue}
+                    setValue={
+                      isIndicator(entryValue.refNumber)
+                        ? setIndicatorOne
+                        : setPriceOne
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
+
+                {entryValue.refNumber === "1" ||
+                entryValue.refNumber === "2" ||
+                entryValue.refNumber === "3" ? (
+                  <input
+                    type="number"
+                    placeholder="Indicator value"
+                    value={entryValue.indicatorParameter1}
+                    min={1}
+                    max={
+                      entryValue.indicator1
+                        ? entryValue.indicator1 === "SMA"
+                          ? 500
+                          : entryValue.indicator1 === "RSI"
+                          ? 100
+                          : entryValue.indicator1 === "ADX"
+                          ? 100
+                          : 1
+                        : 1
+                    }
+                    onChange={(e) =>
+                      setEntryValues(
+                        entryValues.map((value) => {
+                          if (value.id === entryValue.id)
+                            return {
+                              ...value,
+                              indicatorParameter1: e.target.value,
+                            };
+                          return value;
+                        })
+                      )
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
+
+                {entryValue.refNumber ? (
+                  <SelectInput
+                    label=""
+                    defaultValue="Add Operation"
+                    options={[">", "<", "="]}
+                    value={entryValue}
+                    setValue={(e) =>
+                      setEntryValues(
+                        entryValues.map((value) => {
+                          if (value.id === entryValue.id)
+                            return { ...value, operator: e };
+                          return value;
+                        })
+                      )
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
+
+                {entryValue.refNumber !== "3" &&
+                entryValue.refNumber !== "6" &&
+                entryValue.refNumber ? (
+                  <SelectInput
+                    label=""
+                    defaultValue={
+                      entryValue.refNumber === "1" ||
+                      entryValue.refNumber === "4"
+                        ? "Choose Indicator"
+                        : "Choose Price"
+                    }
+                    options={
+                      entryValue.refNumber === "1" ||
+                      entryValue.refNumber === "4"
+                        ? ["SMA", "RSI", "ADX"]
+                        : ["Open", "Close", "High", "Low"]
+                    }
+                    value={entryValue}
+                    setValue={
+                      entryValue.refNumber === "1" ||
+                      entryValue.refNumber === "4"
+                        ? setIndicatorTwo
+                        : setPriceTwo
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
+
+                {entryValue.refNumber !== "2" &&
+                entryValue.refNumber !== "5" &&
+                entryValue.refNumber ? (
+                  <input
+                    placeholder={
+                      isValue(entryValue.refNumber)
+                        ? "Enter value"
+                        : "Indicator Value"
+                    }
+                    type="text"
+                    onChange={
+                      isValue(entryValue.refNumber)
+                        ? (e) =>
+                            setEntryValues(
+                              entryValues.map((value) => {
+                                if (value.id === entryValue.id)
+                                  return { ...value, value: e.target.value };
+                                return value;
+                              })
+                            )
+                        : (e) =>
+                            setEntryValues(
+                              entryValues.map((value) => {
+                                if (value.id === entryValue.id)
+                                  return {
+                                    ...value,
+                                    indicatorParameter2: e.target.value,
+                                  };
+                                return value;
+                              })
+                            )
+                    }
+                    min={!isValue(entryValue.refNumber) ? 1 : 0}
+                    max={
+                      !isValue(entryValue.refNumber) && entryValue.indicator1
+                        ? entryValue.indicator1 === "SMA"
+                          ? 500
+                          : entryValue.indicator1 === "RSI"
+                          ? 100
+                          : entryValue.indicator1 === "ADX"
+                          ? 100
+                          : 1
+                        : 1
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
               </div>
             ))}
 
@@ -60,8 +425,8 @@ function Exit() {
             <ActionButton
               buttonText={"Delete Rule"}
               onClick={removeRule}
-              textColor="var(--blackColor)"
               backgroundColor="var(--whiteColor)"
+              textColor="var(--blackColor)"
             />
           </div>
         </form>
@@ -76,15 +441,23 @@ function Exit() {
           />
         </Link>
 
-        <Link to="/result">
-          <ActionButton
-            buttonText="Simulate Trades"
-            textColor="var(--whiteColor)"
-            backgroundColor="var(--brandColor)"
-          />
-        </Link>
+        <ActionButton
+          buttonText="Submit"
+          textColor="var(--whiteColor)"
+          backgroundColor="var(--brandColor)"
+          onClick={(e) => {
+            e.preventDefault();
+            if (validatePreviousEntries(entryValues)) {
+              localStorage.setItem("exitValues", JSON.stringify(entryValues));
+              navigate("/result");
+            } else {
+              alert("Please fill all fields");
+            }
+          }}
+        />
       </div>
+      {/* <div className="shade"></div> */}
     </div>
   );
-}
+};
 export default Exit;
