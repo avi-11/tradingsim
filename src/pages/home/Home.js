@@ -106,23 +106,22 @@ function Home() {
                   defaultValue={instrumentname}
                   setValue={setInstrumentname}
                   options={["BTC", "ETH"]}
-                  label="Intrument"
+                  label="Instrument"
                 />
 
-                <LabelSelector
-                  values={["High", "Medium", "Low"]}
-                  currentValue={volatility}
-                  setValue={SetVolatilty}
-                />
-              </div>
-
-              <div style={{ display: "flex", flexDirection: "column" }}>
                 <Numberinput
                   value={closeprice}
                   setValue={setClosePrice}
                   label="Market price"
                 />
+              </div>
 
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <LabelSelector
+                  values={["High", "Medium", "Low"]}
+                  currentValue={volatility}
+                  setValue={SetVolatilty}
+                />
                 <GlobalInput
                   inputType="date"
                   value={startdate}
@@ -158,7 +157,7 @@ function Home() {
           pathname: Object.keys(graphData).length ? "/entry" : "",
         }}
         className="link"
-        style={{ position: "relative", left: "80%" }}
+        style={{ position: "relative", left: "71%", marginTop: "1rem" }}
       >
         <ActionButton
           buttonText="Create Entries"

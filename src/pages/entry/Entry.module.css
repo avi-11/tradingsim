@@ -6,8 +6,9 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-right: 3rem;
+  margin-right: 12rem;
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .entry__radioFormGroup label {
@@ -20,13 +21,13 @@
 
 .entry__capitalFormGroup {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-evenly;
   align-items: center;
 }
 
 .entry__capitalFormGroup > div {
   margin-left: 1rem;
-  width: 20rem;
+  width: 25rem;
   border-radius: 5px;
   padding: 5px;
 }

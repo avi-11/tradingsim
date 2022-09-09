@@ -247,7 +247,7 @@ const Entry = () => {
         <form className={styles.entry_firstForm}>
           <p>Strategy Settings</p>
 
-          <div style={{ width: "90%" }}>
+          <div style={{ width: "85%" }}>
             <div className={styles.entry__capitalFormGroup}>
               <Numberinput
                 label={"Initial Capital"}
