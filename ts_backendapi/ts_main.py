@@ -63,9 +63,9 @@ sellcriteria = {'C1': {
 
 class Report(BaseModel):
     ohlc_data = data
-    order_side: int = 0
-    initial_capital: float = 100000
-    position_size: float = 0.1
+    order_side = "0"
+    initial_capital = "100000"
+    position_size = "0.1"
     buycriteria = buycriteria
     sellcriteria = sellcriteria
 
@@ -89,9 +89,9 @@ def chartdata(report_data: Report):
 
     df = signal(dataf=df, buycriteria=buycriteria, sellcriteria=sellcriteria)
 
-    order_side = report_data.order_side
-    initial_capital = report_data.initial_capital
-    position_size = report_data.position_size
+    order_side = int(report_data.order_side)
+    initial_capital = float(report_data.initial_capital)
+    position_size = float(report_data.position_size)
 
     df = position(dataf=df, order_side=order_side)
 
