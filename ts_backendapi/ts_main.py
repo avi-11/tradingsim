@@ -72,7 +72,7 @@ class Report(BaseModel):
 # link two for report
 
 
-df = pd.DataFrame()
+df = None
 
 
 @app.post('/simulate_chartdata')
@@ -82,21 +82,34 @@ def chartdata(report_data: Report):
 
     sellcriteria = report_data.sellcriteria
 
-    data = report_data.ohlc_data
-    df = pd.DataFrame(data.values(), index=data.keys(), columns=[
-                      'InstrumentName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice'])
-    df.index = pd.to_datetime(df.index, format="%d-%m-%Y")
+    try:
+        data = report_data.ohlc_data
+        df = pd.DataFrame(data.values(), index=data.keys(), columns=[
+            'InstrumentName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice'])
+        df.index = pd.to_datetime(df.index, format="%d-%m-%Y")
+
+    except:
+        df = None
+        return {'Error': 'Provided ohlc data is incorrect'}
 
     df = signal(dataf=df, buycriteria=buycriteria, sellcriteria=sellcriteria)
 
-    order_side = int(report_data.order_side)
-    initial_capital = float(report_data.initial_capital)
-    position_size = float(report_data.position_size)
+    if df == None:
+        return {'Error': 'The provided criteria is incorrect!'}
 
-    df = position(dataf=df, order_side=order_side)
+    try:
+        order_side = int(report_data.order_side)
+        initial_capital = float(report_data.initial_capital)
+        position_size = float(report_data.position_size)
 
-    df = margin(dataf=df, initial_capital=initial_capital,
-                position_size=position_size)
+        df = position(dataf=df, order_side=order_side)
+
+        df = margin(dataf=df, initial_capital=initial_capital,
+                    position_size=position_size)
+
+    except:
+        df = None
+        return {'Error': 'Provided capital, position size or order side is incorrect!'}
 
     res = df.to_json(orient="records")
     parsed = json.loads(res)
@@ -113,5 +126,8 @@ def report(report_data: Report):
     chartdata(report_data=report_data)
 
     dataf = df
+
+    if dataf == None:
+        return {'Error': 'The provided criteria is incorrect!'}
 
     return reportmateric(dataf=dataf)

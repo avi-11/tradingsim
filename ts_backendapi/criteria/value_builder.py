@@ -17,6 +17,13 @@ criteria12 = ['Indicator2', 'Operator', 'Indicator']
 criteria13 = ['Value', 'Operator', 'Value2']
 criteria14 = ['Value2', 'Operator', 'Value']
 
+criteria1a = ['Price', 'Operator', 'Indicator', 'Ind_parameter']
+criteria2a = ['Price', 'Operator', 'Indicator']
+criteria3a = ['Indicator', 'Ind_parameter', 'Operator', 'Price']
+criteria4a = ['Indicator', 'Operator', 'Price']
+criteria13a = ['Price', 'Operator', 'Price2']
+criteria14a = ['Price2', 'Operator', 'Price']
+
 
 def value(criteriadic: dict) -> tuple:
     '''Args:
@@ -25,28 +32,28 @@ def value(criteriadic: dict) -> tuple:
     return: tuple with valueOne and valueTwo
     '''
 
-    if list(criteriadic.keys()) == criteria1:
+    if list(criteriadic.keys()) == criteria1 or list(criteriadic.keys()) == criteria1a:
 
         valueOne = criteriadic['Value']
         valueTwo = f"{criteriadic['Indicator']} {criteriadic['Ind_parameter']}"
 
         return valueOne, valueTwo
 
-    elif list(criteriadic.keys()) == criteria2:
+    elif list(criteriadic.keys()) == criteria2 or list(criteriadic.keys()) == criteria2a:
 
         valueOne = criteriadic['Value']
         valueTwo = f"{criteriadic['Indicator']}"
 
         return valueOne, valueTwo
 
-    elif list(criteriadic.keys()) == criteria3:
+    elif list(criteriadic.keys()) == criteria3 or list(criteriadic.keys()) == criteria3a:
 
         valueOne = f"{criteriadic['Indicator']} {criteriadic['Ind_parameter']}"
         valueTwo = criteriadic['Value']
 
         return valueOne, valueTwo
 
-    elif list(criteriadic.keys()) == criteria4:
+    elif list(criteriadic.keys()) == criteria4 or list(criteriadic.keys()) == criteria4a:
 
         valueOne = f"{criteriadic['Indicator']}"
         valueTwo = criteriadic['Value']
@@ -109,14 +116,14 @@ def value(criteriadic: dict) -> tuple:
 
         return valueOne, valueTwo
 
-    elif list(criteriadic.keys()) == criteria13:
+    elif list(criteriadic.keys()) == criteria13 or list(criteriadic.keys()) == criteria13a:
 
         valueTwo = f"{criteriadic['Value2']}"
         valueOne = f"{criteriadic['Value']}"
 
         return valueOne, valueTwo
 
-    elif list(criteriadic.keys()) == criteria12:
+    elif list(criteriadic.keys()) == criteria14 or list(criteriadic.keys()) == criteria14a:
 
         valueTwo = f"{criteriadic['Value']}"
         valueOne = f"{criteriadic['Value2']}"
@@ -124,4 +131,7 @@ def value(criteriadic: dict) -> tuple:
         return valueOne, valueTwo
 
     else:
-        exit(print('Parameter is incorrect!'))
+        valueOne = None
+        valueTwo = None
+
+        return valueOne, valueTwo

@@ -28,6 +28,10 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
     for ind in list(buycriteria.keys()):
 
         valueOne, valueTwo = value(buycriteria[ind])
+
+        if valueOne == None or valueTwo == None:
+            return None
+
         dataf = buy(dataf, valueOne=valueOne, valueTwo=valueTwo,
                     operation=buycriteria[ind]['Operator'])
 
