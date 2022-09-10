@@ -94,8 +94,10 @@ def chartdata(report_data: Report):
 
     df = signal(dataf=df, buycriteria=buycriteria, sellcriteria=sellcriteria)
 
-    if df == None:
-        return {'Error': 'The provided criteria is incorrect!'}
+    print(df)
+
+    # if df == None:
+    #     return {'Error': 'The provided criteria is incorrect!'}
 
     try:
         order_side = int(report_data.order_side)
@@ -127,7 +129,7 @@ def report(report_data: Report):
 
     dataf = df
 
-    if dataf == None:
-        return {'Error': 'The provided criteria is incorrect!'}
+    # if dataf == None:
+    #     return {'Error': 'The provided criteria is incorrect!'}
 
     return reportmateric(dataf=dataf)

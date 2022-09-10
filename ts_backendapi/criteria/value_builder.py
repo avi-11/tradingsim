@@ -1,3 +1,4 @@
+
 criteria1 = ['Value', 'Operator', 'Indicator', 'Ind_parameter']
 criteria2 = ['Value', 'Operator', 'Indicator']
 criteria3 = ['Indicator', 'Ind_parameter', 'Operator', 'Value']
@@ -34,29 +35,49 @@ def value(criteriadic: dict) -> tuple:
 
     if list(criteriadic.keys()) == criteria1 or list(criteriadic.keys()) == criteria1a:
 
-        valueOne = criteriadic['Value']
-        valueTwo = f"{criteriadic['Indicator']} {criteriadic['Ind_parameter']}"
+        if 'Price' in list(criteriadic.keys()):
+            valueOne = criteriadic['Price']
+            valueTwo = f"{criteriadic['Indicator']} {criteriadic['Ind_parameter']}"
+
+        else:
+            valueOne = criteriadic['Value']
+            valueTwo = f"{criteriadic['Indicator']} {criteriadic['Ind_parameter']}"
 
         return valueOne, valueTwo
 
     elif list(criteriadic.keys()) == criteria2 or list(criteriadic.keys()) == criteria2a:
 
-        valueOne = criteriadic['Value']
-        valueTwo = f"{criteriadic['Indicator']}"
+        if 'Price' in list(criteriadic.keys()):
+            valueOne = criteriadic['Price']
+            valueTwo = f"{criteriadic['Indicator']}"
+
+        else:
+            valueOne = criteriadic['Value']
+            valueTwo = f"{criteriadic['Indicator']}"
 
         return valueOne, valueTwo
 
     elif list(criteriadic.keys()) == criteria3 or list(criteriadic.keys()) == criteria3a:
 
-        valueOne = f"{criteriadic['Indicator']} {criteriadic['Ind_parameter']}"
-        valueTwo = criteriadic['Value']
+        if 'Price' in list(criteriadic.keys()):
+            valueOne = f"{criteriadic['Indicator']} {criteriadic['Ind_parameter']}"
+            valueTwo = criteriadic['Price']
+
+        else:
+            valueOne = f"{criteriadic['Indicator']} {criteriadic['Ind_parameter']}"
+            valueTwo = criteriadic['Value']
 
         return valueOne, valueTwo
 
     elif list(criteriadic.keys()) == criteria4 or list(criteriadic.keys()) == criteria4a:
 
-        valueOne = f"{criteriadic['Indicator']}"
-        valueTwo = criteriadic['Value']
+        if 'Price' in list(criteriadic.keys()):
+            valueOne = f"{criteriadic['Indicator']}"
+            valueTwo = criteriadic['Price']
+
+        else:
+            valueOne = f"{criteriadic['Indicator']}"
+            valueTwo = criteriadic['Value']
 
         return valueOne, valueTwo
 
@@ -118,15 +139,25 @@ def value(criteriadic: dict) -> tuple:
 
     elif list(criteriadic.keys()) == criteria13 or list(criteriadic.keys()) == criteria13a:
 
-        valueTwo = f"{criteriadic['Value2']}"
-        valueOne = f"{criteriadic['Value']}"
+        if 'Price' in list(criteriadic.keys()):
+            valueTwo = f"{criteriadic['Price2']}"
+            valueOne = f"{criteriadic['Price']}"
+
+        else:
+            valueTwo = f"{criteriadic['Value2']}"
+            valueOne = f"{criteriadic['Value']}"
 
         return valueOne, valueTwo
 
     elif list(criteriadic.keys()) == criteria14 or list(criteriadic.keys()) == criteria14a:
 
-        valueTwo = f"{criteriadic['Value']}"
-        valueOne = f"{criteriadic['Value2']}"
+        if 'Price' in list(criteriadic.keys()):
+            valueTwo = f"{criteriadic['Price']}"
+            valueOne = f"{criteriadic['Price2']}"
+
+        else:
+            valueTwo = f"{criteriadic['Value']}"
+            valueOne = f"{criteriadic['Value2']}"
 
         return valueOne, valueTwo
 
