@@ -6,8 +6,9 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-right: 3rem;
+  margin-right: 12rem;
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .entry__radioFormGroup label {
@@ -20,13 +21,13 @@
 
 .entry__capitalFormGroup {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-evenly;
   align-items: center;
 }
 
 .entry__capitalFormGroup > div {
   margin-left: 1rem;
-  width: 20rem;
+  width: 25rem;
   border-radius: 5px;
   padding: 5px;
 }
@@ -70,6 +71,24 @@
   align-items: center;
 
   margin: 1rem 0rem;
+}
+
+.entry_entryRule_text{
+  display: flex;
+  align-items: center;
+}
+
+.entry_input_indicator{
+  height: 3.5rem;
+  width: 6rem;
+    padding: 0 10px;
+    border-radius: 8px;
+}
+
+.entry_ref{
+  display:flex ;
+  justify-content: center;
+  align-items: center;
 }
 
 .entry_reference {

@@ -1,13 +1,27 @@
+import { useState } from "react";
+
 const ReferenceInput = ({
   defaultValue,
   placeholder,
   option,
   index,
   setCurrentRef,
+  isRef,
 }) => {
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <select
+        style={
+          isRef
+            ? { width: "10rem" }
+            : { width: "10rem", position: "relative", right: "41.5rem" }
+        }
         required
         onChange={(e) => {
           setCurrentRef(e.target.value, index + 1);
