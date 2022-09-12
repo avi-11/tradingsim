@@ -10,6 +10,10 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
     # indicator for buycriteria
     for ind in list(buycriteria.keys()):
         if 'Ind_parameter' in buycriteria[ind] and 'Indicator' in buycriteria[ind]:
+
+            if len(dataf) < buycriteria[ind]['Ind_parameter']:
+                return {"Error": "Provided parameter is out of range!!"}
+
             dataf = indicator[buycriteria[ind]['Indicator']](
                 dataf=dataf, periods=int(buycriteria[ind]['Ind_parameter']))
 
@@ -17,6 +21,10 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
             dataf = indicator[buycriteria[ind]['Indicator']](dataf=dataf)
 
         if 'Indicator2' in buycriteria[ind] and 'Indicator2' in buycriteria[ind]:
+
+            if len(dataf) < buycriteria[ind]['Ind_parameter2']:
+                return {"Error": "Provided parameter is out of range!!"}
+
             if 'Ind_parameter2' in buycriteria[ind]:
                 dataf = indicator[buycriteria[ind]['Indicator2']](
                     dataf=dataf, periods=int(buycriteria[ind]['Ind_parameter2']))
@@ -38,19 +46,27 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
     # indicator for sellcriteria
     for ind in list(sellcriteria.keys()):
 
-        if 'Ind_parameter' in sellcriteria[ind] and 'Indicator' in buycriteria[ind]:
+        if 'Ind_parameter' in sellcriteria[ind] and 'Indicator' in sellcriteria[ind]:
+
+            if len(dataf) < sellcriteria[ind]['Ind_parameter']:
+                return {"Error": "Provided parameter is out of range!!"}
+
             dataf = indicator[sellcriteria[ind]['Indicator']](
                 dataf=dataf, periods=int(sellcriteria[ind]['Ind_parameter']))
 
-        elif 'Ind_parameter' not in sellcriteria[ind] and 'Indicator' in buycriteria[ind]:
+        elif 'Ind_parameter' not in sellcriteria[ind] and 'Indicator' in sellcriteria[ind]:
             dataf = indicator[sellcriteria[ind]['Indicator']](dataf=dataf)
 
-        if 'Indicator2' in sellcriteria[ind] and 'Indicator2' in buycriteria[ind]:
+        if 'Indicator2' in sellcriteria[ind] and 'Indicator2' in sellcriteria[ind]:
+
+            if len(dataf) < sellcriteria[ind]['Ind_parameter2']:
+                return {"Error": "Provided parameter is out of range!!"}
+
             if 'Ind_parameter2' in sellcriteria[ind]:
                 dataf = indicator[sellcriteria[ind]['Indicator2']](
                     dataf=dataf, periods=int(sellcriteria[ind]['Ind_parameter2']))
 
-            elif 'Ind_parameter2' not in sellcriteria[ind] and 'Indicator2' in buycriteria[ind]:
+            elif 'Ind_parameter2' not in sellcriteria[ind] and 'Indicator2' in sellcriteria[ind]:
                 dataf = indicator[sellcriteria[ind]['Indicator2']](dataf=dataf)
 
     # sellcriteria

@@ -94,7 +94,10 @@ def chartdata(report_data: Report):
 
     df = signal(dataf=df, buycriteria=buycriteria, sellcriteria=sellcriteria)
 
-    print(df)
+    if type(df) != pd.DataFrame and type(df) == dict:
+        return df
+
+    # print(df)
 
     # if df == None:
     #     return {'Error': 'The provided criteria is incorrect!'}
@@ -110,10 +113,15 @@ def chartdata(report_data: Report):
                     position_size=position_size)
 
     except:
-        df = None
         return {'Error': 'Provided capital, position size or order side is incorrect!'}
 
-    res = df.to_json(orient="records")
+    ret = df.copy()
+
+    ret.index = data.keys()
+
+    print(ret)
+
+    res = ret.to_json(orient="index")
     parsed = json.loads(res)
 
     return parsed
