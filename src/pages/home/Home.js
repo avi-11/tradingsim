@@ -75,6 +75,7 @@ function Home() {
       }&startdate=${startdate}`
     );
     setGraphData(res.data);
+    isCorrect();
     setLoading(false);
     setShowGraph(true);
   }
@@ -144,7 +145,7 @@ function Home() {
                 buttonText="Simulate Price"
                 onClick={() => {
                   getData();
-                  isCorrect();
+                  // isCorrect();
                 }}
                 textColor="var(--whiteColor)"
                 backgroundColor="var(--brandColor)"

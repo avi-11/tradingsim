@@ -262,6 +262,7 @@ const Exit = () => {
                   option={[1, 2, 3, 4, 5, 6]}
                   index={index}
                   setCurrentRef={setCurrentRef}
+                  isRef={entryValues[index].refNumber}
                 />
                 {entryValue.refNumber ? (
                   <SelectInput
@@ -292,6 +293,7 @@ const Exit = () => {
                 entryValue.refNumber === "3" ? (
                   <input
                     type="number"
+                    className={styles.entry_input_indicator}
                     placeholder="Indicator value"
                     value={entryValue.indicatorParameter1}
                     min={1}
@@ -381,6 +383,7 @@ const Exit = () => {
                         ? "Enter value"
                         : "Indicator Value"
                     }
+                    className={styles.entry_input_indicator}
                     type="text"
                     onChange={
                       isValue(entryValue.refNumber)

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import Container from "../../components/container/Container";
@@ -297,13 +297,16 @@ const Entry = () => {
           <div className={styles.entry__entryFormGroup}>
             {entryValues.map((entryValue, index) => (
               <div key={entryValue.id} className={styles.entryFormGroup__row}>
-                <p>Entry Rule {index + 1}</p>
+                <p className={styles.entry_entryRule_text}>
+                  Entry Rule {index + 1}
+                </p>
 
                 <ReferenceInput
                   defaultValue="ref. no"
                   option={[1, 2, 3, 4, 5, 6]}
                   index={index}
                   setCurrentRef={setCurrentRef}
+                  isRef={entryValues[index].refNumber}
                 />
 
                 {entryValue.refNumber ? (
