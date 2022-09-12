@@ -63,16 +63,16 @@ sellcriteria = {'C1': {
 
 class Report(BaseModel):
     ohlc_data = data
-    order_side: int = 0
-    initial_capital: float = 100000
-    position_size: float = 0.1
+    order_side = "0"
+    initial_capital = "100000"
+    position_size = "0.1"
     buycriteria = buycriteria
     sellcriteria = sellcriteria
 
 # link two for report
 
 
-df = pd.DataFrame()
+df = None
 
 
 @app.post('/simulate_chartdata')
@@ -82,23 +82,46 @@ def chartdata(report_data: Report):
 
     sellcriteria = report_data.sellcriteria
 
-    data = report_data.ohlc_data
-    df = pd.DataFrame(data.values(), index=data.keys(), columns=[
-                      'InstrumentName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice'])
-    df.index = pd.to_datetime(df.index, format="%d-%m-%Y")
+    try:
+        data = report_data.ohlc_data
+        df = pd.DataFrame(data.values(), index=data.keys(), columns=[
+            'InstrumentName', 'OpenPrice',  'HighPrice', 'LowPrice', 'ClosePrice'])
+        df.index = pd.to_datetime(df.index, format="%d-%m-%Y")
+
+    except:
+        df = None
+        return {'Error': 'Provided ohlc data is incorrect'}
 
     df = signal(dataf=df, buycriteria=buycriteria, sellcriteria=sellcriteria)
 
-    order_side = report_data.order_side
-    initial_capital = report_data.initial_capital
-    position_size = report_data.position_size
+    if type(df) != pd.DataFrame and type(df) == dict:
+        return df
 
-    df = position(dataf=df, order_side=order_side)
+    # print(df)
 
-    df = margin(dataf=df, initial_capital=initial_capital,
-                position_size=position_size)
+    # if df == None:
+    #     return {'Error': 'The provided criteria is incorrect!'}
 
-    res = df.to_json(orient="records")
+    try:
+        order_side = int(report_data.order_side)
+        initial_capital = float(report_data.initial_capital)
+        position_size = float(report_data.position_size)
+
+        df = position(dataf=df, order_side=order_side)
+
+        df = margin(dataf=df, initial_capital=initial_capital,
+                    position_size=position_size)
+
+    except:
+        return {'Error': 'Provided capital, position size or order side is incorrect!'}
+
+    ret = df.copy()
+
+    ret.index = data.keys()
+
+    print(ret)
+
+    res = ret.to_json(orient="index")
     parsed = json.loads(res)
 
     return parsed
@@ -113,5 +136,8 @@ def report(report_data: Report):
     chartdata(report_data=report_data)
 
     dataf = df
+
+    # if dataf == None:
+    #     return {'Error': 'The provided criteria is incorrect!'}
 
     return reportmateric(dataf=dataf)
