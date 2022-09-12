@@ -8,6 +8,7 @@ const ReferenceInput = ({
   return (
     <div>
       <select
+        style={{ width: "10rem" }}
         required
         onChange={(e) => {
           setCurrentRef(e.target.value, index + 1);

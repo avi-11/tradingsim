@@ -7,7 +7,8 @@ import RadioButton from "../../components/input/radioButton/RadioButton";
 import ReferenceInput from "../../components/input/ReferenceInput/ReferenceInput";
 import SelectInput from "../../components/input/selectInput/SelectInput";
 import EntryReference from "../../components/reference/EntryReference";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from "./Entry.module.css";
 
 const Entry = () => {
@@ -228,8 +229,17 @@ const Entry = () => {
     setEntryValues(newEntryValue);
   }
 
+  const isCorrect = () => {
+    toast("All entries are correct");
+  };
+
+  const notCorrect = () => {
+    toast("Please fill in all fields with proper values");
+  };
+
   return (
     <div className="app-container">
+      <ToastContainer draggable={false} autoClose={3000} />
       <div className={styles.entry_upperCard}>
         <div className={styles.entry_infoIcon}>
           <i
@@ -295,6 +305,7 @@ const Entry = () => {
                   index={index}
                   setCurrentRef={setCurrentRef}
                 />
+
                 {entryValue.refNumber ? (
                   <SelectInput
                     label=""
@@ -323,6 +334,7 @@ const Entry = () => {
                 entryValue.refNumber === "2" ||
                 entryValue.refNumber === "3" ? (
                   <input
+                    className={styles.entry_input_indicator}
                     type="number"
                     placeholder="Indicator value"
                     value={entryValue.indicatorParameter1}
@@ -408,6 +420,7 @@ const Entry = () => {
                 entryValue.refNumber !== "5" &&
                 entryValue.refNumber ? (
                   <input
+                    className={styles.entry_input_indicator}
                     placeholder={
                       isValue(entryValue.refNumber)
                         ? "Enter value"
@@ -500,9 +513,12 @@ const Entry = () => {
               localStorage.setItem("positionSize", positionSize);
               localStorage.setItem("orderSize", orderSize);
               localStorage.setItem("entryValues", JSON.stringify(entryValues));
-              navigate("/exit");
+              isCorrect();
+              setTimeout(() => {
+                navigate("/exit");
+              }, 3000);
             } else {
-              alert("Please fill all fields");
+              notCorrect();
             }
           }}
         />

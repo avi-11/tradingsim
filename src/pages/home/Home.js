@@ -2,6 +2,8 @@ import "../../index.css";
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   Chart as ChartJS,
@@ -77,8 +79,17 @@ function Home() {
     setShowGraph(true);
   }
 
+  const isCorrect = () => {
+    toast("All entries are correct");
+  };
+
+  const notCorrect = () => {
+    toast("Run simulation first");
+  };
+
   return (
     <div className="container">
+      <ToastContainer draggable={false} autoClose={3000} />
       <div className={styles.header}>
         <div>
           <i
@@ -131,7 +142,10 @@ function Home() {
 
               <ActionButton
                 buttonText="Simulate Price"
-                onClick={getData}
+                onClick={() => {
+                  getData();
+                  isCorrect();
+                }}
                 textColor="var(--whiteColor)"
                 backgroundColor="var(--brandColor)"
               />
@@ -166,7 +180,7 @@ function Home() {
           onClick={(e) => {
             if (Object.keys(graphData).length) {
               localStorage.setItem("graphData", JSON.stringify(graphData));
-            } else alert("Run simulation first");
+            } else notCorrect();
           }}
         />
       </Link>

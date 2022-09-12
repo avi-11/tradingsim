@@ -73,6 +73,18 @@
   margin: 1rem 0rem;
 }
 
+.entry_input_indicator{
+  width: 6rem;
+    padding: 0 10px;
+    border-radius: 8px;
+}
+
+.entry_ref{
+  display:flex ;
+  justify-content: center;
+  align-items: center;
+}
+
 .entry_reference {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
