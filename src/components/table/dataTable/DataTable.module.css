@@ -1,0 +1,31 @@
+.dataTable {
+  height: 70vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.dataTable::-webkit-scrollbar {
+  width: 10px;
+}
+.dataTable::-webkit-scrollbar-track {
+  background: transparent;
+  border: 1px solid white;
+}
+.dataTable::-webkit-scrollbar-thumb {
+  background: white;
+}
+
+.dataTable > table {
+  width: 100%;
+  color: white;
+  margin: 3rem 1rem;
+  border: none;
+  text-align: left;
+}
+
+.dataTable > table > tbody > tr:nth-child(odd) {
+  background: #1e1e1e;
+}
+
+.dataTable > table > tbody > tr > td {
+  padding: 0.5rem;
+}

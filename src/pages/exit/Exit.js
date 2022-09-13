@@ -244,7 +244,7 @@ const Exit = () => {
           <div className={styles.entry__entryFormGroup}>
             {entryValues.map((entryValue, index) => (
               <div key={entryValue.id} className={styles.entryFormGroup__row}>
-                <p>Entry Rule {index + 1}</p>
+                <p>Exit Rule {index + 1}</p>
 
                 <ReferenceInput
                   defaultValue="ref. no"

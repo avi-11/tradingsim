@@ -24,6 +24,8 @@ import LabelSelector from "../../components/input/labelSelector/LabelSelector";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import CandleChart from "../../components/chart/candleChart/CandleChart";
 
+import { formatData, options } from "./helpers";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -54,15 +56,7 @@ function Home() {
     e.preventDefault();
 
     setLoading(true);
-    if (!(instrumentname === "BTC" || instrumentname === "ETH")) {
-      setError("Invalid instrument name");
-      alert("Invalid instrument name");
-      setLoading(false);
-      return;
-    }
-    if (!closeprice || !volatility || !startdate) {
-      setError("Check all fields");
-      alert("Check all fields");
+    if (!checkFields(instrumentname, closeprice, volatility, startdate)) {
       setLoading(false);
       return;
     }
@@ -76,6 +70,30 @@ function Home() {
     setLoading(false);
     setShowGraph(true);
   }
+
+  const checkFields = () => {
+    if (!(instrumentname === "BTC" || instrumentname === "ETH")) {
+      setError("Invalid instrument name");
+      alert("Invalid instrument name");
+      return false;
+    }
+    if (!closeprice) {
+      setError("Please Enter Market Price");
+      alert("Please Enter Market Price");
+      return false;
+    }
+    if (!volatility) {
+      setError("Please select volatility");
+      alert("Please select volatility");
+      return false;
+    }
+    if (!startdate) {
+      setError("Please Enter Start Date");
+      alert("Please Enter Start Date");
+      return false;
+    }
+    return true;
+  };
 
   return (
     <div className="container">
@@ -143,7 +161,11 @@ function Home() {
 
       <div className="details-ID">
         {showGraph ? (
-          <CandleChart data={graphData} name={instrumentname} />
+          <CandleChart
+            data={formatData(graphData)}
+            name={instrumentname}
+            options={options}
+          />
         ) : loading ? (
           <div>
             <h1>Loading...</h1>
@@ -167,6 +189,7 @@ function Home() {
           onClick={(e) => {
             if (Object.keys(graphData).length) {
               localStorage.setItem("graphData", JSON.stringify(graphData));
+              localStorage.setItem("instrumentname", instrumentname);
             } else alert("Run simulation first");
           }}
         />
