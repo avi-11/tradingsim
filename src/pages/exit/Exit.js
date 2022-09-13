@@ -5,6 +5,8 @@ import Container from "../../components/container/Container";
 import ReferenceInput from "../../components/input/ReferenceInput/ReferenceInput";
 import SelectInput from "../../components/input/selectInput/SelectInput";
 import EntryReference from "../../components/reference/EntryReference";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import styles from "../entry/Entry.module.css";
 
@@ -222,8 +224,17 @@ const Exit = () => {
     setEntryValues(newEntryValue);
   }
 
+  const isCorrect = () => {
+    toast("All entries are correct");
+  };
+
+  const notCorrect = () => {
+    toast("Please fill in all fields with proper values");
+  };
+
   return (
     <div className="app-container">
+      <ToastContainer draggable={false} autoClose={3000} />
       <div className={styles.entry_upperCard}>
         <div className={styles.entry_infoIcon}>
           <i
@@ -244,13 +255,14 @@ const Exit = () => {
           <div className={styles.entry__entryFormGroup}>
             {entryValues.map((entryValue, index) => (
               <div key={entryValue.id} className={styles.entryFormGroup__row}>
-                <p>Entry Rule {index + 1}</p>
+                <p>Exit Rule {index + 1}</p>
 
                 <ReferenceInput
                   defaultValue="ref. no"
                   option={[1, 2, 3, 4, 5, 6]}
                   index={index}
                   setCurrentRef={setCurrentRef}
+                  isRef={entryValues[index].refNumber}
                 />
                 {entryValue.refNumber ? (
                   <SelectInput
@@ -281,6 +293,7 @@ const Exit = () => {
                 entryValue.refNumber === "3" ? (
                   <input
                     type="number"
+                    className={styles.entry_input_indicator}
                     placeholder="Indicator value"
                     value={entryValue.indicatorParameter1}
                     min={1}
@@ -370,6 +383,7 @@ const Exit = () => {
                         ? "Enter value"
                         : "Indicator Value"
                     }
+                    className={styles.entry_input_indicator}
                     type="text"
                     onChange={
                       isValue(entryValue.refNumber)
@@ -449,9 +463,12 @@ const Exit = () => {
             e.preventDefault();
             if (validatePreviousEntries(entryValues)) {
               localStorage.setItem("exitValues", JSON.stringify(entryValues));
-              navigate("/result");
+              isCorrect();
+              setTimeout(() => {
+                navigate("/result");
+              }, 3000);
             } else {
-              alert("Please fill all fields");
+              notCorrect();
             }
           }}
         />

@@ -116,6 +116,10 @@ form.secActive .form.first {
   line-height: 22px;
 }
 
+.input-field{
+  margin: 0.5rem 0;
+}
+
 .input-field label {
   width: max-content;
   font-size: 12px;

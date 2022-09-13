@@ -2,6 +2,8 @@ import "../../index.css";
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   Chart as ChartJS,
@@ -73,12 +75,22 @@ function Home() {
       }&startdate=${startdate}`
     );
     setGraphData(res.data);
+    isCorrect();
     setLoading(false);
     setShowGraph(true);
   }
 
+  const isCorrect = () => {
+    toast("All entries are correct");
+  };
+
+  const notCorrect = () => {
+    toast("Run simulation first");
+  };
+
   return (
     <div className="container">
+      <ToastContainer draggable={false} autoClose={3000} />
       <div className={styles.header}>
         <div>
           <i
@@ -106,23 +118,22 @@ function Home() {
                   defaultValue={instrumentname}
                   setValue={setInstrumentname}
                   options={["BTC", "ETH"]}
-                  label="Intrument"
+                  label="Instrument"
                 />
 
-                <LabelSelector
-                  values={["High", "Medium", "Low"]}
-                  currentValue={volatility}
-                  setValue={SetVolatilty}
-                />
-              </div>
-
-              <div style={{ display: "flex", flexDirection: "column" }}>
                 <Numberinput
                   value={closeprice}
                   setValue={setClosePrice}
                   label="Market price"
                 />
+              </div>
 
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <LabelSelector
+                  values={["High", "Medium", "Low"]}
+                  currentValue={volatility}
+                  setValue={SetVolatilty}
+                />
                 <GlobalInput
                   inputType="date"
                   value={startdate}
@@ -132,7 +143,10 @@ function Home() {
 
               <ActionButton
                 buttonText="Simulate Price"
-                onClick={getData}
+                onClick={() => {
+                  getData();
+                  // isCorrect();
+                }}
                 textColor="var(--whiteColor)"
                 backgroundColor="var(--brandColor)"
               />
@@ -158,7 +172,7 @@ function Home() {
           pathname: Object.keys(graphData).length ? "/entry" : "",
         }}
         className="link"
-        style={{ position: "relative", left: "80%" }}
+        style={{ position: "relative", left: "71%", marginTop: "1rem" }}
       >
         <ActionButton
           buttonText="Create Entries"
@@ -167,7 +181,7 @@ function Home() {
           onClick={(e) => {
             if (Object.keys(graphData).length) {
               localStorage.setItem("graphData", JSON.stringify(graphData));
-            } else alert("Run simulation first");
+            } else notCorrect();
           }}
         />
       </Link>
