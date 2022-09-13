@@ -4,6 +4,7 @@ from datetime import datetime
 import pandas as pd
 from pydantic import BaseModel
 import json
+import numpy as np
 
 from sampledata import data
 from ts_signal import signal
@@ -114,6 +115,24 @@ def chartdata(report_data: Report):
 
     except:
         return {'Error': 'Provided capital, position size or order side is incorrect!'}
+
+    buysellcheck = (
+        'BuySignal' in df.columns and 'SellSignal' in df.columns)
+    buycheck = ('BuySignal' in df.columns)
+    sellcheck = ('SellSignal' in df.columns)
+
+    if buysellcheck:
+        con = [(df['BuySignal']+df['SellSignal'] == 0) & (df['BuySignal'] != 0),
+               (df['BuySignal']+df['SellSignal'] == 1)]
+        df['Position'] = np.select(con, [-1, 1], 0)
+
+        df.drop(['BuySignal', 'SellSignal'], axis=1, inplace=True)
+
+    elif buysellcheck == False and buycheck:
+        df.rename(columns={"BuySignal": "Position"}, inplace=True)
+
+    elif buysellcheck == False and sellcheck:
+        df.rename(columns={"SellSignal": "Position"}, inplace=True)
 
     ret = df.copy()
 
