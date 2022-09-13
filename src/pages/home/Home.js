@@ -58,7 +58,15 @@ function Home() {
     e.preventDefault();
 
     setLoading(true);
-    if (!checkFields(instrumentname, closeprice, volatility, startdate)) {
+    if (!(instrumentname === "BTC" || instrumentname === "ETH")) {
+      setError("Invalid instrument name");
+      alert("Invalid instrument name");
+      setLoading(false);
+      return;
+    }
+    if (!closeprice || !volatility || !startdate) {
+      setError("Check all fields");
+      alert("Check all fields");
       setLoading(false);
       return;
     }
