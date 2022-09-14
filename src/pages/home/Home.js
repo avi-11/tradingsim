@@ -174,25 +174,51 @@ function Home() {
         )}
       </div>
 
-      <Link
-        to={{
-          pathname: Object.keys(graphData).length ? "/entry" : "",
-        }}
-        className="link"
-        style={{ position: "relative", left: "71%", marginTop: "1rem" }}
-      >
-        <ActionButton
-          buttonText="Create Entries"
-          textColor="var(--whiteColor)"
-          backgroundColor="var(--brandColor)"
-          onClick={(e) => {
-            if (Object.keys(graphData).length) {
-              localStorage.setItem("graphData", JSON.stringify(graphData));
-              localStorage.setItem("instrumentname", instrumentname);
-            } else notCorrect();
+
+      {showGraph ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            margin: "1rem 0",
+
           }}
-        />
-      </Link>
+        >
+          <Link
+            to={{
+              pathname: "/",
+            }}
+            className="link"
+            style={{ position: "relative", marginTop: "1rem" }}
+          >
+            <ActionButton
+              buttonText="Previous"
+              textColor="var(--whiteColor)"
+              backgroundColor="var(--brandColor)"
+            />
+          </Link>
+          <Link
+            to={{
+              pathname: Object.keys(graphData).length ? "/entry" : "",
+            }}
+            className="link"
+            style={{ position: "relative", marginTop: "1rem" }}
+          >
+            <ActionButton
+              buttonText="Next"
+              textColor="var(--whiteColor)"
+              backgroundColor="var(--brandColor)"
+              onClick={(e) => {
+                if (Object.keys(graphData).length) {
+                  localStorage.setItem("graphData", JSON.stringify(graphData));
+                } else notCorrect();
+              }}
+            />
+          </Link>
+        </div>
+      ) : (
+        ""
+      )}
       {console.log(graphData)}
       {/* <div className="shade"></div> */}
     </div>

@@ -7,6 +7,7 @@ const headStyles = {
   fontSize: "4rem",
   color: "#6FFF62",
   padding: "0",
+  margin: "1rem 0",
 };
 const headStyles_normal = {
   fontFamily: "Play",
