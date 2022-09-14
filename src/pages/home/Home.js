@@ -26,6 +26,8 @@ import LabelSelector from "../../components/input/labelSelector/LabelSelector";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import CandleChart from "../../components/chart/candleChart/CandleChart";
 
+import { formatData, options } from "./helpers";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -79,6 +81,7 @@ function Home() {
     setLoading(false);
     setShowGraph(true);
   }
+
 
   const isCorrect = () => {
     toast("All entries are correct");
@@ -157,7 +160,11 @@ function Home() {
 
       <div className="details-ID">
         {showGraph ? (
-          <CandleChart data={graphData} name={instrumentname} />
+          <CandleChart
+            data={formatData(graphData)}
+            name={instrumentname}
+            options={options}
+          />
         ) : loading ? (
           <div>
             <h1>Loading...</h1>
@@ -167,12 +174,14 @@ function Home() {
         )}
       </div>
 
+
       {showGraph ? (
         <div
           style={{
             display: "flex",
             justifyContent: "space-around",
             margin: "1rem 0",
+
           }}
         >
           <Link
