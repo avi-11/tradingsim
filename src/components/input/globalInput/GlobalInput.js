@@ -4,7 +4,7 @@ const GlobalInput = ({ inputType, setValue }) => {
       <label style={{ width: "100%" }}>
         Start Date
         <input
-          style={{ marginLeft: "1rem" }}
+          style={{ marginLeft: "2rem" }}
           type={inputType}
           onChange={(e) => setValue(e.target.value)}
         />
