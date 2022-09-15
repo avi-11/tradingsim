@@ -38,7 +38,7 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
         valueOne, valueTwo = value(buycriteria[ind])
 
         if valueOne == None or valueTwo == None:
-            return None
+            return {"Error": "Provided Criteria is incorrect!!"}
 
         dataf = buy(dataf, valueOne=valueOne, valueTwo=valueTwo,
                     operation=buycriteria[ind]['Operator'])
@@ -73,6 +73,9 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
     for ind in list(sellcriteria.keys()):
 
         valueOne, valueTwo = value(sellcriteria[ind])
+
+        if valueOne == None or valueTwo == None:
+            return {"Error": "Provided Criteria is incorrect!!"}
 
         dataf = sell(dataf, valueOne=valueOne, valueTwo=valueTwo,
                      operation=sellcriteria[ind]['Operator'])

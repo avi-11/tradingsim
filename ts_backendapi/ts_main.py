@@ -98,11 +98,6 @@ def chartdata(report_data: Report):
     if type(df) != pd.DataFrame and type(df) == dict:
         return df
 
-    # print(df)
-
-    # if df == None:
-    #     return {'Error': 'The provided criteria is incorrect!'}
-
     try:
         order_side = int(report_data.order_side)
         initial_capital = float(report_data.initial_capital)
@@ -124,21 +119,19 @@ def chartdata(report_data: Report):
     if buysellcheck:
         con = [(df['BuySignal']+df['SellSignal'] == 0) & (df['BuySignal'] != 0),
                (df['BuySignal']+df['SellSignal'] == 1)]
-        df['Position'] = np.select(con, [-1, 1], 0)
+        df['Signal'] = np.select(con, [-1, 1], 0)
 
         df.drop(['BuySignal', 'SellSignal'], axis=1, inplace=True)
 
     elif buysellcheck == False and buycheck:
-        df.rename(columns={"BuySignal": "Position"}, inplace=True)
+        df.rename(columns={"BuySignal": "Signal"}, inplace=True)
 
     elif buysellcheck == False and sellcheck:
-        df.rename(columns={"SellSignal": "Position"}, inplace=True)
+        df.rename(columns={"SellSignal": "Signal"}, inplace=True)
 
     ret = df.copy()
 
     ret.index = data.keys()
-
-    print(ret)
 
     res = ret.to_json(orient="index")
     parsed = json.loads(res)
@@ -156,7 +149,7 @@ def report(report_data: Report):
 
     dataf = df
 
-    # if dataf == None:
-    #     return {'Error': 'The provided criteria is incorrect!'}
+    if type(df) != pd.DataFrame and type(df) == dict:
+        return df
 
     return reportmateric(dataf=dataf)
