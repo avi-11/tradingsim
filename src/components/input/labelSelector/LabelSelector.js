@@ -16,7 +16,15 @@ const labelStyle = {
 
 const LabelSelector = ({ values, currentValue, setValue }) => {
   return (
-    <div style={{ display: "flex", margin: "2rem" }} className="input-field">
+    <div
+      style={{
+        display: "flex",
+        margin: "2rem",
+        position: "relative",
+        right: "1.5rem",
+      }}
+      className="input-field"
+    >
       <label>Market Volatility</label>
       <div style={{ display: "flex", marginLeft: "1rem" }}>
         {values.map((value) => (

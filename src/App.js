@@ -9,7 +9,7 @@ import Exit from "./pages/exit/Exit";
 import Home from "./pages/home/Home";
 import Result from "./pages/result/Result";
 import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
+
 import ShadeContainer from "./components/container/ShadeContainer";
 import { NormalLogo } from "./components/header/Logo";
 
@@ -27,7 +27,6 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Start />} />
         </Routes>
-        <Footer />
       </BrowserRouter>
     </ShadeContainer>
   );

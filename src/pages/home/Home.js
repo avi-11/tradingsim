@@ -26,6 +26,8 @@ import LabelSelector from "../../components/input/labelSelector/LabelSelector";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import CandleChart from "../../components/chart/candleChart/CandleChart";
 
+import { formatData, options } from "./helpers";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -79,6 +81,7 @@ function Home() {
     setLoading(false);
     setShowGraph(true);
   }
+
 
   const isCorrect = () => {
     toast("All entries are correct");
@@ -157,7 +160,11 @@ function Home() {
 
       <div className="details-ID">
         {showGraph ? (
-          <CandleChart data={graphData} name={instrumentname} />
+          <CandleChart
+            data={formatData(graphData)}
+            name={instrumentname}
+            options={options}
+          />
         ) : loading ? (
           <div>
             <h1>Loading...</h1>
@@ -167,24 +174,51 @@ function Home() {
         )}
       </div>
 
-      <Link
-        to={{
-          pathname: Object.keys(graphData).length ? "/entry" : "",
-        }}
-        className="link"
-        style={{ position: "relative", left: "71%", marginTop: "1rem" }}
-      >
-        <ActionButton
-          buttonText="Create Entries"
-          textColor="var(--whiteColor)"
-          backgroundColor="var(--brandColor)"
-          onClick={(e) => {
-            if (Object.keys(graphData).length) {
-              localStorage.setItem("graphData", JSON.stringify(graphData));
-            } else notCorrect();
+
+      {showGraph ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            margin: "1rem 0",
+
           }}
-        />
-      </Link>
+        >
+          <Link
+            to={{
+              pathname: "/",
+            }}
+            className="link"
+            style={{ position: "relative", marginTop: "1rem" }}
+          >
+            <ActionButton
+              buttonText="Previous"
+              textColor="var(--whiteColor)"
+              backgroundColor="var(--brandColor)"
+            />
+          </Link>
+          <Link
+            to={{
+              pathname: Object.keys(graphData).length ? "/entry" : "",
+            }}
+            className="link"
+            style={{ position: "relative", marginTop: "1rem" }}
+          >
+            <ActionButton
+              buttonText="Next"
+              textColor="var(--whiteColor)"
+              backgroundColor="var(--brandColor)"
+              onClick={(e) => {
+                if (Object.keys(graphData).length) {
+                  localStorage.setItem("graphData", JSON.stringify(graphData));
+                } else notCorrect();
+              }}
+            />
+          </Link>
+        </div>
+      ) : (
+        ""
+      )}
       {console.log(graphData)}
       {/* <div className="shade"></div> */}
     </div>
