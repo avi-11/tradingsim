@@ -24,6 +24,9 @@ function Result() {
   const [resultData, setResultData] = useState([]);
   const [resultLoading, setResultLoading] = useState(false);
 
+  const [chartError, setChartError] = useState("");
+  const [resultError, setResultError] = useState("");
+
   useEffect(() => {
     simulateChartData();
   }, []);
@@ -42,6 +45,11 @@ function Result() {
         body
       );
       const resData = res.data;
+      if (resData.Error) {
+        setChartError(resData.Error);
+        setChartLoading(false);
+        return;
+      }
       setChartData(resData);
     } catch (error) {
       alert(error);
@@ -60,6 +68,11 @@ function Result() {
         body
       );
       const resData = res.data;
+      if (resData.Error) {
+        setResultError(resData.Error);
+        setResultLoading(false);
+        return;
+      }
       setResultData(resData);
     } catch (error) {
       alert(error);
@@ -132,13 +145,25 @@ function Result() {
       <Container>
         <h2 style={{ textAlign: "center" }}>Chart</h2>
         {!chartLoading ? (
-          <div>
-            <CandleChart
-              data={formatData(chartData)}
-              name={instrumentName ? instrumentName : ""}
-              options={options}
-            />
-          </div>
+          chartError ? (
+            <h4
+              style={{
+                color: "white",
+                textAlign: "center",
+                padding: "1rem 0rem",
+              }}
+            >
+              {chartError}
+            </h4>
+          ) : (
+            <div>
+              <CandleChart
+                data={formatData(chartData)}
+                name={instrumentName ? instrumentName : ""}
+                options={options}
+              />
+            </div>
+          )
         ) : (
           <h4
             style={{
@@ -155,9 +180,21 @@ function Result() {
       <Container>
         <h2 style={{ textAlign: "center" }}>Statistics</h2>
         {!resultLoading ? (
-          <div>
-            <DataTable data={resultData.Strategy} />
-          </div>
+          resultError ? (
+            <h4
+              style={{
+                color: "white",
+                textAlign: "center",
+                padding: "1rem 0rem",
+              }}
+            >
+              {resultError}
+            </h4>
+          ) : (
+            <div>
+              <DataTable data={resultData.Strategy} />
+            </div>
+          )
         ) : (
           <h4
             style={{
