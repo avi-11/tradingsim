@@ -11,7 +11,7 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
     for ind in list(buycriteria.keys()):
         if 'Ind_parameter' in buycriteria[ind] and 'Indicator' in buycriteria[ind]:
 
-            if len(dataf) < buycriteria[ind]['Ind_parameter']:
+            if len(dataf) < int(buycriteria[ind]['Ind_parameter']):
                 return {"Error": "Provided parameter is out of range!!"}
 
             dataf = indicator[buycriteria[ind]['Indicator']](
@@ -22,7 +22,7 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
 
         if 'Indicator2' in buycriteria[ind] and 'Indicator2' in buycriteria[ind]:
 
-            if len(dataf) < buycriteria[ind]['Ind_parameter2']:
+            if len(dataf) < int(buycriteria[ind]['Ind_parameter2']):
                 return {"Error": "Provided parameter is out of range!!"}
 
             if 'Ind_parameter2' in buycriteria[ind]:
@@ -48,7 +48,7 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
 
         if 'Ind_parameter' in sellcriteria[ind] and 'Indicator' in sellcriteria[ind]:
 
-            if len(dataf) < sellcriteria[ind]['Ind_parameter']:
+            if len(dataf) < int(sellcriteria[ind]['Ind_parameter']):
                 return {"Error": "Provided parameter is out of range!!"}
 
             dataf = indicator[sellcriteria[ind]['Indicator']](
@@ -59,7 +59,7 @@ def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
 
         if 'Indicator2' in sellcriteria[ind] and 'Indicator2' in sellcriteria[ind]:
 
-            if len(dataf) < sellcriteria[ind]['Ind_parameter2']:
+            if len(dataf) < int(sellcriteria[ind]['Ind_parameter2']):
                 return {"Error": "Provided parameter is out of range!!"}
 
             if 'Ind_parameter2' in sellcriteria[ind]:
