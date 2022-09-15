@@ -94,7 +94,7 @@ function Result() {
           Indicator: entry.indicator1,
           Ind_parameter: entry.indicatorParameter1,
           Operator: entry.operator,
-          Price: entry.price1,
+          Price: entry.price2 + "Price",
         };
       else if (entry.refNumber === "3")
         criteria[`C${index + 1}`] = {
@@ -105,20 +105,20 @@ function Result() {
         };
       else if (entry.refNumber === "4")
         criteria[`C${index + 1}`] = {
-          Price: entry.price1,
+          Price: entry.price1 + "Price",
           Operator: entry.operator,
           Indicator: entry.indicator2,
           Ind_parameter: entry.indicatorParameter2,
         };
       else if (entry.refNumber === "5")
         criteria[`C${index + 1}`] = {
-          Price: entry.price1,
+          Price: entry.price1 + "Price",
           Operator: entry.operator,
-          Price2: entry.price2,
+          Price2: entry.price2 + "Price",
         };
       else if (entry.refNumber === "6")
         criteria[`C${index + 1}`] = {
-          Price: entry.price1,
+          Price: entry.price1 + "Price",
           Operator: entry.operator,
           Value: entry.value,
         };
