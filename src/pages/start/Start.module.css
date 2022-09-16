@@ -4,7 +4,7 @@
     font-family: 'Inter';
 font-style: normal;
 font-weight: 300;
-font-size: 22px;
+font-size: 18px;
 }
 
 .Start_page_firstBox {
@@ -24,7 +24,7 @@ font-size: 22px;
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
-    font-size: 26px;
+    font-size: 22px;
     color: #FFFFFF
 }
 
@@ -35,7 +35,7 @@ font-weight: 300;
 font-size: 40px;
 
 padding: 0;
-margin: 1rem 0;
+margin: 0.8rem 0;
 
 
 
@@ -47,28 +47,40 @@ margin: 1rem 0;
 }
 
 .Start_page_secondBox {
-  margin: 0 2rem;
+  margin: 0 4rem;
+  position: relative;
+  bottom: 2rem;
+  left: 1rem;
 }
 
 .third_heading {
   display: flex;
-  margin: 1rem 0;
+  
+  padding-left: 580px;
+}
+
+.Start_page_thirdBox{
+  position: relative;
+  bottom: 3rem;
 }
 
 .Start_page_thirdBox_heading{
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
-    font-size: 32px;
+    font-size: 28px;
     color: #C4C4C4;
-    margin: 3rem 0px;
+    margin: 1rem 0px;
+    padding-left: 580px;
 }
+
+
 
 .third_text{
     font-family: 'Inter';
 font-style: normal;
 font-weight: 300;
-font-size: 28px;
+font-size: 24px;
 margin-bottom: 1rem;
 
 color: #C4C4C4;

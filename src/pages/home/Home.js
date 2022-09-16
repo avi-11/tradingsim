@@ -25,6 +25,7 @@ import GlobalInput from "../../components/input/globalInput/GlobalInput";
 import LabelSelector from "../../components/input/labelSelector/LabelSelector";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import CandleChart from "../../components/chart/candleChart/CandleChart";
+import { NormalLogo } from "../../components/header/Logo";
 
 import { formatData, options } from "./helpers";
 
@@ -93,6 +94,11 @@ function Home() {
 
   return (
     <div className="container">
+      <div style={{ position: "relative", bottom: "7rem" }}>
+        <Link to="/">
+          <NormalLogo />
+        </Link>
+      </div>
       <ToastContainer draggable={false} autoClose={3000} />
       <div className={styles.header}>
         <div>

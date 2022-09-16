@@ -73,6 +73,12 @@
   margin: 1rem 0rem;
 }
 
+.entry_Pheads{
+  color: #C5C1C1;
+  text-decoration: underline;
+  font-family: 'Play';
+}
+
 .entry_entryRule_text{
   display: flex;
   align-items: center;
