@@ -10,6 +10,7 @@ import EntryReference from "../../components/reference/EntryReference";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./Entry.module.css";
+import { NormalLogo } from "../../components/header/Logo";
 
 const Entry = () => {
   const [initialCapital, setInitialCapital] = useState("");
@@ -239,6 +240,11 @@ const Entry = () => {
 
   return (
     <div className="app-container">
+      <div style={{ position: "relative", bottom: "5rem" }}>
+        <Link to="/">
+          <NormalLogo />
+        </Link>
+      </div>
       <ToastContainer draggable={false} autoClose={3000} />
       <div className={styles.entry_upperCard}>
         <div className={styles.entry_infoIcon}>
@@ -248,7 +254,9 @@ const Entry = () => {
           ></i>
         </div>
         <div className={styles.entry_referenceBox}>
-          <h1 style={{ padding: "0 1rem" }}>Reference Card</h1>
+          <h1 className={styles.entry_Pheads} style={{ padding: "0 1rem" }}>
+            Reference Card
+          </h1>
           <EntryReference />
         </div>
       </div>
@@ -292,7 +300,7 @@ const Entry = () => {
       </Container>
 
       <Container>
-        <h2>ENTRY BUILDER</h2>
+        <h2 className={styles.entry_Pheads}>ENTRY BUILDER</h2>
         <form>
           <div className={styles.entry__entryFormGroup}>
             {entryValues.map((entryValue, index) => (
@@ -306,7 +314,6 @@ const Entry = () => {
                   option={[1, 2, 3, 4, 5, 6]}
                   index={index}
                   setCurrentRef={setCurrentRef}
-                  isRef={entryValues[index].refNumber}
                 />
 
                 {entryValue.refNumber ? (
