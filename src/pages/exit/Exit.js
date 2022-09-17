@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import styles from "../entry/Entry.module.css";
+import { NormalLogo } from "../../components/header/Logo";
 
 const Exit = () => {
   const [entryGroups, setEntryGroups] = useState([1]);
@@ -19,6 +20,8 @@ const Exit = () => {
     },
   ]);
   const [num, setNum] = useState(1);
+
+  const [exitValuesError, setExitValuesError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -40,7 +43,7 @@ const Exit = () => {
     }
 
     if (!validRange)
-      alert(
+      toast(
         `Indicator value out of range. Ranges are: \n
           1. SMA:- 0 - 500 \n
           2. RSI:- 0 - 100 \n
@@ -132,6 +135,8 @@ const Exit = () => {
       }
     });
 
+    if (!valid) setExitValuesError(true);
+
     return valid;
   }
 
@@ -139,7 +144,7 @@ const Exit = () => {
     e.preventDefault();
 
     if (!validatePreviousEntries(entryValues)) {
-      alert("Complete Previous Entries!!");
+      toast("Complete Previous Entries!!");
       return;
     }
 
@@ -234,6 +239,11 @@ const Exit = () => {
 
   return (
     <div className="app-container">
+      <div style={{ position: "relative", bottom: "5rem" }}>
+        <Link to="/">
+          <NormalLogo />
+        </Link>
+      </div>
       <ToastContainer draggable={false} autoClose={3000} />
       <div className={styles.entry_upperCard}>
         <div className={styles.entry_infoIcon}>
@@ -243,26 +253,39 @@ const Exit = () => {
           ></i>
         </div>
         <div className={styles.entry_referenceBox}>
-          <h1 style={{ padding: "0 1rem" }}>Reference Card</h1>
+          <h1 className={styles.entry_Pheads} style={{ padding: "0 1rem" }}>
+            Reference Card
+          </h1>
 
           <EntryReference />
         </div>
       </div>
 
       <Container>
-        <h2>EXIT BUILDER</h2>
+        <h2 className={styles.entry_Pheads}>EXIT BUILDER</h2>
         <form>
           <div className={styles.entry__entryFormGroup}>
             {entryValues.map((entryValue, index) => (
               <div key={entryValue.id} className={styles.entryFormGroup__row}>
-                <p>Exit Rule {index + 1}</p>
+                <p
+                className={styles.entry_entryRule_text}
+                  style={{
+                    color: `${
+                      exitValuesError && entryValues.length === index + 1
+                        ? "red"
+                        : ""
+                    }`,
+                  }}
+                >
+
+                  Exit Rule {index + 1}
+                </p>
 
                 <ReferenceInput
                   defaultValue="ref. no"
                   option={[1, 2, 3, 4, 5, 6]}
                   index={index}
                   setCurrentRef={setCurrentRef}
-                  isRef={entryValues[index].refNumber}
                 />
                 {entryValue.refNumber ? (
                   <SelectInput
@@ -432,13 +455,19 @@ const Exit = () => {
           <div className={styles.entry__editRuleBtn}>
             <ActionButton
               buttonText={"Add Rule"}
-              onClick={addRule}
+              onClick={(e) => {
+                setExitValuesError(false);
+                addRule(e);
+              }}
               textColor="var(--whiteColor)"
               backgroundColor="var(--brandColor)"
             />
             <ActionButton
               buttonText={"Delete Rule"}
-              onClick={removeRule}
+              onClick={(e) => {
+                setExitValuesError(false);
+                removeRule(e);
+              }}
               backgroundColor="var(--whiteColor)"
               textColor="var(--blackColor)"
             />
@@ -461,12 +490,16 @@ const Exit = () => {
           backgroundColor="var(--brandColor)"
           onClick={(e) => {
             e.preventDefault();
+            setExitValuesError(false);
             if (validatePreviousEntries(entryValues)) {
               localStorage.setItem("exitValues", JSON.stringify(entryValues));
               isCorrect();
               setTimeout(() => {
                 navigate("/result");
               }, 3000);
+            } else if (!validatePreviousEntries(entryValues)) {
+              setExitValuesError(true);
+              notCorrect();
             } else {
               notCorrect();
             }

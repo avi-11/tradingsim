@@ -29,6 +29,11 @@ export const options = {
     tooltip: {
       enabled: true,
     },
+    labels: {
+      formatter: function (value) {
+        return formatNumber(value);
+      },
+    },
   },
   tooltip: {
     custom: undefined,

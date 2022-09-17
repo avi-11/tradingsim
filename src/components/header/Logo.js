@@ -13,18 +13,20 @@ const headStyles_normal = {
   fontFamily: "Play",
   fontStyle: "normal",
   fontWeight: "400",
-  fontSize: "3rem",
+  fontSize: "2rem",
   color: "#6FFF62",
   padding: "0",
 };
 
 const spanStyles = {
+  fontFamily: "Play",
   fontWeight: "700",
   fontSize: "4rem",
   color: "#FFFFFF",
 };
 
 const spanStyles_normal = {
+  fontFamily: "Play",
   fontWeight: "700",
   fontSize: "3rem",
   color: "#FFFFFF",

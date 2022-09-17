@@ -3,6 +3,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Container from "../../components/container/Container";
 import ActionButton from "../../components/button/actionButton/ActionButton";
+
+import { NormalLogo } from "../../components/header/Logo";
+
 import CandleChart from "../../components/chart/candleChart/CandleChart";
 import DataTable from "../../components/table/dataTable/DataTable";
 
@@ -24,6 +27,9 @@ function Result() {
   const [resultData, setResultData] = useState([]);
   const [resultLoading, setResultLoading] = useState(false);
 
+  const [chartError, setChartError] = useState("");
+  const [resultError, setResultError] = useState("");
+
   useEffect(() => {
     simulateChartData();
   }, []);
@@ -42,6 +48,11 @@ function Result() {
         body
       );
       const resData = res.data;
+      if (resData.Error) {
+        setChartError(resData.Error);
+        setChartLoading(false);
+        return;
+      }
       setChartData(resData);
     } catch (error) {
       alert(error);
@@ -60,6 +71,11 @@ function Result() {
         body
       );
       const resData = res.data;
+      if (resData.Error) {
+        setResultError(resData.Error);
+        setResultLoading(false);
+        return;
+      }
       setResultData(resData);
     } catch (error) {
       alert(error);
@@ -94,7 +110,7 @@ function Result() {
           Indicator: entry.indicator1,
           Ind_parameter: entry.indicatorParameter1,
           Operator: entry.operator,
-          Price: entry.price1,
+          Price: entry.price2 + "Price",
         };
       else if (entry.refNumber === "3")
         criteria[`C${index + 1}`] = {
@@ -105,20 +121,20 @@ function Result() {
         };
       else if (entry.refNumber === "4")
         criteria[`C${index + 1}`] = {
-          Price: entry.price1,
+          Price: entry.price1 + "Price",
           Operator: entry.operator,
           Indicator: entry.indicator2,
           Ind_parameter: entry.indicatorParameter2,
         };
       else if (entry.refNumber === "5")
         criteria[`C${index + 1}`] = {
-          Price: entry.price1,
+          Price: entry.price1 + "Price",
           Operator: entry.operator,
-          Price2: entry.price2,
+          Price2: entry.price2 + "Price",
         };
       else if (entry.refNumber === "6")
         criteria[`C${index + 1}`] = {
-          Price: entry.price1,
+          Price: entry.price1 + "Price",
           Operator: entry.operator,
           Value: entry.value,
         };
@@ -129,16 +145,33 @@ function Result() {
 
   return (
     <div>
+      <div style={{ position: "relative", bottom: "6rem" }}>
+        <Link to="/">
+          <NormalLogo />
+        </Link>
+      </div>
       <Container>
         <h2 style={{ textAlign: "center" }}>Chart</h2>
         {!chartLoading ? (
-          <div>
-            <CandleChart
-              data={formatData(chartData)}
-              name={instrumentName ? instrumentName : ""}
-              options={options}
-            />
-          </div>
+          chartError ? (
+            <h4
+              style={{
+                color: "white",
+                textAlign: "center",
+                padding: "1rem 0rem",
+              }}
+            >
+              {chartError}
+            </h4>
+          ) : (
+            <div>
+              <CandleChart
+                data={formatData(chartData)}
+                name={instrumentName ? instrumentName : ""}
+                options={options}
+              />
+            </div>
+          )
         ) : (
           <h4
             style={{
@@ -155,9 +188,21 @@ function Result() {
       <Container>
         <h2 style={{ textAlign: "center" }}>Statistics</h2>
         {!resultLoading ? (
-          <div>
-            <DataTable data={resultData.Strategy} />
-          </div>
+          resultError ? (
+            <h4
+              style={{
+                color: "white",
+                textAlign: "center",
+                padding: "1rem 0rem",
+              }}
+            >
+              {resultError}
+            </h4>
+          ) : (
+            <div>
+              <DataTable data={resultData.Strategy} />
+            </div>
+          )
         ) : (
           <h4
             style={{
