@@ -117,9 +117,9 @@ def chartdata(report_data: Report):
     sellcheck = ('SellSignal' in df.columns)
 
     if buysellcheck:
-        con = [(df['BuySignal']+df['SellSignal'] == 0) & (df['BuySignal'] != 0),
-               (df['BuySignal']+df['SellSignal'] == 1)]
-        df['Signal'] = np.select(con, [-1, 1], 0)
+        con = [(df['BuySignal']+df['SellSignal'] == 1),
+               (df['BuySignal']+df['SellSignal'] == 0) & (df['BuySignal'] != 0) & (df['BuySignal'].shift(1)+df['SellSignal'].shift(1) == 1)]
+        df['Signal'] = np.select(con, [1, -1], 0)
 
         df.drop(['BuySignal', 'SellSignal'], axis=1, inplace=True)
 
@@ -153,3 +153,32 @@ def report(report_data: Report):
         return df
 
     return reportmateric(dataf=dataf)
+
+
+@app.post('/stimulate_trade')
+def trade(report_data: Report):
+    global df
+
+    data = report_data.ohlc_data
+
+    chartdata(report_data=report_data)
+
+    if type(df) != pd.DataFrame and type(df) == dict:
+        return df
+
+    df.index = data.keys()
+
+    dataf = df[df['Signal'] != 0]
+
+    con = [(dataf['Signal'] == 1), (dataf['Signal'] == -1)]
+
+    dataf['Order_Side'] = np.select(con, ['BUY', 'SELL'], 0)
+
+    dataf['Position'] = np.select(con, ['LONG', 'SHORT'], 0)
+
+    ret = dataf.copy()
+
+    res = ret.to_json(orient="index")
+    parsed = json.loads(res)
+
+    return parsed
