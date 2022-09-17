@@ -164,7 +164,7 @@ function Home() {
                   }}
                   label="Market price"
                   style={{
-                    color: `${instrumentError ? "var(--errorColor)" : ""}`,
+                    color: `${closePriceError ? "var(--errorColor)" : ""}`,
                   }}
                 />
               </div>
@@ -179,7 +179,7 @@ function Home() {
                   }}
                   label="Market Volatility"
                   style={{
-                    color: `${instrumentError ? "var(--errorColor)" : ""}`,
+                    color: `${volatilityError ? "var(--errorColor)" : ""}`,
                   }}
                 />
                 <GlobalInput
@@ -188,7 +188,7 @@ function Home() {
                   setValue={updateDate}
                   label="Start Date"
                   style={{
-                    color: `${instrumentError ? "var(--errorColor)" : ""}`,
+                    color: `${startDateError ? "var(--errorColor)" : ""}`,
                   }}
                 />
               </div>
