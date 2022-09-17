@@ -47,9 +47,14 @@ function Home() {
   const [startdate, setStartDate] = useState(null);
   const [graphData, setGraphData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+
+  const [instrumentError, setInstrumentError] = useState(false);
+  const [closePriceError, setClosePriceError] = useState(false);
+  const [volatilityError, setVolatilityError] = useState(false);
+  const [startDateError, setStartDateError] = useState(false);
 
   const updateDate = (date) => {
+    setStartDateError(false);
     const newDate = date.split("-");
     setStartDate(`${newDate[2]}-${newDate[1]}-${newDate[0]}`);
   };
@@ -59,14 +64,30 @@ function Home() {
 
     setLoading(true);
     if (!(instrumentname === "BTC" || instrumentname === "ETH")) {
-      setError("Invalid instrument name");
-      alert("Invalid instrument name");
-      setLoading(false);
-      return;
+      setInstrumentError(true);
+      toast("Invalid instrument name");
     }
     if (!closeprice || !volatility || !startdate) {
-      setError("Check all fields");
-      alert("Check all fields");
+      if (!closeprice) {
+        setClosePriceError(true);
+        toast("Invalid Close Price");
+      }
+      if (!volatility) {
+        setVolatilityError(true);
+        toast("Invalid Volatility Value");
+      }
+      if (!startdate) {
+        setStartDateError(true);
+        toast("Invalid Start Date");
+      }
+    }
+
+    if (
+      instrumentError ||
+      closePriceError ||
+      volatilityError ||
+      startDateError
+    ) {
       setLoading(false);
       return;
     }
@@ -81,7 +102,6 @@ function Home() {
     setLoading(false);
     setShowGraph(true);
   }
-
 
   const isCorrect = () => {
     toast("All entries are correct");
@@ -119,15 +139,23 @@ function Home() {
               >
                 <SelectInput
                   defaultValue={instrumentname}
-                  setValue={setInstrumentname}
+                  setValue={(e, value) => {
+                    setInstrumentError(false);
+                    setInstrumentname(e, value);
+                  }}
                   options={["BTC", "ETH"]}
                   label="Instrument"
+                  style={{ color: `${instrumentError ? "red" : ""}` }}
                 />
 
                 <Numberinput
                   value={closeprice}
-                  setValue={setClosePrice}
+                  setValue={(value) => {
+                    setClosePriceError(false);
+                    setClosePrice(value);
+                  }}
                   label="Market price"
+                  style={{ color: `${closePriceError ? "red" : ""}` }}
                 />
               </div>
 
@@ -135,12 +163,19 @@ function Home() {
                 <LabelSelector
                   values={["High", "Medium", "Low"]}
                   currentValue={volatility}
-                  setValue={SetVolatilty}
+                  setValue={(value) => {
+                    setVolatilityError(false);
+                    SetVolatilty(value);
+                  }}
+                  label="Market Volatility"
+                  style={{ color: `${volatilityError ? "red" : ""}` }}
                 />
                 <GlobalInput
                   inputType="date"
                   value={startdate}
                   setValue={updateDate}
+                  label="Start Date"
+                  style={{ color: `${startDateError ? "red" : ""}` }}
                 />
               </div>
 
@@ -174,14 +209,12 @@ function Home() {
         )}
       </div>
 
-
       {showGraph ? (
         <div
           style={{
             display: "flex",
             justifyContent: "space-around",
             margin: "1rem 0",
-
           }}
         >
           <Link
