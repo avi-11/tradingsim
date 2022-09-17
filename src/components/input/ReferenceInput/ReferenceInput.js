@@ -6,7 +6,6 @@ const ReferenceInput = ({
   option,
   index,
   setCurrentRef,
-  isRef,
 }) => {
   return (
     <div
@@ -17,11 +16,6 @@ const ReferenceInput = ({
       }}
     >
       <select
-        style={
-          isRef
-            ? { width: "10rem" }
-            : { width: "10rem", position: "relative", right: "41.5rem" }
-        }
         required
         onChange={(e) => {
           setCurrentRef(e.target.value, index + 1);

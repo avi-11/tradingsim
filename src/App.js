@@ -17,7 +17,6 @@ function App() {
   return (
     <ShadeContainer>
       <Header />
-      <NormalLogo />
 
       <BrowserRouter>
         <Routes>
