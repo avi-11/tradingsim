@@ -1,6 +1,6 @@
 const containerStyles = {
   textAlign: "center",
-  padding: "3rem 0px",
+  padding: "2.5rem 0px",
   borderBottom: "1px solid rgba(105, 102, 255, 0.5)",
 };
 

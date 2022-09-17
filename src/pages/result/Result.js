@@ -3,6 +3,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Container from "../../components/container/Container";
 import ActionButton from "../../components/button/actionButton/ActionButton";
+
+import { NormalLogo } from "../../components/header/Logo";
+
 import CandleChart from "../../components/chart/candleChart/CandleChart";
 import DataTable from "../../components/table/dataTable/DataTable";
 
@@ -142,6 +145,11 @@ function Result() {
 
   return (
     <div>
+      <div style={{ position: "relative", bottom: "6rem" }}>
+        <Link to="/">
+          <NormalLogo />
+        </Link>
+      </div>
       <Container>
         <h2 style={{ textAlign: "center" }}>Chart</h2>
         {!chartLoading ? (

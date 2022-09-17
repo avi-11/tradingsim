@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import styles from "../entry/Entry.module.css";
+import { NormalLogo } from "../../components/header/Logo";
 
 const Exit = () => {
   const [entryGroups, setEntryGroups] = useState([1]);
@@ -238,6 +239,11 @@ const Exit = () => {
 
   return (
     <div className="app-container">
+      <div style={{ position: "relative", bottom: "5rem" }}>
+        <Link to="/">
+          <NormalLogo />
+        </Link>
+      </div>
       <ToastContainer draggable={false} autoClose={3000} />
       <div className={styles.entry_upperCard}>
         <div className={styles.entry_infoIcon}>
@@ -247,19 +253,22 @@ const Exit = () => {
           ></i>
         </div>
         <div className={styles.entry_referenceBox}>
-          <h1 style={{ padding: "0 1rem" }}>Reference Card</h1>
+          <h1 className={styles.entry_Pheads} style={{ padding: "0 1rem" }}>
+            Reference Card
+          </h1>
 
           <EntryReference />
         </div>
       </div>
 
       <Container>
-        <h2>EXIT BUILDER</h2>
+        <h2 className={styles.entry_Pheads}>EXIT BUILDER</h2>
         <form>
           <div className={styles.entry__entryFormGroup}>
             {entryValues.map((entryValue, index) => (
               <div key={entryValue.id} className={styles.entryFormGroup__row}>
                 <p
+                className={styles.entry_entryRule_text}
                   style={{
                     color: `${
                       exitValuesError && entryValues.length === index + 1
@@ -268,6 +277,7 @@ const Exit = () => {
                     }`,
                   }}
                 >
+
                   Exit Rule {index + 1}
                 </p>
 
@@ -276,7 +286,6 @@ const Exit = () => {
                   option={[1, 2, 3, 4, 5, 6]}
                   index={index}
                   setCurrentRef={setCurrentRef}
-                  isRef={entryValues[index].refNumber}
                 />
                 {entryValue.refNumber ? (
                   <SelectInput
