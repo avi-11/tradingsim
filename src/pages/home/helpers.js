@@ -61,11 +61,6 @@ export const options = {
               </div>
             </div>`;
       },
-      // title: {
-      //   formatter: function (e) {
-      //     return "";
-      //   },
-      // },
     },
   },
 };

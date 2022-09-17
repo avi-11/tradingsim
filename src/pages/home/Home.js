@@ -151,7 +151,9 @@ function Home() {
                   }}
                   options={["BTC", "ETH"]}
                   label="Instrument"
-                  style={{ color: `${instrumentError ? "red" : ""}` }}
+                  style={{
+                    color: `${instrumentError ? "var(--errorColor)" : ""}`,
+                  }}
                 />
 
                 <Numberinput
@@ -161,7 +163,9 @@ function Home() {
                     setClosePrice(value);
                   }}
                   label="Market price"
-                  style={{ color: `${closePriceError ? "red" : ""}` }}
+                  style={{
+                    color: `${instrumentError ? "var(--errorColor)" : ""}`,
+                  }}
                 />
               </div>
 
@@ -174,14 +178,18 @@ function Home() {
                     SetVolatilty(value);
                   }}
                   label="Market Volatility"
-                  style={{ color: `${volatilityError ? "red" : ""}` }}
+                  style={{
+                    color: `${instrumentError ? "var(--errorColor)" : ""}`,
+                  }}
                 />
                 <GlobalInput
                   inputType="date"
                   value={startdate}
                   setValue={updateDate}
                   label="Start Date"
-                  style={{ color: `${startDateError ? "red" : ""}` }}
+                  style={{
+                    color: `${instrumentError ? "var(--errorColor)" : ""}`,
+                  }}
                 />
               </div>
 

@@ -9,8 +9,7 @@ import { NormalLogo } from "../../components/header/Logo";
 import CandleChart from "../../components/chart/candleChart/CandleChart";
 import DataTable from "../../components/table/dataTable/DataTable";
 
-import { formatData } from "./helpers";
-import { options } from "../home/helpers";
+import { formatData, options } from "./helpers";
 
 function Result() {
   const graphData = localStorage.getItem("graphData");
