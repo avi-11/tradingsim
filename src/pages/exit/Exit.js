@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import styles from "../entry/Entry.module.css";
 import { NormalLogo } from "../../components/header/Logo";
+import Numberinput from "../../components/input/numberInput/Numberinput";
 
 const Exit = () => {
   const [entryGroups, setEntryGroups] = useState([1]);
@@ -268,16 +269,15 @@ const Exit = () => {
             {entryValues.map((entryValue, index) => (
               <div key={entryValue.id} className={styles.entryFormGroup__row}>
                 <p
-                className={styles.entry_entryRule_text}
+                  className={styles.entry_entryRule_text}
                   style={{
                     color: `${
                       exitValuesError && entryValues.length === index + 1
-                        ? "red"
+                        ? "var(--errorColor)"
                         : ""
                     }`,
                   }}
                 >
-
                   Exit Rule {index + 1}
                 </p>
 
@@ -400,49 +400,50 @@ const Exit = () => {
                 {entryValue.refNumber !== "2" &&
                 entryValue.refNumber !== "5" &&
                 entryValue.refNumber ? (
-                  <input
-                    placeholder={
-                      isValue(entryValue.refNumber)
-                        ? "Enter value"
-                        : "Indicator Value"
-                    }
-                    className={styles.entry_input_indicator}
-                    type="text"
-                    onChange={
-                      isValue(entryValue.refNumber)
-                        ? (e) =>
-                            setEntryValues(
-                              entryValues.map((value) => {
-                                if (value.id === entryValue.id)
-                                  return { ...value, value: e.target.value };
-                                return value;
-                              })
-                            )
-                        : (e) =>
-                            setEntryValues(
-                              entryValues.map((value) => {
-                                if (value.id === entryValue.id)
-                                  return {
-                                    ...value,
-                                    indicatorParameter2: e.target.value,
-                                  };
-                                return value;
-                              })
-                            )
-                    }
-                    min={!isValue(entryValue.refNumber) ? 1 : 0}
-                    max={
-                      !isValue(entryValue.refNumber) && entryValue.indicator1
-                        ? entryValue.indicator1 === "SMA"
-                          ? 500
-                          : entryValue.indicator1 === "RSI"
-                          ? 100
-                          : entryValue.indicator1 === "ADX"
-                          ? 100
+                  isValue(entryValue.refNumber) ? (
+                    <Numberinput
+                      placeholder="Enter Value"
+                      onChange={(e) =>
+                        setEntryValues(
+                          entryValues.map((value) => {
+                            if (value.id === entryValue.id)
+                              return { ...value, value: e.target.value };
+                            return value;
+                          })
+                        )
+                      }
+                    />
+                  ) : (
+                    <input
+                      placeholder={"Indicator Value"}
+                      className={styles.entry_input_indicator}
+                      type="text"
+                      onChange={(e) =>
+                        setEntryValues(
+                          entryValues.map((value) => {
+                            if (value.id === entryValue.id)
+                              return {
+                                ...value,
+                                indicatorParameter2: e.target.value,
+                              };
+                            return value;
+                          })
+                        )
+                      }
+                      min={1}
+                      max={
+                        entryValue.indicator1
+                          ? entryValue.indicator1 === "SMA"
+                            ? 500
+                            : entryValue.indicator1 === "RSI"
+                            ? 100
+                            : entryValue.indicator1 === "ADX"
+                            ? 100
+                            : 1
                           : 1
-                        : 1
-                    }
-                  />
+                      }
+                    />
+                  )
                 ) : (
                   <></>
                 )}

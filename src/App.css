@@ -8,6 +8,7 @@
   --whiteColor: #fff;
   --blackColor: #000;
   --grayColor: #c5c1c1;
+  --errorColor: #EF4E4E;
 }
 
 input {
