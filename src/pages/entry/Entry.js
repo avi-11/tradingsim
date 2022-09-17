@@ -25,8 +25,29 @@ const Entry = () => {
   ]);
   const [num, setNum] = useState(1);
 
+  const [initialCapitalError, setInitialCapitalError] = useState(false);
+  const [positionSizeError, setPositionSizeError] = useState(false);
+  const [orderSizeError, setOrderSizeError] = useState(false);
+  const [entryValuesError, setEntryValuesError] = useState(false);
+
   const navigate = useNavigate();
-  const location = useLocation();
+
+  function validateSettings(initialCapital, positionSize, orderSize) {
+    if (initialCapital === "") {
+      console.log("error");
+      setInitialCapitalError(true);
+    }
+    if (positionSize === "") {
+      setPositionSizeError(true);
+    }
+    if (orderSize === "") {
+      setOrderSizeError(true);
+    }
+
+    if (initialCapitalError || positionSizeError || orderSizeError)
+      return false;
+    return true;
+  }
 
   function checkIndicatorRange(indicator, indicatorValue) {
     let validRange = true;
@@ -46,7 +67,7 @@ const Entry = () => {
     }
 
     if (!validRange)
-      alert(
+      toast(
         `Indicator value out of range. Ranges are: \n
           1. SMA:- 0 - 500 \n
           2. RSI:- 0 - 100 \n
@@ -138,6 +159,7 @@ const Entry = () => {
       }
     });
 
+    if (!valid) setEntryValuesError(true);
     return valid;
   }
 
@@ -145,7 +167,7 @@ const Entry = () => {
     e.preventDefault();
 
     if (!validatePreviousEntries(entryValues)) {
-      alert("Complete Previous Entries!!");
+      toast("Complete Previous Entries!!");
       return;
     }
 
@@ -270,29 +292,45 @@ const Entry = () => {
               <Numberinput
                 label={"Initial Capital"}
                 value={initialCapital}
-                setValue={setInitialCapital}
+                setValue={(value) => {
+                  setInitialCapitalError(false);
+                  setInitialCapital(value);
+                }}
+                style={{ color: `${initialCapitalError ? "red" : ""}` }}
               />
 
               <Numberinput
                 label={"Position Size"}
                 value={positionSize}
-                setValue={setPositionSize}
+                setValue={(value) => {
+                  setPositionSizeError(false);
+                  setPositionSize(value);
+                }}
+                style={{ color: `${positionSizeError ? "red" : ""}` }}
               />
             </div>
             <div className={styles.entry__radioFormGroup}>
-              <p>Order Size</p>
+              <p style={{ color: `${orderSizeError ? "red" : ""}` }}>
+                Order Size
+              </p>
               <RadioButton
                 label="LONG"
                 value="long"
                 name="type"
-                setValue={setOrderSize}
+                setValue={(value) => {
+                  setOrderSize(value);
+                  setOrderSizeError(false);
+                }}
               />
 
               <RadioButton
                 label="SHORT"
                 value="short"
                 name="type"
-                setValue={setOrderSize}
+                setValue={(value) => {
+                  setOrderSize(value);
+                  setOrderSizeError(false);
+                }}
               />
             </div>
           </div>
@@ -305,7 +343,16 @@ const Entry = () => {
           <div className={styles.entry__entryFormGroup}>
             {entryValues.map((entryValue, index) => (
               <div key={entryValue.id} className={styles.entryFormGroup__row}>
-                <p className={styles.entry_entryRule_text}>
+                <p
+                  className={styles.entry_entryRule_text}
+                  style={{
+                    color: `${
+                      entryValuesError && entryValues.length === index + 1
+                        ? "red"
+                        : ""
+                    }`,
+                  }}
+                >
                   Entry Rule {index + 1}
                 </p>
 
@@ -484,13 +531,19 @@ const Entry = () => {
           <div className={styles.entry__editRuleBtn}>
             <ActionButton
               buttonText={"Add Rule"}
-              onClick={addRule}
+              onClick={(e) => {
+                setEntryValuesError(false);
+                addRule(e);
+              }}
               textColor="var(--whiteColor)"
               backgroundColor="var(--brandColor)"
             />
             <ActionButton
               buttonText={"Delete Rule"}
-              onClick={removeRule}
+              onClick={(e) => {
+                setEntryValuesError(false);
+                removeRule(e);
+              }}
               backgroundColor="var(--whiteColor)"
               textColor="var(--blackColor)"
             />
@@ -513,11 +566,10 @@ const Entry = () => {
           backgroundColor="var(--brandColor)"
           onClick={(e) => {
             e.preventDefault();
+            setEntryValuesError(false);
             if (
-              validatePreviousEntries(entryValues) &&
-              initialCapital &&
-              positionSize &&
-              orderSize
+              validateSettings(initialCapital, positionSize, orderSize) &&
+              validatePreviousEntries(entryValues)
             ) {
               localStorage.setItem("initialCapital", initialCapital);
               localStorage.setItem("positionSize", positionSize);
@@ -527,6 +579,9 @@ const Entry = () => {
               setTimeout(() => {
                 navigate("/exit");
               }, 3000);
+            } else if (!validatePreviousEntries(entryValues)) {
+              setEntryValuesError(true);
+              notCorrect();
             } else {
               notCorrect();
             }

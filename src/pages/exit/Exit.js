@@ -21,6 +21,8 @@ const Exit = () => {
   ]);
   const [num, setNum] = useState(1);
 
+  const [exitValuesError, setExitValuesError] = useState(false);
+
   const navigate = useNavigate();
 
   function checkIndicatorRange(indicator, indicatorValue) {
@@ -41,7 +43,7 @@ const Exit = () => {
     }
 
     if (!validRange)
-      alert(
+      toast(
         `Indicator value out of range. Ranges are: \n
           1. SMA:- 0 - 500 \n
           2. RSI:- 0 - 100 \n
@@ -133,6 +135,8 @@ const Exit = () => {
       }
     });
 
+    if (!valid) setExitValuesError(true);
+
     return valid;
   }
 
@@ -140,7 +144,7 @@ const Exit = () => {
     e.preventDefault();
 
     if (!validatePreviousEntries(entryValues)) {
-      alert("Complete Previous Entries!!");
+      toast("Complete Previous Entries!!");
       return;
     }
 
@@ -263,7 +267,17 @@ const Exit = () => {
           <div className={styles.entry__entryFormGroup}>
             {entryValues.map((entryValue, index) => (
               <div key={entryValue.id} className={styles.entryFormGroup__row}>
-                <p className={styles.entry_entryRule_text}>
+                <p
+                className={styles.entry_entryRule_text}
+                  style={{
+                    color: `${
+                      exitValuesError && entryValues.length === index + 1
+                        ? "red"
+                        : ""
+                    }`,
+                  }}
+                >
+
                   Exit Rule {index + 1}
                 </p>
 
@@ -441,13 +455,19 @@ const Exit = () => {
           <div className={styles.entry__editRuleBtn}>
             <ActionButton
               buttonText={"Add Rule"}
-              onClick={addRule}
+              onClick={(e) => {
+                setExitValuesError(false);
+                addRule(e);
+              }}
               textColor="var(--whiteColor)"
               backgroundColor="var(--brandColor)"
             />
             <ActionButton
               buttonText={"Delete Rule"}
-              onClick={removeRule}
+              onClick={(e) => {
+                setExitValuesError(false);
+                removeRule(e);
+              }}
               backgroundColor="var(--whiteColor)"
               textColor="var(--blackColor)"
             />
@@ -470,12 +490,16 @@ const Exit = () => {
           backgroundColor="var(--brandColor)"
           onClick={(e) => {
             e.preventDefault();
+            setExitValuesError(false);
             if (validatePreviousEntries(entryValues)) {
               localStorage.setItem("exitValues", JSON.stringify(entryValues));
               isCorrect();
               setTimeout(() => {
                 navigate("/result");
               }, 3000);
+            } else if (!validatePreviousEntries(entryValues)) {
+              setExitValuesError(true);
+              notCorrect();
             } else {
               notCorrect();
             }

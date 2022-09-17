@@ -1,9 +1,15 @@
-const SelectInput = ({ defaultValue, options, label, setValue, value }) => {
+const SelectInput = ({
+  defaultValue,
+  options,
+  label,
+  setValue,
+  value,
+  style,
+}) => {
   return (
     <div className="input-field">
-      <label>{label}</label>
+      <label style={style}>{label}</label>
       <select
-        required
         defaultValue={defaultValue}
         onChange={(e) => setValue(e.target.value, value)}
       >
