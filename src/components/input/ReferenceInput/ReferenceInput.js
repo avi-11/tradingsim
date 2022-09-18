@@ -13,6 +13,8 @@ const ReferenceInput = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        maxWidth: "8rem",
+        minWidth: "8rem",
       }}
     >
       <select
