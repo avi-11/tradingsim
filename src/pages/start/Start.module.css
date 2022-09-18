@@ -4,16 +4,16 @@
     font-family: 'Inter';
 font-style: normal;
 font-weight: 300;
-font-size: 18px;
+font-size: 22px;
 }
 
 .Start_page_firstBox {
   display: inline-block;
-  padding: 1rem 3rem;
+  padding: 1rem 5rem;
   background-color: #1c1c1c;
   border-radius: 10px;
   position: relative;
-  left: 60%;
+  left: 50%;
   margin-top: 2rem;
 }
 
@@ -24,7 +24,7 @@ font-size: 18px;
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
-    font-size: 22px;
+    font-size: 28px;
     color: #FFFFFF
 }
 
@@ -32,7 +32,7 @@ font-size: 18px;
     font-family: 'Inter';
 font-style: normal;
 font-weight: 300;
-font-size: 40px;
+font-size: 32px;
 
 padding: 0;
 margin: 0.8rem 0;
@@ -49,19 +49,20 @@ margin: 0.8rem 0;
 .Start_page_secondBox {
   margin: 0 4rem;
   position: relative;
-  bottom: 2rem;
+ 
   left: 1rem;
 }
 
 .third_heading {
   display: flex;
-  
-  padding-left: 580px;
+  height: 6rem;
+  padding-left: 40rem;
 }
 
 .Start_page_thirdBox{
   position: relative;
-  bottom: 3rem;
+  bottom: 10rem;
+
 }
 
 .Start_page_thirdBox_heading{
@@ -71,7 +72,7 @@ margin: 0.8rem 0;
     font-size: 28px;
     color: #C4C4C4;
     margin: 1rem 0px;
-    padding-left: 580px;
+    padding-left: 40rem;
 }
 
 
