@@ -17,6 +17,7 @@ export const formatData = (data) => {
         data[props]["LowPrice"],
         data[props]["ClosePrice"],
       ],
+      description: data[props],
     });
   }
   return newData;
@@ -25,6 +26,39 @@ export const formatData = (data) => {
 export const options = {
   chart: {
     type: "candlestick",
+  },
+  dataLabels: {
+    enabled: true,
+    formatter: function (val, options) {
+      const signal =
+        options.w.config.series[options.seriesIndex].data[
+          options.dataPointIndex
+        ].description.Signal;
+
+      if (signal === 1) return "Buy";
+      else if (signal === -1) return "Sell";
+    },
+    style: {
+      colors: [
+        (options) => {
+          const signal =
+            options.w.config.series[options.seriesIndex].data[
+              options.dataPointIndex
+            ].description.Signal;
+          if (signal === 1) return "#00ff00";
+          else if (signal === -1) return "#ff0000";
+        },
+      ],
+    },
+    background: {
+      enabled: true,
+      foreColor: "#fff",
+      padding: 2,
+      borderRadius: 2,
+      borderWidth: 1,
+      borderColor: "#fff",
+      opacity: 0.9,
+    },
   },
   xaxis: {
     type: "datetime",
@@ -35,6 +69,11 @@ export const options = {
   yaxis: {
     tooltip: {
       enabled: true,
+    },
+    labels: {
+      formatter: function (value) {
+        return formatNumber(value);
+      },
     },
   },
   tooltip: {
@@ -47,27 +86,22 @@ export const options = {
     y: {
       formatter: function (e, { series, seriesIndex, dataPointIndex, w }) {
         return `<div class="chartTooltip">
-            <div>
-                <p><span>Open:</span> ${formatNumber(
-                  w.globals.seriesCandleO[seriesIndex][dataPointIndex]
-                )}</p>
-                <p><span>Close:</span> ${formatNumber(
-                  w.globals.seriesCandleC[seriesIndex][dataPointIndex]
-                )}</p>
-                <p><span>Low:</span> ${formatNumber(
-                  w.globals.seriesCandleL[seriesIndex][dataPointIndex]
-                )}</p>
-                <p><span>High:</span> ${formatNumber(
-                  w.globals.seriesCandleH[seriesIndex][dataPointIndex]
-                )}</p>
-                </div>
-              </div>`;
+          <div>
+              <p><span>Open:</span> ${formatNumber(
+                w.globals.seriesCandleO[seriesIndex][dataPointIndex]
+              )}</p>
+              <p><span>Close:</span> ${formatNumber(
+                w.globals.seriesCandleC[seriesIndex][dataPointIndex]
+              )}</p>
+              <p><span>Low:</span> ${formatNumber(
+                w.globals.seriesCandleL[seriesIndex][dataPointIndex]
+              )}</p>
+              <p><span>High:</span> ${formatNumber(
+                w.globals.seriesCandleH[seriesIndex][dataPointIndex]
+              )}</p>
+              </div>
+            </div>`;
       },
-      // title: {
-      //   formatter: function (e) {
-      //     return "";
-      //   },
-      // },
     },
   },
 };

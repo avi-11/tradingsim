@@ -285,7 +285,7 @@ const Entry = () => {
 
       <Container>
         <form className={styles.entry_firstForm}>
-          <p>Strategy Settings</p>
+          <p style={{ fontSize: "1.5rem" }}>Strategy Settings</p>
 
           <div style={{ width: "85%" }}>
             <div className={styles.entry__capitalFormGroup}>
@@ -296,7 +296,9 @@ const Entry = () => {
                   setInitialCapitalError(false);
                   setInitialCapital(value);
                 }}
-                style={{ color: `${initialCapitalError ? "red" : ""}` }}
+                style={{
+                  color: `${initialCapitalError ? "var(--errorColor)" : ""}`,
+                }}
               />
 
               <Numberinput
@@ -306,12 +308,18 @@ const Entry = () => {
                   setPositionSizeError(false);
                   setPositionSize(value);
                 }}
-                style={{ color: `${positionSizeError ? "red" : ""}` }}
+                style={{
+                  color: `${positionSizeError ? "var(--errorColor)" : ""}`,
+                }}
               />
             </div>
             <div className={styles.entry__radioFormGroup}>
-              <p style={{ color: `${orderSizeError ? "red" : ""}` }}>
-                Order Size
+              <p
+                style={{
+                  color: `${orderSizeError ? "var(--errorColor)" : ""}`,
+                }}
+              >
+                Order Side
               </p>
               <RadioButton
                 label="LONG"
@@ -348,7 +356,7 @@ const Entry = () => {
                   style={{
                     color: `${
                       entryValuesError && entryValues.length === index + 1
-                        ? "red"
+                        ? "var(--errorColor)"
                         : ""
                     }`,
                   }}

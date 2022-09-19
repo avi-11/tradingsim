@@ -4,7 +4,7 @@ const headStyles = {
   fontFamily: "Play",
   fontStyle: "normal",
   fontWeight: "400",
-  fontSize: "4rem",
+  fontSize: "3rem",
   color: "#6FFF62",
   padding: "0",
   margin: "1rem 0",
@@ -21,7 +21,7 @@ const headStyles_normal = {
 const spanStyles = {
   fontFamily: "Play",
   fontWeight: "700",
-  fontSize: "4rem",
+  fontSize: "3rem",
   color: "#FFFFFF",
 };
 

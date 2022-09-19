@@ -1,6 +1,6 @@
 import NumberFormat from "react-number-format";
 
-const Numberinput = ({ value, setValue, label, style }) => {
+const Numberinput = ({ value, setValue, label, style, placeholder }) => {
   const handleChange = (e) => {
     const value = parseFloat(e.target.value.replace(/,/g, ""));
     setValue(value);
@@ -8,12 +8,15 @@ const Numberinput = ({ value, setValue, label, style }) => {
 
   return (
     <div className="input-field">
-      <label style={{ marginRight: "16px", ...style }}>{label}</label>
+      {label ? (
+        <label style={{ marginRight: "16px", ...style }}>{label}</label>
+      ) : null}
       <NumberFormat
         thousandSeparator={true}
         id="market-price"
         value={value}
         onChange={handleChange}
+        placeholder={placeholder ? placeholder : ""}
       />
     </div>
   );

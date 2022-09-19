@@ -25,7 +25,7 @@ const Start = () => {
         <h1 className={styles.second_box_heading}>An Invsto Product</h1>
         <Link to="/home" className="link">
           <ActionButton
-            buttonText="Start Building"
+            buttonText="Start BUIDLing"
             textColor="var(--whiteColor)"
             backgroundColor="var(--brandColor)"
           />
