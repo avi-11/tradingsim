@@ -49,7 +49,7 @@ margin: 0.8rem 0;
 .Start_page_secondBox {
   margin: 0 4rem;
   position: relative;
- 
+ z-index: 99;
   left: 1rem;
 }
 
