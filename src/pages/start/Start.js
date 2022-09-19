@@ -22,7 +22,13 @@ const Start = () => {
       </div>
       <div className={styles.Start_page_secondBox}>
         <LOGO />
-        <h1 className={styles.second_box_heading}>An Invsto Product</h1>
+        <a
+          className={styles.toInvsto}
+          target="_blank"
+          href="https://www.invsto.com/"
+        >
+          <h1 className={styles.second_box_heading}>An Invsto Product</h1>
+        </a>
         <Link to="/home" className="link">
           <ActionButton
             buttonText="Start BUIDLing"
