@@ -9,10 +9,12 @@ def reportmateric(dataf):
     return: matrics
     '''
 
-    dataf['nextclose'] = dataf['ClosePrice'].shift(-1)
-    dataf.fillna(0, inplace=True)
-    dataf['Profit'] = [float((dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
-                       if dataf.loc[i, 'Signal'] == 1 else 0 for i in dataf.index]
+    startprice=0
+    for i in dataf.index:
+        if dataf.loc[i, 'Signal']==1:
+            startprice=dataf.loc[i, 'ClosePrice']
+        elif dataf.loc[i, 'Signal']==-1 and startprice!=0:
+            dataf.loc[i, 'Profit']=float(dataf.loc[i, 'ClosePrice']-startprice)
 
     if len(dataf['Profit'].value_counts().values)==1:
         return {'Error': 'No Trade Generated!!'}
