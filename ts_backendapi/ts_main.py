@@ -117,17 +117,18 @@ def chartdata(report_data: Report):
     sellcheck = ('SellSignal' in df.columns)
 
     if buysellcheck:
-        con = [(df['BuySignal'] == 1) & (df['BuySignal'].shift(1)+df['SellSignal'].shift(1)==0) & (df['SellSignal']==0), (df['BuySignal'] == 1) & (df['BuySignal'].shift(1)==0) & (df['SellSignal']==0),
-               (df['BuySignal'].shift(1) == 1) & (df['SellSignal'] == -1) & (df['BuySignal'] != 0) &  (df['SellSignal'].shift(1) == 0) ]
+        con = [(df['BuySignal'] == 1) & (df['BuySignal'].shift(1)+df['SellSignal'].shift(1) == 0) & (df['SellSignal'] == 0), (df['BuySignal'] == 1) & (df['BuySignal'].shift(1) == 0) & (df['SellSignal'] == 0),
+               (df['BuySignal'].shift(1) == 1) & (df['SellSignal'] == -1) & (df['BuySignal'] != 0) & (df['SellSignal'].shift(1) == 0)]
         df['Signal'] = np.select(con, [1, 1, -1], 0)
 
-        df.drop(['BuySignal', 'SellSignal'], axis=1, inplace=True)
+        # df.drop(['BuySignal', 'SellSignal'], axis=1, inplace=True)
 
     elif buysellcheck == False and buycheck:
-        con = [(df['BuySignal'] == 1) & (df['BuySignal'].shift(1)==0),(df['BuySignal'] == 0) & (df['BuySignal'].shift(1) == 1) ]
+        con = [(df['BuySignal'] == 1) & (df['BuySignal'].shift(1) == 0),
+               (df['BuySignal'] == 0) & (df['BuySignal'].shift(1) == 1)]
         df['Signal'] = np.select(con, [1, -1], 0)
 
-        df.drop(['BuySignal'], axis=1, inplace=True)
+        # df.drop(['BuySignal'], axis=1, inplace=True)
 
     # elif buysellcheck == False and sellcheck:
     #     df.rename(columns={"SellSignal": "Signal"}, inplace=True)
@@ -135,6 +136,11 @@ def chartdata(report_data: Report):
     ret = df.copy()
 
     ret.index = data.keys()
+
+    if buysellcheck:
+        ret.drop(['BuySignal', 'SellSignal'], axis=1, inplace=True)
+    elif buysellcheck == False and buycheck:
+        ret.drop(['BuySignal'], axis=1, inplace=True)
 
     res = ret.to_json(orient="index")
     parsed = json.loads(res)
@@ -177,11 +183,27 @@ def trade(report_data: Report):
 
     dataf['Order_Side'] = np.select(con, ['BUY', 'SELL'], 0)
 
-    dataf['Position'] = np.select(con, ['LONG', 'SHORT'], 0)
+    dataf['Position'] = np.select(con, ['LONG', 'LONG EXIT'], 0)
 
     ret = dataf.copy()
 
     res = ret.to_json(orient="index")
     parsed = json.loads(res)
+    
+    keylist=list(parsed.keys())
+
+    for i in keylist:
+        try:
+            if parsed[i]['Position']=='LONG':
+                nextOne=keylist[(keylist.index(i)+1)]
+                if parsed[nextOne]['Position']=='LONG EXIT':
+                    pass
+                    
+        except:
+            del parsed[i]
+
+    
+    if len(parsed.keys())<1:
+        return {'Error': 'No trade generated'}
 
     return parsed
