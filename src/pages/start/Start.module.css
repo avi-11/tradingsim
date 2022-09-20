@@ -42,6 +42,11 @@ margin: 0.8rem 0;
   color: #ffffff;
 }
 
+.second_box_heading:hover{
+  color: rgb(0, 106, 255);
+  text-decoration: underline;
+}
+
 .Start_page_firstBox_points {
   margin: 1rem 0px;
 }
@@ -49,9 +54,15 @@ margin: 0.8rem 0;
 .Start_page_secondBox {
   margin: 0 4rem;
   position: relative;
- 
+ z-index: 99;
   left: 1rem;
 }
+
+.toInvsto{
+  text-decoration: none;
+}
+
+
 
 .third_heading {
   display: flex;

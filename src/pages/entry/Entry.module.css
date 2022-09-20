@@ -86,7 +86,8 @@
 }
 
 .entry_input_indicator{
-  height: 3.5rem;
+  height: 3rem;
+    margin-top: 5px;
   width: 6rem;
     padding: 0 10px;
     border-radius: 8px;
