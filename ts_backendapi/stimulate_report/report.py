@@ -1,39 +1,31 @@
-import quantstats as qs
-
-
-def reportmateric(dataf):
+def profit(df):
     '''Args:
-    dataf(dataframe): datafram with BuySignal and SellSignal column
+    df(dframe): dframe with BuySignal and SellSignal column
 
 
     return: matrics
     '''
-    buysellcheck = (
-        'BuySignal' in dataf.columns and 'SellSignal' in dataf.columns)
-    buycheck = ('BuySignal' in dataf.columns)
-    sellcheck = ('SellSignal' in dataf.columns)
 
-    dataf['nextclose'] = dataf['ClosePrice'].shift(-1)
+    # Next Day close
+    df['nextclose'] = df['ClosePrice'].shift(-1)
 
-    if buysellcheck:
-        dataf['UnrealizedProfit'] = [dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']
-                                     if (dataf.loc[i, 'BuySignal'] == 1) and (dataf.loc[i, 'SellSignal'] == 0) else 0 for i in dataf.index]
-    elif buycheck and buysellcheck == False:
-        dataf['UnrealizedProfit'] = [dataf.loc[i, 'nextclose']-dataf.loc[i, 'ClosePrice']
-                                     if (dataf.loc[i, 'BuySignal'] == 1) else 0 for i in dataf.index]
+    # Calculate Unrealized profit
+    signalcheck=0
+    for i in df.index:
+        if df.loc[i, 'Signal']==1:
+            signalcheck=1
 
-    startprice = 0
-    for i in dataf.index:
-        if dataf.loc[i, 'Signal'] == 1:
-            startprice = dataf.loc[i, 'ClosePrice']
-        elif dataf.loc[i, 'Signal'] == -1 and startprice != 0:
-            dataf.loc[i, 'RealizedProfit'] = float(
-                dataf.loc[i, 'ClosePrice']-startprice)
+        if signalcheck==1:
+            if df.loc[i, 'BuySignal'] == 1 and df.loc[i, 'SellSignal'] == 0:
+                df.loc[i, 'UnrealizedProfit'] = float(df.loc[i,'Qty']*(df.loc[i, 'nextclose'] - df.loc[i, 'ClosePrice']))
+            
+            elif df.loc[i, 'BuySignal'] == 0 or df.loc[i, 'SellSignal'] == -1:
+                signalcheck=0
 
-    if 'RealizedProfit' in list(dataf.columns):
-        if len(dataf['UnrealizedProfit'].value_counts().values) == 1:
+    if 'RealizedProfit' in list(df.columns):
+        if len(df['UnrealizedProfit'].value_counts().values) < 1:
             return {'Error': 'No Trade Generated!!'}
-    elif 'RealizedProfit' not in list(dataf.columns):
+    elif 'RealizedProfit' not in list(df.columns):
         return {'Error': 'No Trade Generated'}
 
-    return (qs.reports.metrics(dataf['UnrealizedProfit'], mode='full', display=False).round(decimals=4))
+    return df

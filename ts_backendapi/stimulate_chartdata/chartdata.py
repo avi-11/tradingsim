@@ -1,146 +1,70 @@
-def position(dataf, order_side):
+import numpy as np
 
-    dataf.loc[dataf.index[0], 'Position'] = int(order_side)
+def position(df, order_side):
 
-    # loop over dataf
-    for i in dataf.index[1::]:
-        buysellcheck = (
-            'BuySignal' in dataf.columns and 'SellSignal' in dataf.columns)
-        buycheck = ('BuySignal' in dataf.columns)
-        sellcheck = ('SellSignal' in dataf.columns)
+    # Create position column
+    buysellcheck = (
+        'BuySignal' in df.columns and 'SellSignal' in df.columns)
+    buycheck = ('BuySignal' in df.columns)
+    # sellcheck = ('SellSignal' in df.columns)
 
-        if buysellcheck:
-            if order_side == 0:
+    if buysellcheck:
+        con = [(df['BuySignal'] == 1) & (df['BuySignal'].shift(1)+df['SellSignal'].shift(1) == 0) & (df['SellSignal'] == 0), (df['BuySignal'] == 1) & (df['BuySignal'].shift(1) == 0) & (df['SellSignal'] == 0),
+               (df['BuySignal'].shift(1) == 1) & (df['SellSignal'] == -1) & (df['BuySignal'] != 0) & (df['SellSignal'].shift(1) == 0)]
+        df['Signal'] = np.select(con, [1, 1, -1], 0)
+        # df.drop(['BuySignal', 'SellSignal'], axis=1, inplace=True)
 
-                if (dataf.loc[i, 'BuySignal']+dataf.loc[i, 'SellSignal'] == 0) and (dataf.loc[i, 'BuySignal'] != 0):
-                    dataf.loc[i, 'Position'] = -1
+    elif buysellcheck == False and buycheck:
+        con = [(df['BuySignal'] == 1) & (df['BuySignal'].shift(1) == 0),
+               (df['BuySignal'] == 0) & (df['BuySignal'].shift(1) == 1)]
+        df['Signal'] = np.select(con, [1, -1], 0)
+        # df.drop(['BuySignal'], axis=1, inplace=True)
 
-                elif (dataf.loc[i, 'BuySignal']+dataf.loc[i, 'SellSignal'] == 1):
-                    dataf.loc[i, 'Position'] = 1
-
-                else:
-                    dataf.loc[i, 'Position'] = 0
-
-            elif order_side == 1:
-                if (dataf.loc[i, 'SellSignal'] == -1):
-
-                    order_side = 0
-                    dataf.loc[i, 'Position'] = 0
-
-                elif (dataf.loc[i, 'SellSignal'] == 0 and (dataf.loc[i, 'BuySignal'] == 1 or dataf.loc[i, 'BuySignal'] == 0)):
-
-                    dataf.loc[i, 'Position'] = 1
-
-            elif order_side == -1:
-                if (dataf.loc[i, 'BuySignal'] == 1):
-
-                    order_side = 0
-                    dataf.loc[i, 'Position'] = 0
-
-                elif (dataf.loc[i, 'BuySignal'] == 0 and (dataf.loc[i, 'SellSignal'] == -1 or dataf.loc[i, 'SellSignal'] == 0)):
-
-                    dataf.loc[i, 'Position'] = -1
-
-        elif buysellcheck == False and buycheck:
-            if order_side == 0:
-
-                if dataf.loc[i, 'BuySignal'] == 1:
-                    dataf.loc[i, 'Position'] = 1
-
-                elif dataf.loc[i, 'BuySignal'] == 0:
-                    dataf.loc[i, 'Position'] = 0
-
-            elif order_side == 1:
-                if dataf.loc[i, 'BuySignal'] == 1:
-                    dataf.loc[i, 'Position'] = 1
-
-                elif dataf.loc[i, 'BuySignal'] == 0:
-                    order_side = 0
-                    dataf.loc[i, 'Position'] = 0
-
-            elif order_side == -1:
-                if dataf.loc[i, 'BuySignal'] == 1:
-                    order_side = 0
-                    dataf.loc[i, 'Position'] = 1
-
-                elif dataf.loc[i, 'BuySignal'] == 0:
-                    dataf.loc[i, 'Position'] = -1
-
-        elif buysellcheck == False and sellcheck:
-            if order_side == 0:
-                if dataf.loc[i, 'SellSignal'] == -1:
-                    dataf.loc[i, 'Position'] = -1
-
-                elif dataf.loc[i, 'SellSignal'] == 0:
-                    dataf.loc[i, 'Position'] = 0
-
-            elif order_side == 1:
-                if dataf.loc[i, 'SellSignal'] == -1:
-                    order_side = 0
-                    dataf.loc[i, 'Position'] = -1
-
-                elif dataf.loc[i, 'SellSignal'] == 0:
-                    dataf.loc[i, 'Position'] = 1
-
-            elif order_side == -1:
-                if dataf.loc[i, 'SellSignal'] == -1:
-                    dataf.loc[i, 'Position'] = -1
-
-                elif dataf.loc[i, 'SellSignal'] == 0:
-                    order_side = 0
-                    dataf.loc[i, 'Position'] = 0
-    return dataf
+    return df
 
 
-def margin(dataf, initial_capital, position_size):
+def margin(df, initial_capital, position_size):
 
-    dataf['Capital'] = float(initial_capital)
-    dataf['PositionSize'] = float(position_size)
-    dataf['TotalMargin'] = float(initial_capital * position_size)
-    dataf['Qty'] = (dataf['TotalMargin']/dataf['ClosePrice'])
-    dataf['UsedMargin'] = 0
+    df['Capital'] = float(initial_capital)
+    df['PositionSize'] = float(position_size)
+    df['TotalMargin'] = float(initial_capital * position_size)
+    df['Qty'] = (df['TotalMargin']/df['ClosePrice'])
+    df['UsedMargin'] = 0
 
     buyclose = 0
     sellclose = 0
 
-    for i in dataf.index:
-
-        if dataf.loc[i, 'Position'] == 1 and sellclose == 0:
-
+    for i in df.index:
+        if df.loc[i, 'Signal'] == 1:
             if buyclose == 0:
-                buyclose = dataf.loc[i, 'ClosePrice']
+                buyclose = df.loc[i, 'ClosePrice']
+            df['Qty'][i::] = (
+                df.loc[i, 'TotalMargin']/df.loc[i, 'ClosePrice'])
+            df['UsedMargin'][i::] = float(
+                df.loc[i, 'ClosePrice'] * df.loc[i, 'Qty'])
+        
+        elif df.loc[i, 'Signal'] == -1 and buyclose != 0:
+            df['TotalMargin'][i::] = df.loc[i, 'TotalMargin'] + \
+                (df.loc[i, 'Qty'] *
+                 float(df.loc[i, 'ClosePrice'] - buyclose))
+            df.loc[i, 'RealizedProfit'] = float( (df.loc[i, 'Qty'] *
+                 float(df.loc[i, 'ClosePrice'] - buyclose)))
+            df['UsedMargin'][i::] = 0
 
-            dataf['Qty'][i::] = (
-                dataf.loc[i, 'TotalMargin']/dataf.loc[i, 'ClosePrice'])
+        # print(df[df['RealizedProfit']!=0])
 
-            dataf['UsedMargin'][i::] = float(
-                dataf.loc[i, 'ClosePrice'] * dataf.loc[i, 'Qty'])
+        # elif df.loc[i, 'Signal'] == -1 and buyclose == 0:
+        #     if sellclose == 0:
+        #         sellclose = df.loc[i, 'ClosePrice']
+        #     df['Qty'][i::] = (
+        #         df.loc[i, 'TotalMargin']/df.loc[i, 'ClosePrice'])
+        #     df['UsedMargin'][i::] = float(
+        #         df.loc[i, 'ClosePrice'] * df.loc[i, 'Qty'])
+            
+        # elif df.loc[i, 'Signal'] == 1 and sellclose != 0:
+        #     df['TotalMargin'][i::] = df['TotalMargin'] + \
+        #         (df.loc[i, 'Qty'] *
+        #          float(sellclose - df.loc[i, 'ClosePrice']))
+        #     df['UsedMargin'][i::] = 0
 
-        elif dataf.loc[i, 'Position'] == -1 and buyclose != 0:
-
-            dataf['TotalMargin'][i::] = dataf['TotalMargin'] + \
-                (dataf.loc[i, 'Qty'] *
-                 float(dataf.loc[i, 'ClosePrice'] - buyclose))
-
-            dataf['UsedMargin'][i::] = 0
-
-        elif dataf.loc[i, 'Position'] == -1 and buyclose == 0:
-
-            if sellclose == 0:
-                sellclose = dataf.loc[i, 'ClosePrice']
-
-            dataf['Qty'][i::] = (
-                dataf.loc[i, 'TotalMargin']/dataf.loc[i, 'ClosePrice'])
-
-            dataf['UsedMargin'][i::] = float(
-                dataf.loc[i, 'ClosePrice'] * dataf.loc[i, 'Qty'])
-
-        elif dataf.loc[i, 'Position'] == 1 and sellclose != 0:
-
-            dataf['TotalMargin'][i::] = dataf['TotalMargin'] + \
-                (dataf.loc[i, 'Qty'] *
-                 float(sellclose - dataf.loc[i, 'ClosePrice']))
-
-            dataf['UsedMargin'][i::] = 0
-
-        return dataf
+    return df
