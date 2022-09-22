@@ -2,82 +2,99 @@ from ts_tatools import Indicators
 from criteria import *
 
 
-def signal(dataf: DataFrame, buycriteria: dict, sellcriteria: list = None):
+def signal(df, buycriteria: dict, sellcriteria: list = None):
 
+    # Indicator Dict
     indicator = {'SMA': Indicators().addmovingav,
                  'RSI': Indicators().addrsi, 'BB': Indicators().addbb, 'ADX': Indicators().addadx, 'PP': Indicators().addpp}
 
     # indicator for buycriteria
     for ind in list(buycriteria.keys()):
+
+        # Indicator with parameter
         if 'Ind_parameter' in buycriteria[ind] and 'Indicator' in buycriteria[ind]:
-
-            if len(dataf) < int(buycriteria[ind]['Ind_parameter']):
+            if len(df) < int(buycriteria[ind]['Ind_parameter']):
                 return {"Error": "Provided parameter is out of range!!"}
 
-            dataf = indicator[buycriteria[ind]['Indicator']](
-                dataf=dataf, periods=int(buycriteria[ind]['Ind_parameter']))
+            # Get indicator added df
+            df = indicator[buycriteria[ind]['Indicator']](
+                df=df, periods=int(buycriteria[ind]['Ind_parameter']))
 
+        # Indicator without parameter
         elif 'Ind_parameter' not in buycriteria[ind] and 'Indicator' in buycriteria[ind]:
-            dataf = indicator[buycriteria[ind]['Indicator']](dataf=dataf)
-
-        if 'Indicator2' in buycriteria[ind] and 'Indicator2' in buycriteria[ind]:
-
-            if len(dataf) < int(buycriteria[ind]['Ind_parameter2']):
+            
+            # Get indicator added df
+            df = indicator[buycriteria[ind]['Indicator']](df=df)
+        
+        # Indicator2 with parameter
+        if 'Indicator2' in buycriteria[ind] and 'Ind_parameter2' in buycriteria[ind]:
+            if len(df) < int(buycriteria[ind]['Ind_parameter2']):
                 return {"Error": "Provided parameter is out of range!!"}
 
-            if 'Ind_parameter2' in buycriteria[ind]:
-                dataf = indicator[buycriteria[ind]['Indicator2']](
-                    dataf=dataf, periods=int(buycriteria[ind]['Ind_parameter2']))
+            # Get Indicator added df
+            df = indicator[buycriteria[ind]['Indicator2']](
+                    df=df, periods=int(buycriteria[ind]['Ind_parameter2']))
 
-            elif 'Ind_parameter2' not in buycriteria[ind] and 'Indicator2' in buycriteria[ind]:
-                dataf = indicator[buycriteria[ind]['Indicator2']](dataf=dataf)
+        # Indicator2 without parameter
+        elif 'Ind_parameter2' not in buycriteria[ind] and 'Indicator2' in buycriteria[ind]:
+            # Get indicator added df
+            df = indicator[buycriteria[ind]['Indicator2']](df=df)
 
-    # buycriteria
+    # Buycriteria
     for ind in list(buycriteria.keys()):
 
+        # Get values
         valueOne, valueTwo = value(buycriteria[ind])
-
         if valueOne == None or valueTwo == None:
             return {"Error": "Provided Criteria is incorrect!!"}
 
-        dataf = buy(dataf, valueOne=valueOne, valueTwo=valueTwo,
+        # Get BuySignal
+        df = buy(df, valueOne=valueOne, valueTwo=valueTwo,
                     operation=buycriteria[ind]['Operator'])
 
-    # indicator for sellcriteria
+    # Indicator for sellcriteria
     for ind in list(sellcriteria.keys()):
 
+        # Indicator with parameter
         if 'Ind_parameter' in sellcriteria[ind] and 'Indicator' in sellcriteria[ind]:
-
-            if len(dataf) < int(sellcriteria[ind]['Ind_parameter']):
+            if len(df) < int(sellcriteria[ind]['Ind_parameter']):
                 return {"Error": "Provided parameter is out of range!!"}
 
-            dataf = indicator[sellcriteria[ind]['Indicator']](
-                dataf=dataf, periods=int(sellcriteria[ind]['Ind_parameter']))
+            # Indicator added df
+            df = indicator[sellcriteria[ind]['Indicator']](
+                df=df, periods=int(sellcriteria[ind]['Ind_parameter']))
 
+        # Indicator without parameter
         elif 'Ind_parameter' not in sellcriteria[ind] and 'Indicator' in sellcriteria[ind]:
-            dataf = indicator[sellcriteria[ind]['Indicator']](dataf=dataf)
 
-        if 'Indicator2' in sellcriteria[ind] and 'Indicator2' in sellcriteria[ind]:
-
-            if len(dataf) < int(sellcriteria[ind]['Ind_parameter2']):
+            # Indicator added df
+            df = indicator[sellcriteria[ind]['Indicator']](df=df)
+        
+        # Indicator2 With parameter
+        if 'Indicator2' in sellcriteria[ind] and 'Ind_parameter2' in sellcriteria[ind]:
+            if len(df) < int(sellcriteria[ind]['Ind_parameter2']):
                 return {"Error": "Provided parameter is out of range!!"}
 
-            if 'Ind_parameter2' in sellcriteria[ind]:
-                dataf = indicator[sellcriteria[ind]['Indicator2']](
-                    dataf=dataf, periods=int(sellcriteria[ind]['Ind_parameter2']))
+            # Indicator added parameter    
+            df = indicator[sellcriteria[ind]['Indicator2']](
+                    df=df, periods=int(sellcriteria[ind]['Ind_parameter2']))
 
-            elif 'Ind_parameter2' not in sellcriteria[ind] and 'Indicator2' in sellcriteria[ind]:
-                dataf = indicator[sellcriteria[ind]['Indicator2']](dataf=dataf)
+        #  Indicator2 without parameter
+        elif 'Ind_parameter2' not in sellcriteria[ind] and 'Indicator2' in sellcriteria[ind]:
+            
+            # Indicator added df
+            df = indicator[sellcriteria[ind]['Indicator2']](df=df)
 
     # sellcriteria
     for ind in list(sellcriteria.keys()):
-
+        # Get Values 
         valueOne, valueTwo = value(sellcriteria[ind])
 
         if valueOne == None or valueTwo == None:
             return {"Error": "Provided Criteria is incorrect!!"}
 
-        dataf = sell(dataf, valueOne=valueOne, valueTwo=valueTwo,
+        # Get Sell Signal
+        df = sell(df, valueOne=valueOne, valueTwo=valueTwo,
                      operation=sellcriteria[ind]['Operator'])
 
-    return dataf
+    return df

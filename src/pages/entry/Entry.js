@@ -246,7 +246,7 @@ const Entry = () => {
 
       <Container>
         <form className={styles.entry_firstForm}>
-          <p style={{ fontSize: "1.5rem" }}>Strategy Settings</p>
+          <p>STRATEGY SETTINGS</p>
 
           {!loading ? (
             <div style={{ width: "85%" }}>
