@@ -11,7 +11,8 @@ const SelectInput = ({
       <label style={style}>{label}</label>
       <select
         defaultValue={defaultValue}
-        onChange={(e) => setValue(e.target.value, value)}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
       >
         <option disabled>{defaultValue}</option>
 

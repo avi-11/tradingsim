@@ -10,7 +10,7 @@ export const formatData = (data) => {
   for (let props in data) {
     const date = getDate(props);
     newData.push({
-      x: new Date(date[2], date[1], date[0]),
+      x: new Date(date[2], date[1] - 1, date[0]),
       y: [
         data[props]["OpenPrice"],
         data[props]["HighPrice"],

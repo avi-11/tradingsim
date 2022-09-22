@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import Container from "../../components/container/Container";
 import Numberinput from "../../components/input/numberInput/Numberinput";
 import RadioButton from "../../components/input/radioButton/RadioButton";
-import ReferenceInput from "../../components/input/ReferenceInput/ReferenceInput";
-import SelectInput from "../../components/input/selectInput/SelectInput";
 import EntryReference from "../../components/reference/EntryReference";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./Entry.module.css";
 import { NormalLogo } from "../../components/header/Logo";
+import TradeBuilder from "../../components/tradeBuilder/TradeBuilder";
 
 const Entry = () => {
   const [initialCapital, setInitialCapital] = useState("");
@@ -25,12 +24,29 @@ const Entry = () => {
   ]);
   const [num, setNum] = useState(1);
 
+  const [loading, setLoading] = useState(false);
   const [initialCapitalError, setInitialCapitalError] = useState(false);
   const [positionSizeError, setPositionSizeError] = useState(false);
   const [orderSizeError, setOrderSizeError] = useState(false);
   const [entryValuesError, setEntryValuesError] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getExitStrategyFromLocalStorage();
+  }, []);
+
+  const getExitStrategyFromLocalStorage = () => {
+    setLoading(true);
+    const appEntryValues = sessionStorage.getItem("entryValues");
+    if (appEntryValues) {
+      setEntryValues(JSON.parse(appEntryValues));
+      setInitialCapital(sessionStorage.getItem("initialCapital"));
+      setPositionSize(sessionStorage.getItem("positionSize"));
+      setOrderSize("long");
+    }
+    setLoading(false);
+  };
 
   function validateSettings(initialCapital, positionSize, orderSize) {
     if (initialCapital === "") {
@@ -197,61 +213,6 @@ const Entry = () => {
     setEntryValues(newEntryValue);
   }
 
-  function isIndicator(refNumber) {
-    if (refNumber === "1" || refNumber === "2" || refNumber === "3")
-      return true;
-    return false;
-  }
-
-  function isValue(refNumber) {
-    if (refNumber === "3" || refNumber === "6") return true;
-    return false;
-  }
-
-  function setIndicatorOne(e, value) {
-    const newEntryValue = entryValues.map((entryValue) => {
-      if (entryValue.id === value.id)
-        return {
-          ...entryValue,
-          indicator1: e,
-        };
-      return entryValue;
-    });
-
-    setEntryValues(newEntryValue);
-  }
-
-  function setPriceOne(e, value) {
-    const newEntryValue = entryValues.map((entryValue) => {
-      if (entryValue.id === value.id) return { ...entryValue, price1: e };
-      return entryValue;
-    });
-
-    setEntryValues(newEntryValue);
-  }
-
-  function setIndicatorTwo(e, value) {
-    const newEntryValue = entryValues.map((entryValue) => {
-      if (entryValue.id === value.id)
-        return {
-          ...entryValue,
-          indicator2: e,
-        };
-      return entryValue;
-    });
-
-    setEntryValues(newEntryValue);
-  }
-
-  function setPriceTwo(e, value) {
-    const newEntryValue = entryValues.map((entryValue) => {
-      if (entryValue.id === value.id) return { ...entryValue, price2: e };
-      return entryValue;
-    });
-
-    setEntryValues(newEntryValue);
-  }
-
   const isCorrect = () => {
     toast("All entries are correct");
   };
@@ -287,32 +248,33 @@ const Entry = () => {
         <form className={styles.entry_firstForm}>
           <p>STRATEGY SETTINGS</p>
 
-          <div style={{ width: "85%" }}>
-            <div className={styles.entry__capitalFormGroup}>
-              <Numberinput
-                label={"Initial Capital"}
-                value={initialCapital}
-                setValue={(value) => {
-                  setInitialCapitalError(false);
-                  setInitialCapital(value);
-                }}
-                style={{
-                  color: `${initialCapitalError ? "var(--errorColor)" : ""}`,
-                }}
-              />
+          {!loading ? (
+            <div style={{ width: "85%" }}>
+              <div className={styles.entry__capitalFormGroup}>
+                <Numberinput
+                  label={"Initial Capital"}
+                  value={initialCapital}
+                  setValue={(value) => {
+                    setInitialCapitalError(false);
+                    setInitialCapital(value);
+                  }}
+                  style={{
+                    color: `${initialCapitalError ? "var(--errorColor)" : ""}`,
+                  }}
+                />
 
-              <Numberinput
-                label={"Position Size"}
-                value={positionSize}
-                setValue={(value) => {
-                  setPositionSizeError(false);
-                  setPositionSize(value);
-                }}
-                style={{
-                  color: `${positionSizeError ? "var(--errorColor)" : ""}`,
-                }}
-              />
-
+                <Numberinput
+                  label={"Position Size"}
+                  value={positionSize}
+                  setValue={(value) => {
+                    setPositionSizeError(false);
+                    setPositionSize(value);
+                  }}
+                  style={{
+                    color: `${positionSizeError ? "var(--errorColor)" : ""}`,
+                  }}
+                />
+              </div>
               <div className={styles.entry__radioFormGroup}>
                 <p
                   style={{
@@ -342,222 +304,28 @@ const Entry = () => {
                 />
               </div>
             </div>
-          </div>
+          ) : (
+            <h2>Loading...</h2>
+          )}
         </form>
       </Container>
 
       <Container>
         <h2 className={styles.entry_Pheads}>ENTRY BUILDER</h2>
-        <form>
-          <div className={styles.entry__entryFormGroup}>
-            {entryValues.map((entryValue, index) => (
-              <div key={entryValue.id} className={styles.entryFormGroup__row}>
-                <p
-                  className={styles.entry_entryRule_text}
-                  style={{
-                    color: `${
-                      entryValuesError && entryValues.length === index + 1
-                        ? "var(--errorColor)"
-                        : ""
-                    }`,
-                  }}
-                >
-                  Entry Rule {index + 1}
-                </p>
-
-                <ReferenceInput
-                  defaultValue="ref. no"
-                  option={[1, 2, 3, 4, 5, 6]}
-                  index={index}
-                  setCurrentRef={setCurrentRef}
-                />
-
-                {entryValue.refNumber ? (
-                  <SelectInput
-                    label=""
-                    defaultValue={
-                      isIndicator(entryValue.refNumber)
-                        ? "Choose Indicator"
-                        : "Choose Price"
-                    }
-                    options={
-                      isIndicator(entryValue.refNumber)
-                        ? ["SMA", "RSI", "ADX"]
-                        : ["Open", "Close", "High", "Low"]
-                    }
-                    value={entryValue}
-                    setValue={
-                      isIndicator(entryValue.refNumber)
-                        ? setIndicatorOne
-                        : setPriceOne
-                    }
-                  />
-                ) : (
-                  <></>
-                )}
-
-                {entryValue.refNumber === "1" ||
-                entryValue.refNumber === "2" ||
-                entryValue.refNumber === "3" ? (
-                  <input
-                    className={styles.entry_input_indicator}
-                    type="number"
-                    placeholder="Indicator value"
-                    value={entryValue.indicatorParameter1}
-                    min={1}
-                    max={
-                      entryValue.indicator1
-                        ? entryValue.indicator1 === "SMA"
-                          ? 500
-                          : entryValue.indicator1 === "RSI"
-                          ? 100
-                          : entryValue.indicator1 === "ADX"
-                          ? 100
-                          : 1
-                        : 1
-                    }
-                    onChange={(e) =>
-                      setEntryValues(
-                        entryValues.map((value) => {
-                          if (value.id === entryValue.id)
-                            return {
-                              ...value,
-                              indicatorParameter1: e.target.value,
-                            };
-                          return value;
-                        })
-                      )
-                    }
-                  />
-                ) : (
-                  <></>
-                )}
-
-                {entryValue.refNumber ? (
-                  <SelectInput
-                    label=""
-                    defaultValue="Add Operation"
-                    options={[">", "<", "="]}
-                    value={entryValue}
-                    setValue={(e) =>
-                      setEntryValues(
-                        entryValues.map((value) => {
-                          if (value.id === entryValue.id)
-                            return { ...value, operator: e };
-                          return value;
-                        })
-                      )
-                    }
-                  />
-                ) : (
-                  <></>
-                )}
-
-                {entryValue.refNumber !== "3" &&
-                entryValue.refNumber !== "6" &&
-                entryValue.refNumber ? (
-                  <SelectInput
-                    label=""
-                    defaultValue={
-                      entryValue.refNumber === "1" ||
-                      entryValue.refNumber === "4"
-                        ? "Choose Indicator"
-                        : "Choose Price"
-                    }
-                    options={
-                      entryValue.refNumber === "1" ||
-                      entryValue.refNumber === "4"
-                        ? ["SMA", "RSI", "ADX"]
-                        : ["Open", "Close", "High", "Low"]
-                    }
-                    value={entryValue}
-                    setValue={
-                      entryValue.refNumber === "1" ||
-                      entryValue.refNumber === "4"
-                        ? setIndicatorTwo
-                        : setPriceTwo
-                    }
-                  />
-                ) : (
-                  <></>
-                )}
-
-                {entryValue.refNumber !== "2" &&
-                entryValue.refNumber !== "5" &&
-                entryValue.refNumber ? (
-                  <input
-                    className={styles.entry_input_indicator}
-                    placeholder={
-                      isValue(entryValue.refNumber)
-                        ? "Enter value"
-                        : "Indicator Value"
-                    }
-                    type="text"
-                    onChange={
-                      isValue(entryValue.refNumber)
-                        ? (e) =>
-                            setEntryValues(
-                              entryValues.map((value) => {
-                                if (value.id === entryValue.id)
-                                  return { ...value, value: e.target.value };
-                                return value;
-                              })
-                            )
-                        : (e) =>
-                            setEntryValues(
-                              entryValues.map((value) => {
-                                if (value.id === entryValue.id)
-                                  return {
-                                    ...value,
-                                    indicatorParameter2: e.target.value,
-                                  };
-                                return value;
-                              })
-                            )
-                    }
-                    min={!isValue(entryValue.refNumber) ? 1 : 0}
-                    max={
-                      !isValue(entryValue.refNumber) && entryValue.indicator1
-                        ? entryValue.indicator1 === "SMA"
-                          ? 500
-                          : entryValue.indicator1 === "RSI"
-                          ? 100
-                          : entryValue.indicator1 === "ADX"
-                          ? 100
-                          : 1
-                        : 1
-                    }
-                  />
-                ) : (
-                  <></>
-                )}
-              </div>
-            ))}
-
-            <div className={styles.entryFormGroup__row}></div>
-          </div>
-
-          <div className={styles.entry__editRuleBtn}>
-            <ActionButton
-              buttonText={"Add Rule"}
-              onClick={(e) => {
-                setEntryValuesError(false);
-                addRule(e);
-              }}
-              textColor="var(--whiteColor)"
-              backgroundColor="var(--brandColor)"
-            />
-            <ActionButton
-              buttonText={"Delete Rule"}
-              onClick={(e) => {
-                setEntryValuesError(false);
-                removeRule(e);
-              }}
-              backgroundColor="var(--whiteColor)"
-              textColor="var(--blackColor)"
-            />
-          </div>
-        </form>
+        {!loading ? (
+          <TradeBuilder
+            type="Entry"
+            entryValues={entryValues}
+            entryValuesError={entryValuesError}
+            setCurrentRef={setCurrentRef}
+            setEntryValues={setEntryValues}
+            setEntryValuesError={setEntryValuesError}
+            addRule={addRule}
+            removeRule={removeRule}
+          />
+        ) : (
+          <h2>Loading...</h2>
+        )}
       </Container>
 
       <div className={styles.entry__routeBtn}>
@@ -580,10 +348,13 @@ const Entry = () => {
               validateSettings(initialCapital, positionSize, orderSize) &&
               validatePreviousEntries(entryValues)
             ) {
-              localStorage.setItem("initialCapital", initialCapital);
-              localStorage.setItem("positionSize", positionSize);
-              localStorage.setItem("orderSize", orderSize);
-              localStorage.setItem("entryValues", JSON.stringify(entryValues));
+              sessionStorage.setItem("initialCapital", initialCapital);
+              sessionStorage.setItem("positionSize", positionSize);
+              sessionStorage.setItem("orderSize", orderSize);
+              sessionStorage.setItem(
+                "entryValues",
+                JSON.stringify(entryValues)
+              );
               isCorrect();
               setTimeout(() => {
                 navigate("/exit");

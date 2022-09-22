@@ -8,6 +8,8 @@ function CandleChart({ data, name, options }) {
     },
   ];
 
+  console.log(series);
+
   return (
     <div>
       <Chart
