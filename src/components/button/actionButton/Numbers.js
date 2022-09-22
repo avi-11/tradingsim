@@ -3,8 +3,9 @@ import React from "react";
 const number = {
   display: "inline-block",
   position: "relative",
-  right: "3.6rem",
-  bottom: "2.3rem",
+  right: "3.5rem",
+  bottom: "2.5rem",
+  fontSize: "24px",
 };
 
 const Numbers = ({ num }) => {
@@ -14,7 +15,7 @@ const Numbers = ({ num }) => {
         <circle
           cx="50"
           cy="50"
-          r="30"
+          r="25"
           stroke="blue"
           strokeWidth="3"
           fill="transparent"

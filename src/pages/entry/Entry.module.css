@@ -131,6 +131,7 @@
 .entry_firstForm > p {
   color: var(--grayColor);
   font-size: 1.5rem;
+  font-weight: bold;
   text-decoration: underline;
 }
 

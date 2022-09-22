@@ -285,7 +285,7 @@ const Entry = () => {
 
       <Container>
         <form className={styles.entry_firstForm}>
-          <p>Strategy Settings</p>
+          <p>STRATEGY SETTINGS</p>
 
           <div style={{ width: "85%" }}>
             <div className={styles.entry__capitalFormGroup}>
