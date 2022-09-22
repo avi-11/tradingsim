@@ -112,6 +112,7 @@ export function setCurrentRef(e, id, entryValues, setEntryValues) {
   setEntryValues(newEntryValue);
 }
 
+// Functions Below are being used
 export function isIndicator(refNumber) {
   if (refNumber === "1" || refNumber === "2" || refNumber === "3") return true;
   return false;
@@ -122,7 +123,7 @@ export function isValue(refNumber) {
   return false;
 }
 
-export function setIndicatorOne(e, value, entryValues, setEntryValues) {
+export function setIndicatorOne(e, value, entryValues) {
   const newEntryValue = entryValues.map((entryValue) => {
     if (entryValue.id === value.id)
       return {
@@ -132,19 +133,19 @@ export function setIndicatorOne(e, value, entryValues, setEntryValues) {
     return entryValue;
   });
 
-  setEntryValues(newEntryValue);
+  return newEntryValue;
 }
 
-export function setPriceOne(e, value, entryValues, setEntryValues) {
+export function setPriceOne(e, value, entryValues) {
   const newEntryValue = entryValues.map((entryValue) => {
     if (entryValue.id === value.id) return { ...entryValue, price1: e };
     return entryValue;
   });
 
-  setEntryValues(newEntryValue);
+  return newEntryValue;
 }
 
-export function setIndicatorTwo(e, value, entryValues, setEntryValues) {
+export function setIndicatorTwo(e, value, entryValues) {
   const newEntryValue = entryValues.map((entryValue) => {
     if (entryValue.id === value.id)
       return {
@@ -154,14 +155,14 @@ export function setIndicatorTwo(e, value, entryValues, setEntryValues) {
     return entryValue;
   });
 
-  setEntryValues(newEntryValue);
+  return newEntryValue;
 }
 
-export function setPriceTwo(e, value, entryValues, setEntryValues) {
+export function setPriceTwo(e, value, entryValues) {
   const newEntryValue = entryValues.map((entryValue) => {
     if (entryValue.id === value.id) return { ...entryValue, price2: e };
     return entryValue;
   });
 
-  setEntryValues(newEntryValue);
+  return newEntryValue;
 }

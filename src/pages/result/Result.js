@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import Container from "../../components/container/Container";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 
@@ -10,24 +11,28 @@ import CandleChart from "../../components/chart/candleChart/CandleChart";
 import DataTable from "../../components/table/dataTable/DataTable";
 
 import { formatData, options } from "./helpers";
+import TradeListTable from "../../components/table/tradeListTable/TradeListTable";
 
 function Result() {
-  const graphData = localStorage.getItem("graphData");
+  const graphData = sessionStorage.getItem("graphData");
   const ohlc_data = JSON.parse(graphData);
-  const initial_capital = localStorage.getItem("initialCapital");
-  const position_size = localStorage.getItem("positionSize");
-  const order_side = localStorage.getItem("orderSize");
-  const entryValues = localStorage.getItem("entryValues");
-  const exitValues = localStorage.getItem("exitValues");
-  const instrumentName = localStorage.getItem("instrumentName");
+  const initial_capital = sessionStorage.getItem("initialCapital");
+  const position_size = sessionStorage.getItem("positionSize");
+  const order_side = sessionStorage.getItem("orderSize");
+  const entryValues = sessionStorage.getItem("entryValues");
+  const exitValues = sessionStorage.getItem("exitValues");
+  const instrumentName = sessionStorage.getItem("instrumentName");
 
   const [chartData, setChartData] = useState([]);
   const [chartLoading, setChartLoading] = useState(false);
   const [resultData, setResultData] = useState([]);
   const [resultLoading, setResultLoading] = useState(false);
+  const [tradeList, setTradeList] = useState([]);
+  const [tradeListLoading, setTradeListLoading] = useState(false);
 
   const [chartError, setChartError] = useState("");
   const [resultError, setResultError] = useState("");
+  const [tradeListError, setTradeListError] = useState("");
 
   useEffect(() => {
     simulateChartData();
@@ -36,6 +41,10 @@ function Result() {
   useEffect(() => {
     simulateResultData();
   }, []);
+
+  // useEffect(() => {
+  // simulateTradeList();
+  // }, []);
 
   const simulateChartData = async () => {
     setChartLoading(true);
@@ -54,7 +63,7 @@ function Result() {
       }
       setChartData(resData);
     } catch (error) {
-      alert(error);
+      toast(error);
     }
 
     setChartLoading(false);
@@ -72,15 +81,38 @@ function Result() {
       const resData = res.data;
       if (resData.Error) {
         setResultError(resData.Error);
-        setResultLoading(false);
-        return;
-      }
-      setResultData(resData);
+        toast(resData.Error);
+      } else setResultData(resData);
     } catch (error) {
-      alert(error);
+      setResultError(error.message);
+      toast(error.message);
+    } finally {
+      setResultLoading(false);
     }
+  };
 
-    setResultLoading(false);
+  const simulateTradeList = async () => {
+    setTradeListLoading(true);
+    const body = getBody();
+
+    try {
+      const res = await axios.post(
+        "https://tradingsim.herokuapp.com/simulate_trade",
+        body
+      );
+      const resData = res.data;
+      if (resData && resData.Error) {
+        setTradeListError(resData.Error);
+        toast(resData.Error, { type: "error" });
+      } else {
+        setTradeList(resData);
+      }
+    } catch (error) {
+      toast(error.message);
+      setTradeListError(error.message);
+    } finally {
+      setTradeListLoading(false);
+    }
   };
 
   const getBody = () => ({
@@ -144,6 +176,7 @@ function Result() {
 
   return (
     <div>
+      <ToastContainer />
       <div style={{ position: "relative", bottom: "6rem" }}>
         <Link to="/">
           <NormalLogo />
@@ -184,6 +217,13 @@ function Result() {
         )}
       </Container>
 
+      {/* <div
+        style={{
+          display: "grid",
+          gap: "5px",
+          gridTemplateColumns: "1fr 1fr",
+        }}
+      > */}
       <Container>
         <h2 style={{ textAlign: "center" }}>Statistics</h2>
         {!resultLoading ? (
@@ -214,6 +254,38 @@ function Result() {
           </h4>
         )}
       </Container>
+
+      {/* <Container>
+          <h2 style={{ textAlign: "center" }}>Trade List</h2>
+          {!tradeListLoading ? (
+            tradeListError ? (
+              <h4
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  padding: "1rem 0rem",
+                }}
+              >
+                {tradeListError}
+              </h4>
+            ) : (
+              <div>
+                <TradeListTable data={tradeList} />
+              </div>
+            )
+          ) : (
+            <h4
+              style={{
+                color: "white",
+                textAlign: "center",
+                padding: "1rem 0rem",
+              }}
+            >
+              Loading ...
+            </h4>
+          )}
+        </Container> */}
+      {/* </div> */}
 
       <Link to="/exit">
         <ActionButton
