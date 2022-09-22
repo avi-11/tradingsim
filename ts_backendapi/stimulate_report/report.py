@@ -1,20 +1,31 @@
-import quantstats as qs
-
-
-def reportmateric(dataf):
+def profit(df):
     '''Args:
-    dataf(dataframe): datafram with BuySignal and SellSignal column
+    df(dframe): dframe with BuySignal and SellSignal column
 
 
     return: matrics
     '''
 
-    dataf['nextclose'] = dataf['ClosePrice'].shift(-1)
-    dataf.fillna(0, inplace=True)
-    dataf['Profit'] = [float((dataf.loc[i, 'nextclose'] - dataf.loc[i, 'ClosePrice']))
-                       if dataf.loc[i, 'Signal'] == 1 else 0 for i in dataf.index]
+    # Next Day close
+    df['nextclose'] = df['ClosePrice'].shift(-1)
 
-    if len(dataf['Profit'].value_counts().values)==1:
-        return {'Error': 'No Trade Generated!!'}
+    # Calculate Unrealized profit
+    signalcheck=0
+    for i in df.index:
+        if df.loc[i, 'Signal']==1:
+            signalcheck=1
 
-    return (qs.reports.metrics(dataf['Profit'], mode='full', display=False).round(decimals=4))
+        if signalcheck==1:
+            if df.loc[i, 'BuySignal'] == 1 and df.loc[i, 'SellSignal'] == 0:
+                df.loc[i, 'UnrealizedProfit'] = float(df.loc[i,'Qty']*(df.loc[i, 'nextclose'] - df.loc[i, 'ClosePrice']))
+            
+            elif df.loc[i, 'BuySignal'] == 0 or df.loc[i, 'SellSignal'] == -1:
+                signalcheck=0
+
+    if 'RealizedProfit' in list(df.columns):
+        if len(df['UnrealizedProfit'].value_counts().values) < 1:
+            return {'Error': 'No Trade Generated!!'}
+    elif 'RealizedProfit' not in list(df.columns):
+        return {'Error': 'No Trade Generated'}
+
+    return df

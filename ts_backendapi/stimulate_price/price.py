@@ -25,11 +25,6 @@ def price_stimulate(instrumentname, closeprice: float, volatility: float, startd
 
         openprice = round(random.uniform(lowprice, highprice), 2)
 
-        # df.loc[d, ['OpenPrice']] = openprice
-        # df.loc[d, ['HighPrice']] = highprice
-        # df.loc[d, ['LowPrice']] = lowprice
-        # df.loc[d, ['ClosePrice']] = closeprice
-
         df.loc[d, ['InstrumentName OHLC']] = [
             [instrumentname, openprice, highprice, lowprice, closeprice]]
 

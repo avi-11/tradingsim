@@ -7,22 +7,16 @@ import Numbers from "../../components/button/actionButton/Numbers";
 
 const Start = () => {
   return (
-    <div className="Start_page" style={{ overflowX: "hidden" }}>
-      <div className={styles.Start_page_firstBox}>
-        <h1 className={styles.First_box_heading}>Features :</h1>
-        <div className={styles.Start_page_firstBox_points}>
-          <ul>
-            <li className={styles.points}>
-              Volatility based price forecasting
-            </li>
-            <li className={styles.points}>Technical Analysis Indicators</li>
-            <li className={styles.points}>Trade Statistics</li>
-          </ul>
-        </div>
-      </div>
+    <div className={styles.start_page} style={{ overflowX: "hidden" }}>
       <div className={styles.Start_page_secondBox}>
         <LOGO />
-        <h1 className={styles.second_box_heading}>An Invsto Product</h1>
+        <a
+          className={styles.toInvsto}
+          target="_blank"
+          href="https://www.invsto.com/"
+        >
+          <h1 className={styles.second_box_heading}>An Invsto Product</h1>
+        </a>
         <Link to="/home" className="link">
           <ActionButton
             buttonText="Start BUIDLing"
@@ -31,25 +25,41 @@ const Start = () => {
           />
         </Link>
       </div>
-      <div className={styles.Start_page_thirdBox}>
-        <h1 className={styles.Start_page_thirdBox_heading}>
-          Crypto tradingsim makes price simulations and strategy based forward
-          testing easy!
-        </h1>
-        <div>
-          <h1 className={styles.third_heading}>
-            <Numbers num={1} />
-            <span className={styles.third_text}>Simulate crypto prices</span>
+      <div className={styles.Start_page_aside}>
+        <div className={styles.Start_page_firstBox}>
+          <h1 className={styles.First_box_heading}>Features :</h1>
+          <div className={styles.Start_page_firstBox_points}>
+            <ul>
+              <li className={styles.points}>
+                Volatility based price forecasting
+              </li>
+              <li className={styles.points}>Technical Analysis Indicators</li>
+              <li className={styles.points}>Trade Statistics</li>
+            </ul>
+          </div>
+        </div>
+        <div className={styles.Start_page_thirdBox}>
+          <h1 className={styles.Start_page_thirdBox_heading}>
+            Crypto tradingsim makes price simulations and strategy based forward
+            testing easy!
           </h1>
-          <h1 className={styles.third_heading}>
-            <Numbers num={2} />
-            <span className={styles.third_text}>Build strategy entries</span>
-          </h1>
-          <h1 className={styles.third_heading}>
-            <Numbers num={3} />
-            <span className={styles.third_text}>Build strategy exits</span>
-          </h1>
-          <h1 className={styles.third_text_result}>. . . and view results!</h1>
+          <div>
+            <h1 className={styles.third_heading}>
+              <Numbers num={1} />
+              <span className={styles.third_text}>Simulate crypto prices</span>
+            </h1>
+            <h1 className={styles.third_heading}>
+              <Numbers num={2} />
+              <span className={styles.third_text}>Build strategy entries</span>
+            </h1>
+            <h1 className={styles.third_heading}>
+              <Numbers num={3} />
+              <span className={styles.third_text}>Build strategy exits</span>
+            </h1>
+            <h1 className={styles.third_text_result}>
+              . . . and view results!
+            </h1>
+          </div>
         </div>
       </div>
     </div>
