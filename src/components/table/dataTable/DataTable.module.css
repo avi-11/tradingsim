@@ -1,5 +1,5 @@
 .dataTable {
-  width: 40vw;
+  /* width: 40vw; */
   height: 70vh;
   overflow-y: scroll;
   overflow-x: hidden;
