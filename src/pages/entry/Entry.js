@@ -312,34 +312,35 @@ const Entry = () => {
                   color: `${positionSizeError ? "var(--errorColor)" : ""}`,
                 }}
               />
-            </div>
-            <div className={styles.entry__radioFormGroup}>
-              <p
-                style={{
-                  color: `${orderSizeError ? "var(--errorColor)" : ""}`,
-                }}
-              >
-                Order Side
-              </p>
-              <RadioButton
-                label="LONG"
-                value="long"
-                name="type"
-                setValue={(value) => {
-                  setOrderSize(value);
-                  setOrderSizeError(false);
-                }}
-              />
 
-              <RadioButton
-                label="SHORT"
-                value="short"
-                name="type"
-                setValue={(value) => {
-                  setOrderSize(value);
-                  setOrderSizeError(false);
-                }}
-              />
+              <div className={styles.entry__radioFormGroup}>
+                <p
+                  style={{
+                    color: `${orderSizeError ? "var(--errorColor)" : ""}`,
+                  }}
+                >
+                  Order Side
+                </p>
+                <RadioButton
+                  label="LONG"
+                  value="long"
+                  name="type"
+                  setValue={(value) => {
+                    setOrderSize(value);
+                    setOrderSizeError(false);
+                  }}
+                />
+
+                <RadioButton
+                  label="SHORT"
+                  value="short"
+                  name="type"
+                  setValue={(value) => {
+                    setOrderSize(value);
+                    setOrderSizeError(false);
+                  }}
+                />
+              </div>
             </div>
           </div>
         </form>

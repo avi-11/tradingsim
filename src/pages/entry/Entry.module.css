@@ -23,6 +23,7 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  margin-left: 3rem;
 }
 
 .entry__capitalFormGroup > div {
