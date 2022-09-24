@@ -167,7 +167,7 @@ def tradeData(report_data: Report):
         return df
 
     # Get Signal and create position    
-    df.index = data.keys()
+    df['Date'] = data.keys()
     dataf = df[df['Signal'] != 0]
     con = [(dataf['Signal'] == 1), (dataf['Signal'] == -1)]
     dataf['Order_Side'] = np.select(con, ['BUY', 'SELL'], 0)
@@ -175,21 +175,20 @@ def tradeData(report_data: Report):
 
     # Return DataFrame
     ret = dataf.copy()
-    res = ret.to_json(orient="index")
+    res = ret.to_json(orient="records")
     parsed = json.loads(res)
 
     # Remove Open long Position
-    keylist = list(parsed.keys())
-    for i in keylist:
+    for i in parsed:
         try:
-            if parsed[i]['Position'] == 'LONG':
-                nextOne = keylist[(keylist.index(i)+1)]
-                if parsed[nextOne]['Position'] == 'LONG EXIT':
+            if i['Position'] == 'LONG':
+                nextOne = parsed[(parsed.index(i)+1)]
+                if nextOne['Position'] == 'LONG EXIT':
                     pass
         except:
-            del parsed[i]
+            del parsed[(parsed.index(i))]
 
-    if len(parsed.keys()) < 1:
+    if len(parsed) < 1:
         return {'Error': 'No trade generated'}
 
     return parsed
@@ -210,15 +209,15 @@ def profitData(report_data: Report):
         return df
 
     # Get Profit data    
-    df.index = data.keys()
+    df['Date'] = data.keys()
     dataf=df[df['UnrealizedProfit'].notnull()]
 
     # Return DataFrame
     ret = dataf.copy()
-    res = ret.to_json(orient="index")
+    res = ret.to_json(orient="records")
     parsed = json.loads(res)
 
-    if len(parsed.keys()) < 1:
+    if len(parsed) < 1:
         return {'Error': 'No trade generated'}
 
     return parsed
