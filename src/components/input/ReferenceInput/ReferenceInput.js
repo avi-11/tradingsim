@@ -6,6 +6,7 @@ const ReferenceInput = ({
   option,
   index,
   setCurrentRef,
+  value,
 }) => {
   return (
     <div
@@ -23,6 +24,7 @@ const ReferenceInput = ({
           setCurrentRef(e.target.value, index + 1);
         }}
         defaultValue={defaultValue}
+        value={value}
       >
         <option placeholder={placeholder} disabled>
           {defaultValue}

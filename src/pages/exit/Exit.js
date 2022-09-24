@@ -1,16 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ActionButton from "../../components/button/actionButton/ActionButton";
 import Container from "../../components/container/Container";
-import ReferenceInput from "../../components/input/ReferenceInput/ReferenceInput";
-import SelectInput from "../../components/input/selectInput/SelectInput";
 import EntryReference from "../../components/reference/EntryReference";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import styles from "../entry/Entry.module.css";
 import { NormalLogo } from "../../components/header/Logo";
-import Numberinput from "../../components/input/numberInput/Numberinput";
+import TradeBuilder from "../../components/tradeBuilder/TradeBuilder";
 
 const Exit = () => {
   const [entryGroups, setEntryGroups] = useState([1]);
@@ -21,10 +19,24 @@ const Exit = () => {
     },
   ]);
   const [num, setNum] = useState(1);
-
+  const [loading, setLoading] = useState(false);
   const [exitValuesError, setExitValuesError] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getExitStrategyFromLocalStorage();
+  }, []);
+
+  const getExitStrategyFromLocalStorage = () => {
+    setLoading(true);
+    const exitValues = sessionStorage.getItem("exitValues");
+    if (exitValues) {
+      setEntryValues(JSON.parse(exitValues));
+    }
+    console.log(entryValues);
+    setLoading(false);
+  };
 
   function checkIndicatorRange(indicator, indicatorValue) {
     let validRange = true;
@@ -175,61 +187,6 @@ const Exit = () => {
     setEntryValues(newEntryValue);
   }
 
-  function isIndicator(refNumber) {
-    if (refNumber === "1" || refNumber === "2" || refNumber === "3")
-      return true;
-    return false;
-  }
-
-  function isValue(refNumber) {
-    if (refNumber === "3" || refNumber === "6") return true;
-    return false;
-  }
-
-  function setIndicatorOne(e, value) {
-    const newEntryValue = entryValues.map((entryValue) => {
-      if (entryValue.id === value.id)
-        return {
-          ...entryValue,
-          indicator1: e,
-        };
-      return entryValue;
-    });
-
-    setEntryValues(newEntryValue);
-  }
-
-  function setPriceOne(e, value) {
-    const newEntryValue = entryValues.map((entryValue) => {
-      if (entryValue.id === value.id) return { ...entryValue, price1: e };
-      return entryValue;
-    });
-
-    setEntryValues(newEntryValue);
-  }
-
-  function setIndicatorTwo(e, value) {
-    const newEntryValue = entryValues.map((entryValue) => {
-      if (entryValue.id === value.id)
-        return {
-          ...entryValue,
-          indicator2: e,
-        };
-      return entryValue;
-    });
-
-    setEntryValues(newEntryValue);
-  }
-
-  function setPriceTwo(e, value) {
-    const newEntryValue = entryValues.map((entryValue) => {
-      if (entryValue.id === value.id) return { ...entryValue, price2: e };
-      return entryValue;
-    });
-
-    setEntryValues(newEntryValue);
-  }
-
   const isCorrect = () => {
     toast("All entries are correct");
   };
@@ -264,216 +221,20 @@ const Exit = () => {
 
       <Container>
         <h2 className={styles.entry_Pheads}>EXIT BUILDER</h2>
-        <form>
-          <div className={styles.entry__entryFormGroup}>
-            {entryValues.map((entryValue, index) => (
-              <div key={entryValue.id} className={styles.entryFormGroup__row}>
-                <p
-                  className={styles.entry_entryRule_text}
-                  style={{
-                    color: `${
-                      exitValuesError && entryValues.length === index + 1
-                        ? "var(--errorColor)"
-                        : ""
-                    }`,
-                  }}
-                >
-                  Exit Rule {index + 1}
-                </p>
-
-                <ReferenceInput
-                  defaultValue="ref. no"
-                  option={[1, 2, 3, 4, 5, 6]}
-                  index={index}
-                  setCurrentRef={setCurrentRef}
-                />
-                {entryValue.refNumber ? (
-                  <SelectInput
-                    label=""
-                    defaultValue={
-                      isIndicator(entryValue.refNumber)
-                        ? "Choose Indicator"
-                        : "Choose Price"
-                    }
-                    options={
-                      isIndicator(entryValue.refNumber)
-                        ? ["SMA", "RSI", "ADX"]
-                        : ["Open", "Close", "High", "Low"]
-                    }
-                    value={entryValue}
-                    setValue={
-                      isIndicator(entryValue.refNumber)
-                        ? setIndicatorOne
-                        : setPriceOne
-                    }
-                  />
-                ) : (
-                  <></>
-                )}
-
-                {entryValue.refNumber === "1" ||
-                entryValue.refNumber === "2" ||
-                entryValue.refNumber === "3" ? (
-                  <input
-                    type="number"
-                    className={styles.entry_input_indicator}
-                    placeholder="Indicator value"
-                    value={entryValue.indicatorParameter1}
-                    min={1}
-                    max={
-                      entryValue.indicator1
-                        ? entryValue.indicator1 === "SMA"
-                          ? 500
-                          : entryValue.indicator1 === "RSI"
-                          ? 100
-                          : entryValue.indicator1 === "ADX"
-                          ? 100
-                          : 1
-                        : 1
-                    }
-                    onChange={(e) =>
-                      setEntryValues(
-                        entryValues.map((value) => {
-                          if (value.id === entryValue.id)
-                            return {
-                              ...value,
-                              indicatorParameter1: e.target.value,
-                            };
-                          return value;
-                        })
-                      )
-                    }
-                  />
-                ) : (
-                  <></>
-                )}
-
-                {entryValue.refNumber ? (
-                  <SelectInput
-                    label=""
-                    defaultValue="Add Operation"
-                    options={[">", "<", "="]}
-                    value={entryValue}
-                    setValue={(e) =>
-                      setEntryValues(
-                        entryValues.map((value) => {
-                          if (value.id === entryValue.id)
-                            return { ...value, operator: e };
-                          return value;
-                        })
-                      )
-                    }
-                  />
-                ) : (
-                  <></>
-                )}
-
-                {entryValue.refNumber !== "3" &&
-                entryValue.refNumber !== "6" &&
-                entryValue.refNumber ? (
-                  <SelectInput
-                    label=""
-                    defaultValue={
-                      entryValue.refNumber === "1" ||
-                      entryValue.refNumber === "4"
-                        ? "Choose Indicator"
-                        : "Choose Price"
-                    }
-                    options={
-                      entryValue.refNumber === "1" ||
-                      entryValue.refNumber === "4"
-                        ? ["SMA", "RSI", "ADX"]
-                        : ["Open", "Close", "High", "Low"]
-                    }
-                    value={entryValue}
-                    setValue={
-                      entryValue.refNumber === "1" ||
-                      entryValue.refNumber === "4"
-                        ? setIndicatorTwo
-                        : setPriceTwo
-                    }
-                  />
-                ) : (
-                  <></>
-                )}
-
-                {entryValue.refNumber !== "2" &&
-                entryValue.refNumber !== "5" &&
-                entryValue.refNumber ? (
-                  isValue(entryValue.refNumber) ? (
-                    <Numberinput
-                      placeholder="Enter Value"
-                      onChange={(e) =>
-                        setEntryValues(
-                          entryValues.map((value) => {
-                            if (value.id === entryValue.id)
-                              return { ...value, value: e.target.value };
-                            return value;
-                          })
-                        )
-                      }
-                    />
-                  ) : (
-                    <input
-                      placeholder={"Indicator Value"}
-                      className={styles.entry_input_indicator}
-                      type="text"
-                      onChange={(e) =>
-                        setEntryValues(
-                          entryValues.map((value) => {
-                            if (value.id === entryValue.id)
-                              return {
-                                ...value,
-                                indicatorParameter2: e.target.value,
-                              };
-                            return value;
-                          })
-                        )
-                      }
-                      min={1}
-                      max={
-                        entryValue.indicator1
-                          ? entryValue.indicator1 === "SMA"
-                            ? 500
-                            : entryValue.indicator1 === "RSI"
-                            ? 100
-                            : entryValue.indicator1 === "ADX"
-                            ? 100
-                            : 1
-                          : 1
-                      }
-                    />
-                  )
-                ) : (
-                  <></>
-                )}
-              </div>
-            ))}
-
-            <div className={styles.entryFormGroup__row}></div>
-          </div>
-
-          <div className={styles.entry__editRuleBtn}>
-            <ActionButton
-              buttonText={"Add Rule"}
-              onClick={(e) => {
-                setExitValuesError(false);
-                addRule(e);
-              }}
-              textColor="var(--whiteColor)"
-              backgroundColor="var(--brandColor)"
-            />
-            <ActionButton
-              buttonText={"Delete Rule"}
-              onClick={(e) => {
-                setExitValuesError(false);
-                removeRule(e);
-              }}
-              backgroundColor="var(--whiteColor)"
-              textColor="var(--blackColor)"
-            />
-          </div>
-        </form>
+        {!loading ? (
+          <TradeBuilder
+            type="Exit"
+            entryValues={entryValues}
+            entryValuesError={exitValuesError}
+            setCurrentRef={setCurrentRef}
+            setEntryValues={setEntryValues}
+            setEntryValuesError={setExitValuesError}
+            addRule={addRule}
+            removeRule={removeRule}
+          />
+        ) : (
+          <h2>Loading...</h2>
+        )}
       </Container>
 
       <div className={styles.entry__routeBtn}>
@@ -493,7 +254,7 @@ const Exit = () => {
             e.preventDefault();
             setExitValuesError(false);
             if (validatePreviousEntries(entryValues)) {
-              localStorage.setItem("exitValues", JSON.stringify(entryValues));
+              sessionStorage.setItem("exitValues", JSON.stringify(entryValues));
               isCorrect();
               setTimeout(() => {
                 navigate("/result");

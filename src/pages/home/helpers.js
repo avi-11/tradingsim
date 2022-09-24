@@ -8,7 +8,7 @@ export function formatData(data) {
   for (let props in data) {
     const date = getDate(props);
     newData.push({
-      x: new Date(date[2], date[1], date[0]),
+      x: new Date(date[2], date[1]-1, date[0]),
       y: [data[props][1], data[props][2], data[props][3], data[props][4]],
     });
   }

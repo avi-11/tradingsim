@@ -1,5 +1,5 @@
 import "../../index.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -40,7 +40,6 @@ ChartJS.register(
 );
 
 function Home() {
-  // Updated states
   const [instrumentname, setInstrumentname] = useState("");
   const [closeprice, setClosePrice] = useState(0);
   const [volatility, SetVolatilty] = useState(0);
@@ -53,6 +52,20 @@ function Home() {
   const [closePriceError, setClosePriceError] = useState(false);
   const [volatilityError, setVolatilityError] = useState(false);
   const [startDateError, setStartDateError] = useState(false);
+
+  useEffect(() => {
+    getChartDataFromLocalStorage();
+  }, []);
+
+  const getChartDataFromLocalStorage = () => {
+    setLoading(true);
+    const appGraphData = sessionStorage.getItem("graphData");
+    if (appGraphData) {
+      setGraphData(JSON.parse(appGraphData));
+      setShowGraph(true);
+    }
+    setLoading(false);
+  };
 
   const updateDate = (date) => {
     setStartDateError(false);
@@ -257,7 +270,10 @@ function Home() {
               backgroundColor="var(--brandColor)"
               onClick={(e) => {
                 if (Object.keys(graphData).length) {
-                  localStorage.setItem("graphData", JSON.stringify(graphData));
+                  sessionStorage.setItem(
+                    "graphData",
+                    JSON.stringify(graphData)
+                  );
                 } else notCorrect();
               }}
             />
