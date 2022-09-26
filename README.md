@@ -1,7 +1,7 @@
 # Introduction
 
 
-0xTradingSim is a crypto trading simulator built by Invsto Team for forecasting ticker prices based on expected market volatility. In addition, the trading simulator has options for users to create a simple strategy using technical analysis by adding entry and exit parameters.
+0xTradingSim is a crypto trading simulator built by [Invsto Team](https://invsto.com/) for forecasting ticker prices based on expected market volatility. In addition, the trading simulator has options for users to create a simple strategy using technical analysis by adding entry and exit parameters.
 
 The trading sim has unique features such as: 
 - Candlestick charting for displaying OHLC (open-high-low-close) prices along with strategy related signals such as buys and sells
