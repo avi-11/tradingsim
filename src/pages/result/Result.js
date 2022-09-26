@@ -12,6 +12,7 @@ import DataTable from "../../components/table/dataTable/DataTable";
 
 import { formatData, options } from "./helpers";
 import TradeListTable from "../../components/table/tradeListTable/TradeListTable";
+import Header from "../../components/header/Header";
 
 function Result() {
   const graphData = sessionStorage.getItem("graphData");
@@ -175,9 +176,10 @@ function Result() {
   };
 
   return (
-    <div>
+    <div style={{ padding: "0 4rem" }}>
+      <Header />
       <ToastContainer />
-      <div style={{ position: "relative", bottom: "6rem" }}>
+      <div style={{ position: "relative", bottom: "5rem" }}>
         <Link to="/">
           <NormalLogo />
         </Link>

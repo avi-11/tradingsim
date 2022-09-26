@@ -16,7 +16,7 @@ import { NormalLogo } from "./components/header/Logo";
 function App() {
   return (
     <ShadeContainer>
-      <Header />
+      {/* <Header /> */}
 
       <BrowserRouter>
         <Routes>
