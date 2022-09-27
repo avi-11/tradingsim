@@ -96,7 +96,11 @@ function TradeBuilder({
                   className={styles.entry_input_indicator}
                   type="number"
                   placeholder="Indicator value"
-                  value={entryValue.indicatorParameter1}
+                  value={
+                    entryValue.indicatorParameter1
+                      ? entryValue.indicatorParameter1
+                      : ""
+                  }
                   min={1}
                   max={
                     entryValue.indicator1
@@ -187,9 +191,7 @@ function TradeBuilder({
                       );
                   }}
                 />
-              ) : (
-                <></>
-              )}
+              ) : null}
 
               {entryValue.refNumber !== "2" &&
               entryValue.refNumber !== "5" &&

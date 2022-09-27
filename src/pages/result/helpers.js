@@ -2,7 +2,8 @@ function getDate(props) {
   return props.split("-");
 }
 
-const formatNumber = (number) => new Intl.NumberFormat("en-IN").format(number);
+export const formatNumber = (number) =>
+  new Intl.NumberFormat("en-IN").format(number);
 
 export const formatData = (data) => {
   let newData = [];

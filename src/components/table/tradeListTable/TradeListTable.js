@@ -1,50 +1,49 @@
 import styles from "../dataTable/DataTable.module.css";
+import { formatNumber } from "../../../pages/result/helpers";
 
 function TradeListTable({ data }) {
-  const getArray = (data) => {
-    if (Array.isArray(data)) {
-      return data;
-    } else {
-      let newData = [];
-      for (let key in data) {
-        newData.push([key, data[key]]);
-      }
-      return newData;
-    }
-  };
-
-  console.log(getArray(data));
+  const header = [
+    "Date",
+    "Open",
+    "High",
+    "Low",
+    "Close",
+    "Instrument Name",
+    "Position",
+    "Capital",
+    "Total Margin",
+    "Quantity",
+    "Used Margin",
+    "Order Side",
+    "Realized Profit",
+  ];
 
   return (
-    <div className={styles.dataTable} style={{ overflow: "scroll" }}>
+    <div className={styles.dataTable2} style={{ overflow: "scroll" }}>
       <table cellSpacing="0" cellPadding="0">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Instrument Name</th>
-            <th>Open Price</th>
-            <th>High Price</th>
-            <th>Low Price</th>
-            <th>Close Price</th>
-            <th>SMA 10</th>
-            <th>SMA 5</th>
-            <th>Position</th>
-            <th>Capital</th>
-            <th>Position Size</th>
-            <th>Total Margin</th>
-            <th>Quantity</th>
-            <th>Used margin</th>
-            <th>Signal</th>
-            <th>Order Side</th>
+            {header.map((item, index) => (
+              <th key={index}>{item}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {getArray(data).map((item) => (
-            <tr key={item[0]}>
-              <td>{item[0]}</td>
-              {getArray(item[1]).map((item) => (
-                <td>{item[1]}</td>
-              ))}
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td>{item.Date}</td>
+              <td>{formatNumber(item.OpenPrice)}</td>
+              <td>{formatNumber(item.HighPrice)}</td>
+              <td>{formatNumber(item.LowPrice)}</td>
+              <td>{formatNumber(item.ClosePrice)}</td>
+              <td>{item.InstrumentName}</td>
+              <td>{item.Position}</td>
+              <td>{formatNumber(item.Capital)}</td>
+              <td>{formatNumber(item.TotalMargin)}</td>
+              <td>{item.Qty}</td>
+              <td>{formatNumber(item.UsedMargin)}</td>
+              <td>{item.Order_Side}</td>
+              <td>{formatNumber(item.RealizedProfit)}</td>
             </tr>
           ))}
         </tbody>
