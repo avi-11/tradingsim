@@ -1,72 +1,44 @@
-# Netlify link: https://stupendous-eclair-039b32.netlify.app/
+# Introduction
 
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). Netlify changes
+0xTradingSim is a crypto trading simulator built by [Invsto Team](https://invsto.com/) for forecasting ticker prices based on expected market volatility. In addition, the trading simulator has options for users to create a simple strategy using technical analysis by adding entry and exit parameters.
 
-## Available Scripts
+The trading sim has unique features such as: 
+- Candlestick charting for displaying OHLC (open-high-low-close) prices along with strategy related signals such as buys and sells
+- A strategy builder for building entries and exits
+- Integration with TA (https://github.com/bukosabino/ta) for building technical indicators
+- Integration with QuantStats (https://github.com/ranaroussi/quantstats) for performance related metrics
 
-In the project directory, you can run:
+# Demo
+The product is hosted on Netlify.
 
-### `npm start`
+[Demo link](https://stupendous-eclair-039b32.netlify.app/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# User Guide:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Price Forecasts:
 
-### `npm test`
+As a first step, a user would provide the following inputs to simulate price forecasts:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Instrument name like BTC or ETH
+Current market price of the instrument
+Expected volatility (in simple categories such as High/Medium/Low)
 
-### `npm run build`
+The app would then generate forecasted prices based on the user inputs
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Strategy Builder:
+How to build a rules based strategy  in trading Sim ?
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+We have two types of rules in the strategy builder :
+Entry Rule (used for choosing when a strategy would enter into a position)
+Exit rule (used to choose when a strategy would exit a position)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+In addition, there are two types of positions: LONG and SHORT. Currently, the trading sim support Long-Only strategies.
 
-### `npm run eject`
+We have 6 variants of the strategy rules (entries or exits) where users can input their criteria: 
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Indicator -operator-Indicator:** Input an indicator like SMA(Simple moving Average), RSI (Relative Strength Index) or  Average Directional Movement Index and have a operator for comprasion like greater than, less than or equal with with a similar indicator. So SMA10> SMA 20 when this condition is met and entry will be created.
+- **Indicator-operator-price:** Input indicators and operator but comparison is done with direct price.Example : SMA(50)> Close(price)
+- **Indicator-operator-Value:** Input indicators and operator but comparison is done with direct price.Example : SMA(50)> 1100
+- **Price-operator-price:** In this price is compared to another price. Example : high > close
+- **Price-operator-value:** In this value (a number) is compared with a price for the current timestamp. Example : high > 75.5
