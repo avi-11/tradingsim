@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import styles from "./Entry.module.css";
 import { NormalLogo } from "../../components/header/Logo";
 import TradeBuilder from "../../components/tradeBuilder/TradeBuilder";
+import Header from "../../components/header/Header";
 
 const Entry = () => {
   const [initialCapital, setInitialCapital] = useState("");
@@ -223,7 +224,8 @@ const Entry = () => {
   };
 
   return (
-    <div className="app-container">
+    <div className="app-container" style={{ padding: "0 4rem" }}>
+      <Header />
       <div style={{ position: "relative", bottom: "5rem" }}>
         <Link to="/">
           <NormalLogo />

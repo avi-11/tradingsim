@@ -11,6 +11,7 @@ import DataTable from "../../components/table/dataTable/DataTable";
 import TradeListTable from "../../components/table/tradeListTable/TradeListTable";
 
 import { formatData, options } from "./helpers";
+import Header from "../../components/header/Header";
 import { getTradeList } from "../../api/resultAPI";
 
 function Result() {
@@ -169,9 +170,10 @@ function Result() {
   };
 
   return (
-    <div>
+    <div style={{ padding: "0 4rem" }}>
+      <Header />
       <ToastContainer />
-      <div style={{ position: "relative", bottom: "6rem" }}>
+      <div style={{ position: "relative", bottom: "5rem" }}>
         <Link to="/">
           <NormalLogo />
         </Link>
