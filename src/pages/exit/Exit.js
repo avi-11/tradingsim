@@ -179,7 +179,7 @@ const Exit = () => {
     const newEntryValue = entryValues.map((value) => {
       if (value.id === id)
         return {
-          ...value,
+          id,
           refNumber: e,
         };
       return value;

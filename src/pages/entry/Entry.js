@@ -182,6 +182,7 @@ const Entry = () => {
 
   function addRule(e) {
     e.preventDefault();
+    console.log(entryValues);
 
     if (!validatePreviousEntries(entryValues)) {
       toast("Complete Previous Entries!!");
@@ -205,7 +206,7 @@ const Entry = () => {
     const newEntryValue = entryValues.map((value) => {
       if (value.id === id)
         return {
-          ...value,
+          id,
           refNumber: e,
         };
       return value;

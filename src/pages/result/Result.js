@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+
 import Container from "../../components/container/Container";
 import ActionButton from "../../components/button/actionButton/ActionButton";
-
 import { NormalLogo } from "../../components/header/Logo";
-
 import CandleChart from "../../components/chart/candleChart/CandleChart";
 import DataTable from "../../components/table/dataTable/DataTable";
+import TradeListTable from "../../components/table/tradeListTable/TradeListTable";
 
 import { formatData, options } from "./helpers";
-import TradeListTable from "../../components/table/tradeListTable/TradeListTable";
 import Header from "../../components/header/Header";
+import { getTradeList } from "../../api/resultAPI";
 
 function Result() {
   const graphData = sessionStorage.getItem("graphData");
@@ -43,9 +43,9 @@ function Result() {
     simulateResultData();
   }, []);
 
-  // useEffect(() => {
-  // simulateTradeList();
-  // }, []);
+  useEffect(() => {
+    simulateTradeList();
+  }, []);
 
   const simulateChartData = async () => {
     setChartLoading(true);
@@ -96,24 +96,18 @@ function Result() {
     setTradeListLoading(true);
     const body = getBody();
 
-    try {
-      const res = await axios.post(
-        "https://tradingsim.herokuapp.com/simulate_trade",
-        body
-      );
-      const resData = res.data;
-      if (resData && resData.Error) {
-        setTradeListError(resData.Error);
-        toast(resData.Error, { type: "error" });
-      } else {
-        setTradeList(resData);
-      }
-    } catch (error) {
-      toast(error.message);
-      setTradeListError(error.message);
-    } finally {
-      setTradeListLoading(false);
+    const res = await getTradeList(body);
+    const resData = res.data;
+    console.log(resData);
+
+    if (res.status !== 200 || resData.Error) {
+      const err = resData.Error ? resData.Error : "Unable to fetch trade list";
+      toast(err, { type: "error" });
+      setTradeListError(err);
+    } else {
+      setTradeList(resData);
     }
+    setTradeListLoading(false);
   };
 
   const getBody = () => ({
@@ -219,17 +213,32 @@ function Result() {
         )}
       </Container>
 
-      {/* <div
+      <div
         style={{
           display: "grid",
           gap: "5px",
           gridTemplateColumns: "1fr 1fr",
         }}
-      > */}
-      <Container>
-        <h2 style={{ textAlign: "center" }}>Statistics</h2>
-        {!resultLoading ? (
-          resultError ? (
+      >
+        <Container>
+          <h2 style={{ textAlign: "center" }}>Statistics</h2>
+          {!resultLoading ? (
+            resultError ? (
+              <h4
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  padding: "1rem 0rem",
+                }}
+              >
+                {resultError}
+              </h4>
+            ) : (
+              <div>
+                <DataTable data={resultData.Strategy} />
+              </div>
+            )
+          ) : (
             <h4
               style={{
                 color: "white",
@@ -237,27 +246,12 @@ function Result() {
                 padding: "1rem 0rem",
               }}
             >
-              {resultError}
+              Loading ...
             </h4>
-          ) : (
-            <div>
-              <DataTable data={resultData.Strategy} />
-            </div>
-          )
-        ) : (
-          <h4
-            style={{
-              color: "white",
-              textAlign: "center",
-              padding: "1rem 0rem",
-            }}
-          >
-            Loading ...
-          </h4>
-        )}
-      </Container>
+          )}
+        </Container>
 
-      {/* <Container>
+        <Container>
           <h2 style={{ textAlign: "center" }}>Trade List</h2>
           {!tradeListLoading ? (
             tradeListError ? (
@@ -286,8 +280,8 @@ function Result() {
               Loading ...
             </h4>
           )}
-        </Container> */}
-      {/* </div> */}
+        </Container>
+      </div>
 
       <Link to="/exit">
         <ActionButton
