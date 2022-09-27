@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def position(df, order_side):
 
     # Create position column
@@ -9,9 +10,30 @@ def position(df, order_side):
     # sellcheck = ('SellSignal' in df.columns)
 
     if buysellcheck:
-        con = [(df['BuySignal'] == 1) & (df['BuySignal'].shift(1)+df['SellSignal'].shift(1) == 0) & (df['SellSignal'] == 0), (df['BuySignal'] == 1) & (df['BuySignal'].shift(1) == 0) & (df['SellSignal'] == 0),
-               (df['BuySignal'].shift(1) == 1) & (df['SellSignal'] == -1) & (df['BuySignal'] != 0) & (df['SellSignal'].shift(1) == 0)]
-        df['Signal'] = np.select(con, [1, 1, -1], 0)
+        df['Signal'] = None
+        pos = None
+        # print(df)
+        # print(len(df))
+
+        for i in range(len(df)):
+            print(df.loc[df.index[i], 'BuySignal'])
+            if i < 1:
+                df.loc[df.index[i], 'Signal'] = 0
+                continue
+            if pos == 'Buy' and df.loc[df.index[i], 'SellSignal'] == -1:
+                pos = None
+                df.loc[df.index[i], 'Signal'] = -1
+            elif pos != 'Buy' and df.loc[df.index[i], 'BuySignal'] == 1 and df.loc[df.index[i], 'SellSignal'] == 0:
+                if (df.loc[df.index[(i-1)], 'BuySignal']+df.loc[df.index[(i-1)], 'SellSignal'] == 0) and df.loc[df.index[(i-1)], 'BuySignal'] != 0:
+                   pos = 'Buy'
+                   df.loc[df.index[i], 'Signal'] = 1 
+                elif df.loc[df.index[(i-1)], 'BuySignal'] == 0:
+                    pos = 'Buy'
+                    df.loc[df.index[i], 'Signal'] = 1
+                else:
+                    df.loc[df.index[i], 'Signal'] = 0
+            else:
+                df.loc[df.index[i], 'Signal'] = 0
         # df.drop(['BuySignal', 'SellSignal'], axis=1, inplace=True)
 
     elif buysellcheck == False and buycheck:
@@ -42,13 +64,13 @@ def margin(df, initial_capital, position_size):
                 df.loc[i, 'TotalMargin']/df.loc[i, 'ClosePrice'])
             df['UsedMargin'][i::] = float(
                 df.loc[i, 'ClosePrice'] * df.loc[i, 'Qty'])
-        
+
         elif df.loc[i, 'Signal'] == -1 and buyclose != 0:
             df['TotalMargin'][i::] = df.loc[i, 'TotalMargin'] + \
                 (df.loc[i, 'Qty'] *
                  float(df.loc[i, 'ClosePrice'] - buyclose))
-            df.loc[i, 'RealizedProfit'] = float( (df.loc[i, 'Qty'] *
-                 float(df.loc[i, 'ClosePrice'] - buyclose)))
+            df.loc[i, 'RealizedProfit'] = float((df.loc[i, 'Qty'] *
+                                                 float(df.loc[i, 'ClosePrice'] - buyclose)))
             df['UsedMargin'][i::] = 0
 
         # print(df[df['RealizedProfit']!=0])
@@ -60,7 +82,7 @@ def margin(df, initial_capital, position_size):
         #         df.loc[i, 'TotalMargin']/df.loc[i, 'ClosePrice'])
         #     df['UsedMargin'][i::] = float(
         #         df.loc[i, 'ClosePrice'] * df.loc[i, 'Qty'])
-            
+
         # elif df.loc[i, 'Signal'] == 1 and sellclose != 0:
         #     df['TotalMargin'][i::] = df['TotalMargin'] + \
         #         (df.loc[i, 'Qty'] *
