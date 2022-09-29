@@ -12,8 +12,6 @@ def position(df, order_side):
     if buysellcheck:
         df['Signal'] = None
         pos = None
-        # print(df)
-        # print(len(df))
 
         for i in range(len(df)):
             print(df.loc[df.index[i], 'BuySignal'])
@@ -25,8 +23,8 @@ def position(df, order_side):
                 df.loc[df.index[i], 'Signal'] = -1
             elif pos != 'Buy' and df.loc[df.index[i], 'BuySignal'] == 1 and df.loc[df.index[i], 'SellSignal'] == 0:
                 if (df.loc[df.index[(i-1)], 'BuySignal']+df.loc[df.index[(i-1)], 'SellSignal'] == 0) and df.loc[df.index[(i-1)], 'BuySignal'] != 0:
-                   pos = 'Buy'
-                   df.loc[df.index[i], 'Signal'] = 1 
+                    pos = 'Buy'
+                    df.loc[df.index[i], 'Signal'] = 1
                 elif df.loc[df.index[(i-1)], 'BuySignal'] == 0:
                     pos = 'Buy'
                     df.loc[df.index[i], 'Signal'] = 1
@@ -72,21 +70,5 @@ def margin(df, initial_capital, position_size):
             df.loc[i, 'RealizedProfit'] = float((df.loc[i, 'Qty'] *
                                                  float(df.loc[i, 'ClosePrice'] - buyclose)))
             df['UsedMargin'][i::] = 0
-
-        # print(df[df['RealizedProfit']!=0])
-
-        # elif df.loc[i, 'Signal'] == -1 and buyclose == 0:
-        #     if sellclose == 0:
-        #         sellclose = df.loc[i, 'ClosePrice']
-        #     df['Qty'][i::] = (
-        #         df.loc[i, 'TotalMargin']/df.loc[i, 'ClosePrice'])
-        #     df['UsedMargin'][i::] = float(
-        #         df.loc[i, 'ClosePrice'] * df.loc[i, 'Qty'])
-
-        # elif df.loc[i, 'Signal'] == 1 and sellclose != 0:
-        #     df['TotalMargin'][i::] = df['TotalMargin'] + \
-        #         (df.loc[i, 'Qty'] *
-        #          float(sellclose - df.loc[i, 'ClosePrice']))
-        #     df['UsedMargin'][i::] = 0
 
     return df

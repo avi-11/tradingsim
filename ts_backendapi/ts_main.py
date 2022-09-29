@@ -29,6 +29,8 @@ app.add_middleware(
 )
 
 # link first for price
+
+
 @app.post('/simulate_price')
 def price(instrumentname: str = 'BTC', closeprice: float = 10000, volatility: float = 0.03, startdate: str = datetime.now().strftime('%d-%m-%Y')):
 
@@ -73,6 +75,8 @@ class Report(BaseModel):
 df = None
 
 # link two for report
+
+
 @app.post('/simulate_chartdata')
 def chartdata(report_data: Report):
     global df
@@ -116,7 +120,7 @@ def chartdata(report_data: Report):
     # sellcheck = ('SellSignal' in df.columns)
 
     # Round of the values
-    df=(df).round(decimals=2)
+    df = (df).round(decimals=2)
 
     # Create Return DataFrame
     ret = df.copy()
@@ -143,16 +147,18 @@ def report(report_data: Report):
     # Update df
     chartdata(report_data=report_data)
     df = profit(df)
-    
-    if type(df) != pd.DataFrame and type(df) == dict:   
+
+    if type(df) != pd.DataFrame and type(df) == dict:
         return df
-    
+
     # Round of the values
-    df=(df).round(decimals=2)
+    df = (df).round(decimals=2)
 
     return (qs.reports.metrics(df['UnrealizedProfit'], mode='full', display=False).round(decimals=4))
 
 # Link four for trade
+
+
 @app.post('/simulate_trade')
 def tradeData(report_data: Report):
     global df
@@ -166,7 +172,7 @@ def tradeData(report_data: Report):
     if type(df) != pd.DataFrame and type(df) == dict:
         return df
 
-    # Get Signal and create position    
+    # Get Signal and create position
     df['Date'] = data.keys()
     dataf = df[df['Signal'] != 0]
     con = [(dataf['Signal'] == 1), (dataf['Signal'] == -1)]
@@ -208,9 +214,9 @@ def profitData(report_data: Report):
     if type(df) != pd.DataFrame and type(df) == dict:
         return df
 
-    # Get Profit data    
+    # Get Profit data
     df['Date'] = data.keys()
-    dataf=df[df['UnrealizedProfit'].notnull()]
+    dataf = df[df['UnrealizedProfit'].notnull()]
 
     # Return DataFrame
     ret = dataf.copy()

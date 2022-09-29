@@ -1,6 +1,7 @@
 import numpy as np
 from pandas import DataFrame
 
+
 def buy(df: DataFrame, valueOne: str, valueTwo: str, operation: str):
     '''
     '''

@@ -22,10 +22,10 @@ def signal(df, buycriteria: dict, sellcriteria: list = None):
 
         # Indicator without parameter
         elif 'Ind_parameter' not in buycriteria[ind] and 'Indicator' in buycriteria[ind]:
-            
+
             # Get indicator added df
             df = indicator[buycriteria[ind]['Indicator']](df=df)
-        
+
         # Indicator2 with parameter
         if 'Indicator2' in buycriteria[ind] and 'Ind_parameter2' in buycriteria[ind]:
             if len(df) < int(buycriteria[ind]['Ind_parameter2']):
@@ -33,7 +33,7 @@ def signal(df, buycriteria: dict, sellcriteria: list = None):
 
             # Get Indicator added df
             df = indicator[buycriteria[ind]['Indicator2']](
-                    df=df, periods=int(buycriteria[ind]['Ind_parameter2']))
+                df=df, periods=int(buycriteria[ind]['Ind_parameter2']))
 
         # Indicator2 without parameter
         elif 'Ind_parameter2' not in buycriteria[ind] and 'Indicator2' in buycriteria[ind]:
@@ -50,7 +50,7 @@ def signal(df, buycriteria: dict, sellcriteria: list = None):
 
         # Get BuySignal
         df = buy(df, valueOne=valueOne, valueTwo=valueTwo,
-                    operation=buycriteria[ind]['Operator'])
+                 operation=buycriteria[ind]['Operator'])
 
     # Indicator for sellcriteria
     for ind in list(sellcriteria.keys()):
@@ -69,25 +69,25 @@ def signal(df, buycriteria: dict, sellcriteria: list = None):
 
             # Indicator added df
             df = indicator[sellcriteria[ind]['Indicator']](df=df)
-        
+
         # Indicator2 With parameter
         if 'Indicator2' in sellcriteria[ind] and 'Ind_parameter2' in sellcriteria[ind]:
             if len(df) < int(sellcriteria[ind]['Ind_parameter2']):
                 return {"Error": "Provided parameter is out of range!!"}
 
-            # Indicator added parameter    
+            # Indicator added parameter
             df = indicator[sellcriteria[ind]['Indicator2']](
-                    df=df, periods=int(sellcriteria[ind]['Ind_parameter2']))
+                df=df, periods=int(sellcriteria[ind]['Ind_parameter2']))
 
         #  Indicator2 without parameter
         elif 'Ind_parameter2' not in sellcriteria[ind] and 'Indicator2' in sellcriteria[ind]:
-            
+
             # Indicator added df
             df = indicator[sellcriteria[ind]['Indicator2']](df=df)
 
     # sellcriteria
     for ind in list(sellcriteria.keys()):
-        # Get Values 
+        # Get Values
         valueOne, valueTwo = value(sellcriteria[ind])
 
         if valueOne == None or valueTwo == None:
@@ -95,6 +95,6 @@ def signal(df, buycriteria: dict, sellcriteria: list = None):
 
         # Get Sell Signal
         df = sell(df, valueOne=valueOne, valueTwo=valueTwo,
-                     operation=sellcriteria[ind]['Operator'])
+                  operation=sellcriteria[ind]['Operator'])
 
     return df

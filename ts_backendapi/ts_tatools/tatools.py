@@ -127,7 +127,7 @@ class Indicators:
             # pp TCPR
             df['PP TCPR'] = tcpr
             print('\nPivot Points added to dframe')
-            
+
         except Exception as e:
             print(f'\n{e} while adding pivot points')
 
