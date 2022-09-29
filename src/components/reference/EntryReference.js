@@ -24,18 +24,13 @@ export default function EntryReference() {
         />
         <Reference
           refNumber="4"
-          refType="price - operator - indicator"
-          refExample="close > SMA(50)"
+          refType="price - operator - price"
+          refExample="close > high"
         />
       </div>
       <div>
         <Reference
           refNumber="5"
-          refType="price - operator - price"
-          refExample="close > high"
-        />
-        <Reference
-          refNumber="6"
           refType="price - operator - value"
           refExample="close > 75.5"
         />

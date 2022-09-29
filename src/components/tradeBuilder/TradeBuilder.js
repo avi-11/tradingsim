@@ -47,7 +47,7 @@ function TradeBuilder({
               <ReferenceInput
                 defaultValue="ref. no"
                 value={entryValue.refNumber ? entryValue.refNumber : "ref. no"}
-                option={[1, 2, 3, 4, 5, 6]}
+                option={[1, 2, 3, 4, 5]}
                 index={index}
                 setCurrentRef={setCurrentRef}
               />
@@ -96,7 +96,11 @@ function TradeBuilder({
                   className={styles.entry_input_indicator}
                   type="number"
                   placeholder="Indicator value"
-                  value={entryValue.indicatorParameter1}
+                  value={
+                    entryValue.indicatorParameter1
+                      ? entryValue.indicatorParameter1
+                      : ""
+                  }
                   min={1}
                   max={
                     entryValue.indicator1
@@ -149,17 +153,17 @@ function TradeBuilder({
               )}
 
               {entryValue.refNumber !== "3" &&
-              entryValue.refNumber !== "6" &&
+              entryValue.refNumber !== "5" &&
               entryValue.refNumber ? (
                 <SelectInput
                   label=""
                   defaultValue={
-                    entryValue.refNumber === "1" || entryValue.refNumber === "4"
+                    entryValue.refNumber === "1"
                       ? "Choose Indicator"
                       : "Choose Price"
                   }
                   options={
-                    entryValue.refNumber === "1" || entryValue.refNumber === "4"
+                    entryValue.refNumber === "1"
                       ? ["SMA", "RSI", "ADX"]
                       : ["Open", "Close", "High", "Low"]
                   }
@@ -168,16 +172,12 @@ function TradeBuilder({
                       ? entryValue.indicator2
                       : entryValue.price2
                       ? entryValue.price2
-                      : entryValue.refNumber === "1" ||
-                        entryValue.refNumber === "4"
+                      : entryValue.refNumber === "1"
                       ? "Choose Indicator"
                       : "Choose Price"
                   }
                   setValue={(value) => {
-                    if (
-                      entryValue.refNumber === "1" ||
-                      entryValue.refNumber === "4"
-                    )
+                    if (entryValue.refNumber === "1")
                       setEntryValues(
                         setIndicatorTwo(value, entryValue, entryValues)
                       );
@@ -187,12 +187,10 @@ function TradeBuilder({
                       );
                   }}
                 />
-              ) : (
-                <></>
-              )}
+              ) : null}
 
               {entryValue.refNumber !== "2" &&
-              entryValue.refNumber !== "5" &&
+              entryValue.refNumber !== "4" &&
               entryValue.refNumber ? (
                 isValue(entryValue.refNumber) ? (
                   <Numberinput

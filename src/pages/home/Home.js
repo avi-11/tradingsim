@@ -28,6 +28,7 @@ import CandleChart from "../../components/chart/candleChart/CandleChart";
 import { NormalLogo } from "../../components/header/Logo";
 
 import { formatData, options } from "./helpers";
+import Header from "../../components/header/Header";
 
 ChartJS.register(
   CategoryScale,
@@ -126,8 +127,9 @@ function Home() {
   };
 
   return (
-    <div className="container">
-      <div style={{ position: "relative", bottom: "7rem" }}>
+    <div className="container" style={{ padding: "0 4rem" }}>
+      <Header />
+      <div style={{ position: "relative", bottom: "5rem" }}>
         <Link to="/">
           <NormalLogo />
         </Link>

@@ -1,21 +1,30 @@
-.dataTable {
-  /* width: 40vw; */
+.dataTable,
+.dataTable2 {
+  width: 40vw;
   height: 70vh;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: scroll;
 }
-.dataTable::-webkit-scrollbar {
+.dataTable::-webkit-scrollbar,
+.dataTable2::-webkit-scrollbar {
   width: 10px;
 }
-.dataTable::-webkit-scrollbar-track {
+.dataTable::-webkit-scrollbar-track,
+.dataTable2::-webkit-scrollbar-track {
   background: transparent;
-  border: 1px solid white;
 }
-.dataTable::-webkit-scrollbar-thumb {
+.dataTable::-webkit-scrollbar-thumb,
+.dataTable2::-webkit-scrollbar-thumb {
   background: white;
 }
 
-.dataTable > table {
+.dataTable::-webkit-scrollbar-corner,
+.dataTable2::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.dataTable > table,
+.dataTable2 > table {
   width: 100%;
   color: white;
   margin: 3rem 1rem;
@@ -23,16 +32,28 @@
   text-align: left;
 }
 
-.dataTable > table > thead > tr > th {
+.dataTable > table > tbody > tr > th {
   width: max-content;
   padding: 0rem 1rem;
 }
 
-.dataTable > table > tbody > tr:nth-child(odd) {
+.dataTable > table > tbody > tr:nth-child(odd),
+.dataTable2 > table > tbody > tr:nth-child(odd) {
   background: #1e1e1e;
 }
 
 .dataTable > table > tbody > tr > td {
   padding: 0.5rem;
+  text-align: left;
+}
+
+.dataTable2 > table > tbody > tr > td {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.dataTable2 > table > thead > tr > th {
+  width: max-content;
+  padding: 0px 20px;
   text-align: center;
 }

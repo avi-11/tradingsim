@@ -24,8 +24,8 @@ const shade2Style = {
 function ShadeContainer(props) {
   return (
     <>
-      <div style={{ width: "90%", zIndex: "1000", overflowX: "none" }}>
-        {props.children.map((child) => child)}
+      <div style={{ width: "100%", zIndex: "1000", overflowX: "none" }}>
+        {props.children}
       </div>
       <div style={shade1Style} className="shade1"></div>
       <div style={shade2Style} className="shade2"></div>
