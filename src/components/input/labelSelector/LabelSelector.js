@@ -14,7 +14,14 @@ const labelStyle = {
   margin: "0rem 1rem",
 };
 
-const LabelSelector = ({ values, currentValue, setValue, label, style }) => {
+const LabelSelector = ({
+  values,
+  currentValue,
+  setValue,
+  label,
+  info,
+  style,
+}) => {
   return (
     <div
       style={{
@@ -25,7 +32,21 @@ const LabelSelector = ({ values, currentValue, setValue, label, style }) => {
       }}
       className="input-field"
     >
-      <label style={style}>{label}</label>
+      <label className="tooltip" style={style}>
+        {label}
+        {info ? (
+          <span className="tooltiptext">
+            <i
+              style={{
+                color: "#00D6A2",
+                margin: "0 0.5rem",
+              }}
+              class="fa-solid fa-circle-info fa-xl"
+            ></i>
+            {info}
+          </span>
+        ) : null}
+      </label>
       <div style={{ display: "flex", marginLeft: "1rem" }}>
         {values.map((value) => (
           <label

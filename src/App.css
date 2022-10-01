@@ -13,6 +13,7 @@
 
 input {
   z-index: 100000;
+  
 }
 
 a,
@@ -293,3 +294,31 @@ h3 {
   font-weight: 600;
   margin-right: 5px;
 }
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; 
+}
+
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  background-color: white;
+    color: #3f51b5;
+    text-align: center;
+    padding: 1rem 1rem;
+    border-radius: 6px;
+    width: 30rem;
+    position: absolute;
+    bottom: 3rem;
+    left: 0;
+  z-index: 1;
+}
+
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+

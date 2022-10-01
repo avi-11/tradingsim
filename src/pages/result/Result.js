@@ -13,6 +13,7 @@ import TradeListTable from "../../components/table/tradeListTable/TradeListTable
 import { formatData, options } from "./helpers";
 import Header from "../../components/header/Header";
 import { getTradeList } from "../../api/resultAPI";
+import { Tooltip } from "@mui/material";
 
 function Result() {
   const graphData = sessionStorage.getItem("graphData");
@@ -179,7 +180,12 @@ function Result() {
         </Link>
       </div>
       <Container>
-        <h2 style={{ textAlign: "center" }}>Chart</h2>
+        <Tooltip
+          title="It shows the buy and sell based on entry and exit condition. There can be multiple buy and sell trade as condition can be satisfied multiple times"
+          arrow
+        >
+          <h2 style={{ textAlign: "center" }}>Chart</h2>
+        </Tooltip>
         {!chartLoading ? (
           chartError ? (
             <h4
@@ -221,7 +227,9 @@ function Result() {
         }}
       >
         <Container>
-          <h2 style={{ textAlign: "center" }}>Statistics</h2>
+          <Tooltip title="some trade parameter are shown" arrow>
+            <h2 style={{ textAlign: "center" }}>Statistics</h2>
+          </Tooltip>
           {!resultLoading ? (
             resultError ? (
               <h4

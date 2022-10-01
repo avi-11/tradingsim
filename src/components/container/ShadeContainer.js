@@ -1,7 +1,7 @@
 const shade1Style = {
   position: "fixed",
   background:
-    "linear-gradient(180deg, rgba(105, 102, 255, 0.3) 0%, rgba(196, 196, 196, 0) 63.85%)",
+    "linear-gradient(180deg, rgba(31, 31, 255, 0.3) 0%, rgba(51, 102, 153, 0) 63.85%)",
   width: "442px",
   height: "1372px",
   transform: "rotate(-135deg)",

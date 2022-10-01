@@ -178,6 +178,7 @@ function Home() {
                     setClosePrice(value);
                   }}
                   label="Market price"
+                  info="Current price of Instrument on the Exchange"
                   style={{
                     color: `${closePriceError ? "var(--errorColor)" : ""}`,
                   }}
@@ -193,6 +194,7 @@ function Home() {
                     SetVolatilty(value);
                   }}
                   label="Market Volatility"
+                  info=" A random function to varies the price depending on condition choosen"
                   style={{
                     color: `${volatilityError ? "var(--errorColor)" : ""}`,
                   }}
