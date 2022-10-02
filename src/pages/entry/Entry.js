@@ -11,6 +11,7 @@ import styles from "./Entry.module.css";
 import { NormalLogo } from "../../components/header/Logo";
 import TradeBuilder from "../../components/tradeBuilder/TradeBuilder";
 import Header from "../../components/header/Header";
+import { Tooltip } from "@mui/material";
 
 const Entry = () => {
   const [initialCapital, setInitialCapital] = useState("");
@@ -242,6 +243,16 @@ const Entry = () => {
         <div className={styles.entry_referenceBox}>
           <h1 className={styles.entry_Pheads} style={{ padding: "0 1rem" }}>
             Reference Card
+            <span className={styles.tooltiptext}>
+              <i
+                style={{
+                  color: "#00D6A2",
+                  margin: "0 1rem",
+                }}
+                class="fa-solid fa-circle-info fa-xl "
+              ></i>
+              These are example that can be used for below Entry builder
+            </span>
           </h1>
           <EntryReference />
         </div>
@@ -249,7 +260,13 @@ const Entry = () => {
 
       <Container>
         <form className={styles.entry_firstForm}>
-          <p>STRATEGY SETTINGS</p>
+          <Tooltip
+            title="This area is used to provide input to calculate the trading size"
+            placement="top-end"
+            arrow
+          >
+            <p className={styles.StratHead}>STRATEGY SETTINGS</p>
+          </Tooltip>
 
           {!loading ? (
             <div style={{ width: "85%" }}>

@@ -2,7 +2,7 @@ import ReferenceInput from "../input/ReferenceInput/ReferenceInput";
 import SelectInput from "../input/selectInput/SelectInput";
 import Numberinput from "../input/numberInput/Numberinput";
 import ActionButton from "../button/actionButton/ActionButton";
-
+import { Tooltip } from "@mui/material";
 import styles from "../../pages/entry/Entry.module.css";
 
 import {
@@ -31,18 +31,24 @@ function TradeBuilder({
         <div className={styles.entry__entryFormGroup}>
           {entryValues.map((entryValue, index) => (
             <div key={entryValue.id} className={styles.entryFormGroup__row}>
-              <p
-                className={styles.entry_entryRule_text}
-                style={{
-                  color: `${
-                    entryValuesError && entryValues.length === index + 1
-                      ? "var(--errorColor)"
-                      : ""
-                  }`,
-                }}
+              <Tooltip
+                title="If the condition is satisfied, the system will simulate a buy order for the trade."
+                placement="bottom-end"
+                arrow
               >
-                {type} Rule {index + 1}
-              </p>
+                <p
+                  className={styles.entry_entryRule_text}
+                  style={{
+                    color: `${
+                      entryValuesError && entryValues.length === index + 1
+                        ? "var(--errorColor)"
+                        : ""
+                    }`,
+                  }}
+                >
+                  {type} Rule {index + 1}
+                </p>
+              </Tooltip>
 
               <ReferenceInput
                 defaultValue="ref. no"
