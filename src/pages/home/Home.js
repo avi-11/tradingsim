@@ -194,7 +194,7 @@ function Home() {
                     SetVolatilty(value);
                   }}
                   label="Market Volatility"
-                  info=" A random function to varies the price depending on condition choosen"
+                  info=" A random function to varies the price depending on condition chosen( Low = 0.3, Medium = 0.6, High= 0.9 )"
                   style={{
                     color: `${volatilityError ? "var(--errorColor)" : ""}`,
                   }}
