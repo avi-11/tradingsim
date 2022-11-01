@@ -26,9 +26,9 @@ const LabelSelector = ({
     <div
       style={{
         display: "flex",
-        margin: "2rem",
+        margin: "2rem 4rem",
         position: "relative",
-        right: "1.5rem",
+        right: "4rem",
       }}
       className="input-field"
     >
