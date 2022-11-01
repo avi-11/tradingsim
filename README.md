@@ -13,6 +13,8 @@ The trading sim has unique features such as:
 The product is hosted on Netlify.
 
 [Demo link](https://stupendous-eclair-039b32.netlify.app/)
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/wfm0-CpwIYc/0.jpg)](http://www.youtube.com/watch?v=wfm0-CpwIYc "0xTradingSim Demo")
+
 
 # User Guide:
 
