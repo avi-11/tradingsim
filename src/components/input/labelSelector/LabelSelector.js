@@ -26,9 +26,9 @@ const LabelSelector = ({
     <div
       style={{
         display: "flex",
-        margin: "2rem",
+        margin: "2rem 4rem",
         position: "relative",
-        right: "1.5rem",
+        right: "4rem",
       }}
       className="input-field"
     >
@@ -39,11 +39,43 @@ const LabelSelector = ({
             <i
               style={{
                 color: "#00D6A2",
-                margin: "0 0.5rem",
+                margin: "2rem 14rem",
               }}
               class="fa-solid fa-circle-info fa-xl"
             ></i>
             {info}
+            <br></br>
+            <br></br>
+            <span
+              style={{
+                color: "black",
+                border: "1px solid black",
+                padding: "0 1rem",
+              }}
+            >
+              High = close + rand (0-8%)
+            </span>
+            <br></br>
+            <span
+              style={{
+                color: "black",
+                border: "1px solid black",
+                padding: "0 1.25rem",
+              }}
+            >
+              Low = close - rand (0-8%)
+            </span>
+            <br></br>
+            <span
+              style={{
+                color: "black",
+                border: "1px solid black",
+                padding: "0 1.6rem",
+              }}
+            >
+              Open = rand (low, close)
+            </span>
+            <br></br>
           </span>
         ) : null}
       </label>

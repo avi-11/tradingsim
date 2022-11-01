@@ -71,7 +71,8 @@ function Home() {
   const updateDate = (date) => {
     setStartDateError(false);
     const newDate = date.split("-");
-    setStartDate(`${newDate[2]}-${newDate[1]}-${newDate[0]}`);
+
+    setStartDate(`${newDate[1]}-${newDate[2]}-${newDate[0]}`);
   };
 
   async function getData(e) {
@@ -193,8 +194,8 @@ function Home() {
                     setVolatilityError(false);
                     SetVolatilty(value);
                   }}
-                  label="Market Volatility"
-                  info=" A random function to varies the price depending on condition choosen"
+                  label="Expected Market Volatility"
+                  info=" A random function to varies the price depending on condition chosen( Low = 0.3, Medium = 0.6, High= 0.9 )"
                   style={{
                     color: `${volatilityError ? "var(--errorColor)" : ""}`,
                   }}
